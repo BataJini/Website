@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load job_tags %}
+
+{% block title %}Jobs - JobHub{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container h-100">
+        <div class="row justify-content-center h-100 align-items-center">
+            <div class="col-lg-10 text-center">
+                <h1 class="hero-title">Find Your Dream Tech Job</h1>
+                <h2 class="hero-subtitle">Discover opportunities that match your skills and aspirations</h2>
+
+                <div class="hero-tags" id="heroTags">
+                    <!-- Tags will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <div class="jobs-header">
+        <div class="container-fluid px-0">
+            <div class="row justify-content-center mx-0">
+                <div class="col-lg-12 text-center">
+                    <form action="{% url 'authentication:home' %}" method="GET" class="mb-3 search-form">
+                        <div class="search-container">
+                            <div class="search-input-wrapper">
+                                <div class="search-tags" id="searchTags"></div>
+                                <input type="hidden" name="q" value="{{ query }}" id="hiddenSearchInput">
+                                <input type="text" class="form-control" id="visibleSearchInput" placeholder="19566 offers" aria-label="Search jobs">
+                                <button type="submit" class="search-button" aria-label="Search">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="job-categories d-flex justify-content-center flex-wrap gap-2 mb-3">
+                        <button class="btn btn-filters" type="button" data-bs-toggle="modal" data-bs-target="#jobFiltersModal">
+                            <i class="bi bi-funnel me-2"></i>Filters
+                        </button>
+                        <div class="vr mx-2 d-none d-md-inline-block"></div>
+                        <button class="btn btn-category" type="button" data-category="it">
+                            <i class="bi bi-laptop me-2"></i>IT
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="marketing">
+                            <i class="bi bi-megaphone me-2"></i>Marketing
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="customer-service">
+                            <i class="bi bi-headset me-2"></i>Customer Service
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="sales">
+                            <i class="bi bi-graph-up me-2"></i>Sales
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="hr">
+                            <i class="bi bi-people me-2"></i>HR
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="engineering">
+                            <i class="bi bi-gear me-2"></i>Engineering
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="jobs-content py-3">
+    <div class="container">
+        <div class="job-listings" id="jobListingsContainer">
+            {% for job in jobs %}
+                {% include 'job_listing_snippet.html' with job=job %}
+            {% empty %}
+                <div class="no-results">
+                    <div class="text-center py-5">
+                        <i class="bi bi-search text-muted display-1"></i>
+                        <h3 class="mt-3">No matching jobs found</h3>
+                        <p class="text-muted">Try adjusting your search criteria or browse all jobs</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Job Filters Modal -->
+<div class="modal fade" id="jobFiltersModal" tabindex="-1" aria-labelledby="jobFiltersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="jobFiltersModalLabel">
+                    FILTERS
+                </h5>
+                <button type="button" class="btn btn-link text-decoration-none p-0" id="clearFiltersBtn">
+                    <i class="bi bi-x-circle me-1"></i>Clear All
+                </button>
+                <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="filtersForm">
+                    <!-- Salary Range Section -->
+                    <div class="filter-section mb-4">
+                        <h6 class="filter-section-title d-flex align-items-center">
+                            <i class="bi bi-currency-dollar me-2"></i>Salary Range
+                        </h6>
+                        <div class="filter-section-content">
+                            <div class="salary-range-container">
+                                <div class="salary-range-slider">
+                                    <div class="slider-track"></div>
+                                    <input type="range" class="salary-range" id="minSalaryRange" min="0" max="50000" value="0" step="1000">
+                                    <input type="range" class="salary-range" id="maxSalaryRange" min="0" max="50000" value="50000" step="1000">
+                                    </div>
+                                <div class="salary-inputs d-flex align-items-center gap-2 mt-3">
+                                    <div class="salary-input-group">
+                                        <label for="minSalaryInput" class="form-label small">Min</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">PLN</span>
+                                            <input type="number" class="form-control" id="minSalaryInput" placeholder="0">
+                                    </div>
+                                    </div>
+                                    <div class="salary-input-divider">-</div>
+                                    <div class="salary-input-group">
+                                        <label for="maxSalaryInput" class="form-label small">Max</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">PLN</span>
+                                            <input type="number" class="form-control" id="maxSalaryInput" placeholder="50000">
+                                    </div>
+                                </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    <!-- Location Section -->
+                    <div class="filter-section mb-4">
+                        <h6 class="filter-section-title d-flex align-items-center">
+                            <i class="bi bi-geo-alt me-2"></i>Location
+                        </h6>
+                        <div class="filter-section-content">
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <input type="text" class="form-control" id="locationInput" placeholder="Enter city or country">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    <!-- Experience Level Section -->
+                    <div class="filter-section mb-4">
+                        <h6 class="filter-section-title d-flex align-items-center">
+                            <i class="bi bi-bar-chart me-2"></i>Experience
+                        </h6>
+                        <div class="filter-section-content">
+                            <div class="experience-buttons d-flex flex-wrap gap-2">
+                                <input type="checkbox" class="btn-check filter-experience" id="expJunior" value="Junior">
+                                <label class="btn btn-outline-primary btn-sm" for="expJunior">Junior</label>
+
+                                <input type="checkbox" class="btn-check filter-experience" id="expMid" value="Mid">
+                                <label class="btn btn-outline-primary btn-sm" for="expMid">Mid</label>
+
+                                <input type="checkbox" class="btn-check filter-experience" id="expSenior" value="Senior">
+                                <label class="btn btn-outline-primary btn-sm" for="expSenior">Senior</label>
+
+                                <input type="checkbox" class="btn-check filter-experience" id="expCLevel" value="C-level">
+                                <label class="btn btn-outline-primary btn-sm" for="expCLevel">C-level</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workplace Section -->
+                    <div class="filter-section mb-4">
+                        <h6 class="filter-section-title d-flex align-items-center">
+                            <i class="bi bi-building me-2"></i>Workplace
+                        </h6>
+                        <div class="filter-section-content">
+                            <div class="workplace-buttons d-flex flex-wrap gap-2">
+                                <input type="checkbox" class="btn-check filter-workplace" id="workRemote" value="Remote">
+                                <label class="btn btn-outline-primary btn-sm" for="workRemote">Remote</label>
+
+                                <input type="checkbox" class="btn-check filter-workplace" id="workHybrid" value="Hybrid">
+                                <label class="btn btn-outline-primary btn-sm" for="workHybrid">Hybrid</label>
+
+                                <input type="checkbox" class="btn-check filter-workplace" id="workOffice" value="Office">
+                                <label class="btn btn-outline-primary btn-sm" for="workOffice">Office</label>
+                                    </div>
+                        </div>
+                    </div>
+
+                    <!-- Employment Type Section -->
+                    <div class="filter-section mb-4">
+                        <h6 class="filter-section-title d-flex align-items-center">
+                            <i class="bi bi-file-earmark-text me-2"></i>Employment type
+                        </h6>
+                        <div class="filter-section-content">
+                            <div class="employment-buttons d-flex flex-wrap gap-2">
+                                <input type="checkbox" class="btn-check filter-employment" id="empB2B" value="B2B">
+                                <label class="btn btn-outline-primary btn-sm" for="empB2B">B2B</label>
+
+                                <input type="checkbox" class="btn-check filter-employment" id="empPermanent" value="Permanent">
+                                <label class="btn btn-outline-primary btn-sm" for="empPermanent">Permanent</label>
+
+                                <input type="checkbox" class="btn-check filter-employment" id="empInternship" value="Internship">
+                                <label class="btn btn-outline-primary btn-sm" for="empInternship">Internship</label>
+
+                                <input type="checkbox" class="btn-check filter-employment" id="empMandate" value="Mandate contract">
+                                <label class="btn btn-outline-primary btn-sm" for="empMandate">Mandate contract</label>
+
+                                <input type="checkbox" class="btn-check filter-employment" id="empSpecificTask" value="Specific-task contract">
+                                <label class="btn btn-outline-primary btn-sm" for="empSpecificTask">Specific-task contract</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Work Type Section -->
+                    <div class="filter-section mb-4">
+                        <h6 class="filter-section-title d-flex align-items-center">
+                            <i class="bi bi-clock me-2"></i>Type of work
+                        </h6>
+                        <div class="filter-section-content">
+                            <div class="work-type-buttons d-flex flex-wrap gap-2">
+                                <input type="checkbox" class="btn-check filter-work-type" id="workFullTime" value="Full-time">
+                                <label class="btn btn-outline-primary btn-sm" for="workFullTime">Full-time</label>
+
+                                <input type="checkbox" class="btn-check filter-work-type" id="workPartTime" value="Part-time">
+                                <label class="btn btn-outline-primary btn-sm" for="workPartTime">Part-time</label>
+
+                                <input type="checkbox" class="btn-check filter-work-type" id="workInternship" value="Practice / Internship">
+                                <label class="btn btn-outline-primary btn-sm" for="workInternship">Practice / Internship</label>
+
+                                <input type="checkbox" class="btn-check filter-work-type" id="workFreelance" value="Freelance">
+                                <label class="btn btn-outline-primary btn-sm" for="workFreelance">Freelance</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-primary px-4" id="applyFiltersBtn" data-bs-dismiss="modal">
+                    <i class="bi bi-check2 me-2"></i>Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script src="{% static 'js/jobs.js' %}"></script>
+<script>
+    // Reset hero tags on page refresh
+    window.addEventListener('pageshow', function(event) {
+        // Check if the page is being loaded from cache (refresh)
+        if (event.persisted || (window.performance && window.performance.navigation.type === 1)) {
+            // Clear session storage for hero tags
+            sessionStorage.removeItem('selectedHeroTags');
+        }
+    });
+
+    // Ensure featured badges are visible
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check for featured jobs and make sure badges are visible
+        const checkFeaturedBadges = function() {
+            document.querySelectorAll('[data-featured="true"]').forEach(job => {
+                const title = job.querySelector('.job-listing-title');
+                let featuredBadge = title.querySelector('.featured-badge');
+                
+                if (!featuredBadge) {
+                    featuredBadge = document.createElement('span');
+                    featuredBadge.className = 'featured-badge';
+                    featuredBadge.textContent = 'FEATURED';
+                    title.insertBefore(featuredBadge, title.firstChild.nextSibling);
+                }
+            });
+        };
+        
+        // Check initially and after any potential AJAX updates
+        checkFeaturedBadges();
+        
+        // Monitor for changes to the job listings container
+        const jobListingsContainer = document.getElementById('jobListingsContainer');
+        if (jobListingsContainer) {
+            const observer = new MutationObserver(checkFeaturedBadges);
+            observer.observe(jobListingsContainer, {childList: true, subtree: true});
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}
+

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8f9fa" rx="20" ry="20"/>
+  
+  <!-- 404 Text -->
+  <text x="400" y="300" font-family="Arial, sans-serif" font-size="180" font-weight="bold" text-anchor="middle" fill="#0d6efd">404</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="200" cy="150" r="50" fill="#e9ecef"/>
+  <circle cx="600" cy="450" r="70" fill="#e9ecef"/>
+  <circle cx="700" cy="200" r="30" fill="#e9ecef"/>
+  <circle cx="100" cy="400" r="40" fill="#e9ecef"/>
+  
+  <!-- Magnifying Glass -->
+  <g transform="translate(400, 400) scale(1.5)">
+    <!-- Handle -->
+    <rect x="-10" y="40" width="20" height="60" rx="10" ry="10" fill="#0d6efd" transform="rotate(45)"/>
+    
+    <!-- Glass -->
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#0d6efd" stroke-width="12"/>
+    
+    <!-- Question Mark -->
+    <text x="0" y="15" font-family="Arial, sans-serif" font-size="40" font-weight="bold" text-anchor="middle" fill="#0d6efd">?</text>
+  </g>
+</svg> 

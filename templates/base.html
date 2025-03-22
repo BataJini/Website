@@ -1,0 +1,1581 @@
+{% load static %}
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' https:;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+        style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/ https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/;
+        font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/;
+        img-src 'self' data: https:;
+        connect-src 'self' https:;
+        frame-src 'none';
+        object-src 'none';
+    ">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="JobHub - Find your dream job today">
+    <meta name="keywords" content="jobs, career, employment, hiring, job search">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" />
+    <title>{% block title %}JobHub{% endblock %}</title>
+    {% bootstrap_css %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/jobs.css' %}" />
+    {% block extra_css %}{% endblock %}
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: var(--bs-body-bg);
+            border-bottom: 1px solid var(--bs-border-color);
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            color: white !important;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        /* Main content area */
+        main {
+            flex-grow: 1;
+            padding: 1rem;
+            margin-top: 64px; /* Adjust based on navbar height */
+        }
+
+        /* Footer */
+        footer {
+            background-color: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid var(--bs-border-color);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* Dropdown improvements */
+        .dropdown-menu {
+            margin-top: 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar-collapse {
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            main {
+                margin-top: 56px; /* Adjust for smaller screens */
+            }
+        }
+
+        :root {
+            --primary-color: #2684FF;
+            --secondary-color: #0052CC;
+            --success-color: #36B37E;
+            --danger-color: #FF5630;
+            --dark-bg: #121212;
+            --dark-card: #1E1E1E;
+            --dark-border: #2D2D2D;
+            --dark-input: #2D2D2D;
+            --dark-hover: #2A2A2A;
+        }
+
+        body {
+            padding-top: 64px;
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+        }
+
+        .navbar {
+            height: 64px;
+            background: linear-gradient(135deg, rgba(10, 25, 50, 1) 0%, rgba(20, 40, 80, 1) 100%);
+            border-bottom: 1px solid rgba(38, 132, 255, 0.2);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 0.5rem 0;
+            margin: 0 1rem;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: transparent;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid white;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            opacity: 0.7;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-link.active:after {
+            display: none;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--bs-body-color);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(38, 132, 255, 0.08);
+            color: var(--primary-color);
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: rgba(255, 86, 48, 0.08);
+            color: var(--danger-color);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Dark mode switch styles */
+        .form-switch .form-check-input {
+            width: 2.5em;
+            height: 1.5em;
+            margin-top: 0;
+            cursor: pointer;
+        }
+
+        .form-switch .form-check-input:focus {
+            box-shadow: none;
+        }
+
+        .bi-moon-stars {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        [data-bs-theme="dark"] .bi-moon-stars {
+            color: white;
+        }
+
+        [data-bs-theme="dark"] {
+            --bs-body-bg: var(--dark-bg);
+            --bs-body-color: #E9ECEF;
+            --bs-border-color: var(--dark-border);
+            --bs-navbar-bg: var(--dark-bg);
+            --bs-card-bg: var(--dark-card);
+            --bs-input-bg: var(--dark-input);
+            --bs-input-color: #E9ECEF;
+            --bs-input-border-color: var(--dark-border);
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background: linear-gradient(135deg, rgba(5, 15, 30, 1) 0%, rgba(10, 25, 45, 1) 100%);
+            border-color: rgba(38, 132, 255, 0.1);
+            box-shadow: 0 1px 0 0 rgba(38, 132, 255, 0.1);
+        }
+
+        [data-bs-theme="dark"] .navbar-brand:hover {
+            color: white !important;
+            text-shadow: 0 0 15px rgba(38, 132, 255, 0.5);
+        }
+
+        [data-bs-theme="dark"] .dropdown-menu {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-bs-theme="dark"] .dropdown-divider {
+            border-color: var(--dark-border);
+        }
+
+        [data-bs-theme="dark"] .form-control {
+            background-color: var(--dark-input);
+            border-color: var(--dark-border);
+            color: var(--bs-input-color);
+        }
+
+        [data-bs-theme="dark"] .form-control:focus {
+            background-color: var(--dark-hover);
+            border-color: var(--primary-color);
+            color: var(--bs-input-color);
+        }
+
+        [data-bs-theme="dark"] .card {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        [data-bs-theme="dark"] .bg-light {
+            background-color: var(--dark-card) !important;
+        }
+
+        [data-bs-theme="dark"] .border-bottom {
+            border-color: var(--dark-border) !important;
+        }
+
+        [data-bs-theme="dark"] .text-muted {
+            color: #9BA1A6 !important;
+        }
+
+        /* Smooth transitions */
+        * {
+            transition: background-color 0.2s ease,
+                        color 0.2s ease,
+                        border-color 0.2s ease,
+                        box-shadow 0.2s ease,
+                        transform 0.2s ease;
+        }
+
+        /* Improved form controls */
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border: 1px solid var(--bs-border-color);
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(38, 132, 255, 0.2);
+        }
+
+        /* Card hover effects */
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] .card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Navbar improvements */
+        .navbar {
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: transparent;
+        }
+
+        /* Add right margin adjustment for the navbar container */
+        .navbar .container {
+            padding-right: 0;
+        }
+
+        /* Move right-side buttons closer to the edge */
+        .navbar-collapse .d-flex.align-items-center.gap-3 {
+            margin-right: -35px;
+        }
+
+        /* Ensure language switcher is properly positioned */
+        .language-switcher {
+            margin-right: -10px;
+        }
+
+        .dropdown-menu {
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 0.5rem;
+        }
+
+        .dropdown-item {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Dropdown item styling - with rounded corners for first and last items */
+        .dropdown-item:first-child {
+            border-top-left-radius: 8px !important;
+            border-top-right-radius: 8px !important;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom-left-radius: 8px !important;
+            border-bottom-right-radius: 8px !important;
+        }
+
+        /* Dropdown menu show class with animation */
+        .dropdown-menu.show {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            position: absolute !important;
+            z-index: 1000 !important;
+            animation: dropdown-animation 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        /* Enhanced dropdown animation */
+        @keyframes dropdown-animation {
+            0% {
+                opacity: 0;
+                transform: translateY(-15px) scale(0.95); /* Start from higher up */
+            }
+            70% {
+                transform: translateY(2px) scale(1.01);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Ensure dropdown toggle has pointer cursor */
+        [data-bs-toggle="dropdown"] {
+            cursor: pointer !important;
+        }
+
+        /* Modern dropdown styles based on JustJoin.it and NoFluffJobs */
+        .dropdown-menu {
+            display: none;
+            border: none !important;
+            border-radius: 12px !important;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15) !important;
+            padding: 0.75rem 0 !important;
+            min-width: 220px !important;
+            margin-top: 0.5rem !important;
+            background-color: white !important;
+            overflow: hidden !important;
+            transition: opacity 0.2s, transform 0.2s !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #1E1E1E !important;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1.25rem !important;
+            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+            color: #333 !important;
+            display: flex !important;
+            align-items: center !important;
+            border-radius: 0 !important;
+            transition: background-color 0.15s ease !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-item {
+            color: #E9ECEF !important;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f5f8ff !important;
+            color: var(--primary-color) !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: #2A2A2A !important;
+        }
+
+        .dropdown-item i {
+            margin-right: 0.75rem !important;
+            font-size: 1.1rem !important;
+            color: #6c757d !important;
+        }
+
+        .dropdown-item:hover i {
+            color: var(--primary-color) !important;
+
+        }
+
+        .dropdown-divider {
+            margin: 0.5rem 0 !important;
+            border-color: #eaeaea !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-divider {
+            border-color: #2D2D2D !important;
+        }
+
+        /* Sign In button styling - match JustJoin.it and NoFluffJobs */
+        .btn-sign-in, .dropdown-toggle.btn-primary {
+            background-color: transparent !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 50px !important; /* Rounded button like in examples */
+            padding: 0.5rem 1rem !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            transition: all 0.2s ease !important;
+            box-shadow: none !important;
+        }
+
+        .btn-sign-in:hover, .dropdown-toggle.btn-primary:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Dropdown menu styling - updated with more rounded corners */
+        .dropdown-menu {
+            display: none;
+            border: 1px solid #eaeaea !important;
+            border-radius: 16px !important; /* More rounded corners */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+            padding: 8px 0 !important; /* Add padding to prevent content touching the rounded corners */
+            min-width: 200px !important;
+            margin-top: 8px !important;
+            background-color: white !important;
+            overflow: hidden !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #1E1E1E !important;
+            border-color: #2D2D2D !important;
+        }
+
+        /* Dropdown item styling - exact match */
+        .dropdown-item {
+            padding: 10px 16px !important;
+            font-size: 14px !important;
+            color: #333 !important;
+            border-left: 3px solid transparent !important;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa !important;
+            color: #2684FF !important;
+            border-left-color: #2684FF !important;
+        }
+
+        /* Dropdown header styling - with rounded corners */
+        .dropdown-header {
+            font-size: 0.7rem !important;
+            font-weight: 700 !important;
+            color: #6c757d !important;
+            padding: 10px 16px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            background-color: #f8f9fa !important;
+            border-bottom: 1px solid #eaeaea !important;
+            margin-bottom: 0.25rem !important;
+            border-top-left-radius: 12px !important; /* Match dropdown menu radius */
+            border-top-right-radius: 12px !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-header {
+            color: #9BA1A6 !important;
+            background-color: #2A2A2A !important;
+            border-color: #2D2D2D !important;
+        }
+
+        /* Dropdown divider - exact match */
+        .dropdown-divider {
+            margin: 0 !important;
+            border-color: #eaeaea !important;
+            opacity: 1 !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-divider {
+            border-color: #2D2D2D !important;
+        }
+
+        /* Dropdown item icon styling - exact match */
+        .dropdown-item i {
+            margin-right: 0.75rem !important;
+            font-size: 1rem !important;
+            color: #6c757d !important;
+            width: 20px !important;
+            text-align: center !important;
+        }
+
+        .dropdown-item:hover i {
+            color: #2684FF !important;
+        }
+
+        /* NoFluffJobs style button */
+        .btn-sign-in {
+            background-color: transparent !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 50px !important;
+            padding: 0.5rem 1rem !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            transition: all 0.2s ease !important;
+            box-shadow: none !important;
+            height: 36px !important;
+        }
+
+        .btn-sign-in i.bi-person-circle {
+            font-size: 1.1rem !important;
+        }
+
+        .btn-sign-in i.bi-chevron-down {
+            opacity: 0.7 !important;
+            font-size: 0.7rem !important;
+        }
+
+        /* Dropdown menu positioning fix - align left sides */
+        .dropdown {
+            position: relative !important;
+        }
+
+        .dropdown-menu {
+            left: 0 !important; /* Default alignment to left side of parent */
+            right: auto !important;
+            transform-origin: top left !important;
+            margin-top: 12px !important; /* Increased margin to prevent covering the button */
+            top: 100% !important; /* Position below the button */
+        }
+
+        /* Special case for right-aligned dropdowns */
+        .dropdown-menu.dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+            transform-origin: top right !important;
+            margin-top: 12px !important; /* Increased margin to prevent covering the button */
+        }
+
+        /* Ensure consistent animation for all dropdowns */
+        .dropdown-menu.show {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            position: absolute !important;
+            z-index: 1000 !important;
+            animation: dropdown-animation 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        /* Apply ripple effect to all buttons with dropdowns */
+        .dropdown-toggle {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-toggle:active {
+            transform: scale(0.95) !important;
+        }
+
+        .dropdown-toggle::after {
+            display: none !important;
+        }
+
+        /* Add a class to handle dropdown alignment */
+        .dropdown-align-left .dropdown-menu {
+            left: 0 !important;
+            right: auto !important;
+            transform-origin: top left !important;
+        }
+
+        .dropdown-align-right .dropdown-menu {
+            right: 0 !important;
+            left: auto !important;
+            transform-origin: top right !important;
+        }
+
+        /* Improved active state for nav links */
+        .nav-link.active {
+            color: white !important;
+            border-bottom: 2px solid white;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Improved spacing for nav items */
+        .navbar-nav .nav-item {
+            margin: 0 0.5rem;
+        }
+
+        .navbar-nav .nav-link {
+            padding: 0.75rem 0;
+            margin: 0;
+            position: relative;
+        }
+
+        /* Ensure only one chevron is shown */
+        .dropdown-toggle::after {
+            display: none !important;
+        }
+
+        /* Additional class to hide default caret */
+        .no-caret::after {
+            display: none !important;
+        }
+
+        /* Button click animation */
+        .btn-sign-in {
+            transition: all 0.2s ease !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-sign-in:active {
+            transform: scale(0.95) !important;
+        }
+
+        .btn-sign-in::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%, -50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn-sign-in:active::after {
+            animation: ripple 0.4s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0) translate(-50%, -50%);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20) translate(-50%, -50%);
+                opacity: 0;
+            }
+        }
+
+        /* Dropdown item hover animation */
+        .dropdown-item {
+            transition: all 0.15s ease-out !important;
+        }
+
+        .dropdown-item:hover {
+            transform: translateX(3px);
+        }
+
+        /* Dropdown menu positioning fix - align left sides */
+        .dropdown {
+            position: relative !important;
+        }
+
+        .dropdown-menu {
+            left: 0 !important; /* Default alignment to left side of parent */
+            right: auto !important;
+            transform-origin: top left !important;
+        }
+
+        /* Special case for right-aligned dropdowns */
+        .dropdown-menu.dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+            transform-origin: top right !important;
+        }
+
+        /* Others specialization dropdown specific styles */
+        .others-dropdown-menu {
+            width: 350px !important;
+            max-width: 90vw !important;
+            padding: 0 !important;
+            overflow: visible !important;
+        }
+
+        .others-dropdown-menu .row {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            margin: 0 -5px !important;
+        }
+
+        .others-dropdown-menu .col-4 {
+            flex: 0 0 33.333333% !important;
+            max-width: 33.333333% !important;
+            padding: 0 5px !important;
+        }
+
+        .others-dropdown-menu .form-check {
+            margin-bottom: 8px !important;
+            padding: 4px 0 !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .others-dropdown-menu .form-check-input {
+            margin-right: 8px !important;
+            position: static !important;
+            opacity: 1 !important;
+        }
+
+        .others-dropdown-menu .form-check-label {
+            font-size: 14px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: block !important;
+            width: 100% !important;
+        }
+
+        /* Responsive adjustments for others dropdown */
+        @media (max-width: 576px) {
+            .others-dropdown-menu {
+                width: 280px !important;
+            }
+
+            .others-dropdown-menu .col-4 {
+                flex: 0 0 50% !important;
+                max-width: 50% !important;
+            }
+        }
+
+        /* Messages/Notifications styling */
+        .messages {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            width: auto;
+            max-width: 300px;
+        }
+
+        .alert {
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateX(100%);
+            animation: slideIn 0.3s forwards;
+        }
+
+        .alert-success {
+            background-color: rgba(54, 179, 126, 0.95);
+            color: white;
+            border: none;
+        }
+
+        .alert-danger {
+            background-color: rgba(255, 86, 48, 0.95);
+            color: white;
+            border: none;
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 171, 0, 0.95);
+            color: white;
+            border: none;
+        }
+
+        .alert-info {
+            background-color: rgba(38, 132, 255, 0.95);
+            color: white;
+            border: none;
+        }
+
+        .alert .btn-close {
+            padding: 12px;
+            margin: -8px -8px -8px 8px;
+            opacity: 0.8;
+        }
+
+        .alert .btn-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        .alert.fade-out {
+            animation: slideOut 0.3s forwards;
+        }
+
+        /* Updated language switcher styles for direct toggle */
+        .language-switcher .btn-sign-in {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 50%;
+            background-color: transparent !important;
+            color: var(--bs-body-color);
+            border: none !important;
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+            box-shadow: none !important;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .language-switcher .btn-sign-in:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .language-switcher .btn-sign-in:active {
+            transform: scale(0.95);
+        }
+
+        .language-switcher .flag-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+
+        .language-switcher .btn-sign-in:hover .flag-icon {
+            transform: rotate(10deg);
+        }
+
+        /* Dropdown menu flag icons */
+        .dropdown-item img.me-2 {
+            width: 24px !important;
+            height: 24px !important;
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            object-position: center !important;
+        }
+
+        footer .text-primary {
+            color: var(--primary-color) !important;
+            transition: all 0.3s ease;
+        }
+
+        footer .text-primary:hover {
+            color: var(--secondary-color) !important;
+            text-shadow: 0 0 10px rgba(38, 132, 255, 0.3);
+        }
+
+        [data-bs-theme="dark"] footer .text-primary:hover {
+            text-shadow: 0 0 10px rgba(38, 132, 255, 0.5);
+        }
+
+        [data-bs-theme="dark"] .btn-sign-in {
+            border: none !important;
+        }
+
+        [data-bs-theme="dark"] .btn-sign-in:hover {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        /* Add these new styles for the theme toggle button */
+        .theme-toggle-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            color: rgba(255, 255, 255, 0.85);
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle-btn:hover {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .theme-toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        .theme-toggle-btn i {
+            font-size: 1.25rem;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-toggle-btn i.rotate {
+            transform: rotate(360deg);
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn i.bi-moon-stars {
+            display: none;
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn i.bi-sun {
+            display: block;
+        }
+
+        .theme-toggle-btn i.bi-sun {
+            display: none;
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn i.bi-moon-stars {
+            display: none;
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn i.bi-sun {
+            display: block;
+            color: #ffd43b;
+        }
+
+        .badge-new {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 1rem;
+            background-color: #3772FF;
+            color: white;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .badge-featured {
+            display: inline-block !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+            padding: 3px 8px !important;
+            border-radius: 1rem !important;
+            background-color: #FFC107 !important;
+            color: #212529 !important;
+            margin-left: 8px !important;
+            vertical-align: middle !important;
+            z-index: 10 !important;
+        }
+
+        @keyframes featured-pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+            }
+            
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+            }
+            
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+            }
+        }
+
+        @keyframes featured-shine {
+            0% {
+                background-position: -100% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .featured-badge {
+            display: inline-block !important;
+            background: linear-gradient(
+                110deg, 
+                #FFC107 20%, 
+                #FFD54F 40%, 
+                #FFE082 60%, 
+                #FFC107 80%
+            ) !important;
+            background-size: 200% auto !important;
+            color: #000000 !important;
+            font-size: 10px !important;
+            font-weight: bold !important;
+            padding: 4px 10px !important;
+            border-radius: 12px !important;
+            margin-left: 8px !important;
+            vertical-align: middle !important;
+            animation: featured-pulse 2s infinite, featured-shine 3s linear infinite !important;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+            letter-spacing: 0.5px !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 
+                0 2px 4px rgba(255, 193, 7, 0.3),
+                inset 0 1px 3px rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .featured-badge:hover {
+            transform: translateY(-1px) scale(1.05) !important;
+            box-shadow: 
+                0 4px 8px rgba(255, 193, 7, 0.4),
+                inset 0 1px 3px rgba(255, 255, 255, 0.3) !important;
+        }
+
+        [data-bs-theme="dark"] .featured-badge {
+            color: #000000 !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 
+                0 2px 4px rgba(255, 193, 7, 0.3),
+                inset 0 1px 3px rgba(255, 255, 255, 0.3) !important;
+        }
+
+        /* Override Bootstrap badge styles for job listing tags */
+        .job-listing-tags .badge {
+            display: inline-block !important;
+            padding: 6px 16px !important; /* Reduced height by decreasing padding */
+            background-color: #f5f5f7 !important;
+            border-radius: 6px !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; /* Increased shadow */
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            color: #5f6368 !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            transition: all 0.2s ease !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            margin: 0.25rem 0.25rem 0.25rem 0 !important;
+            border: none !important; /* Removed border */
+        }
+        
+        .job-listing-tags .badge:hover {
+            background-color: #eeeef0 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important; /* Increased hover shadow */
+        }
+        
+        /* Dark mode adjustments for badges */
+        [data-bs-theme="dark"] .job-listing-tags .badge {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: rgba(255, 255, 255, 0.8) !important;
+            border: none !important; /* Removed border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important; /* Increased shadow for dark mode */
+        }
+        
+        [data-bs-theme="dark"] .job-listing-tags .badge:hover {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3) !important; /* Increased hover shadow for dark mode */
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'authentication:home' %}">JobHub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'authentication:home' %}">
+                            Job offers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'companies' in request.path %}active{% endif %}" href="#">
+                            Companies
+                        </a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center ms-3">
+                        <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
+                            <i class="bi bi-moon-stars"></i>
+                        </button>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    {% if request.path != '/login/' and request.path != '/signup/' %}
+                    <a href="{% if user.is_authenticated %}{% url 'authentication:post_job' %}{% else %}{% url 'authentication:login' %}?next={% url 'authentication:post_job' %}&type=recruiter{% endif %}" class="btn-sign-in text-decoration-none">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>POST A JOB</span>
+                    </a>
+                    {% endif %}
+                    {% if not user.is_authenticated %}
+                        <div class="dropdown dropdown-align-right">
+                            <button class="btn-sign-in dropdown-toggle" id="authDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i>
+                                <span>LOG IN</span>
+                                <i class="bi bi-chevron-down ms-1"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="authDropdown">
+                                <div class="dropdown-header">SIGN IN</div>
+                                <a class="dropdown-item" href="{% url 'authentication:login' %}?next={{ request.path }}&type=candidate">
+                                    <i class="bi bi-person"></i>Candidate
+                                </a>
+                                <a class="dropdown-item" href="{% url 'authentication:login' %}?next={{ request.path }}&type=recruiter">
+                                    <i class="bi bi-building"></i>Recruiter
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-header">SIGN UP</div>
+
+                                <a class="dropdown-item" href="{% url 'authentication:signup' %}?next={{ request.path }}&type=candidate">
+                                    <i class="bi bi-person-plus"></i>Candidate
+                                </a>
+                                <a class="dropdown-item" href="{% url 'authentication:signup' %}?next={{ request.path }}&type=recruiter">
+                                    <i class="bi bi-building-add"></i>Recruiter
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="dropdown dropdown-align-right">
+                            <button class="btn-sign-in dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i>
+                                <span>{{ user.username }}</span>
+                                <i class="bi bi-chevron-down ms-1"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <div class="dropdown-header">MY ACCOUNT</div>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-person"></i>Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-briefcase"></i>Applications
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-bookmark"></i>Saved Jobs
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item" href="{% url 'authentication:logout' %}">
+                                    <i class="bi bi-box-arrow-right"></i>Logout
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Language Switcher -->
+                    <div class="language-switcher ms-auto">
+                        <button class="btn-sign-in" id="languageSwitcher">
+                            <img src="{% static 'img/gb-flag.svg' %}" alt="Current language flag" class="flag-icon" id="currentFlag">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container py-4">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="py-4 mt-5 border-top">
+        <div class="container text-center">
+            <div class="mb-3">
+                <a href="#" class="text-decoration-none text-body-secondary">Privacy Policy – Terms & Conditions</a>
+            </div>
+            <a href="{% url 'authentication:home' %}" class="text-decoration-none mb-3 d-block">
+                <span class="h5 text-primary fw-bold">JobHub</span>
+            </a>
+            <div class="text-body-secondary small">
+                Copyright © 2025 JobHub – All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    {% bootstrap_javascript %}
+    <!-- Direct inclusion of Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme switcher functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Bootstrap's JavaScript components
+            var bsCollapse = document.getElementById('navbarNav');
+            var bsCollapseInstance = new bootstrap.Collapse(bsCollapse, {
+                toggle: false
+            });
+
+            // Mobile menu toggle
+            var navbar = document.querySelector('.navbar-toggler');
+            navbar.addEventListener('click', function(e) {
+                document.body.classList.toggle('menu-open');
+            });
+
+            // Find all dropdown toggles
+            var dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+            // Add click handlers to each toggle
+            dropdownToggles.forEach(function(toggle) {
+                toggle.addEventListener('click', function(e) {
+                    // Only prevent default if in mobile view
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+
+                    // Find the dropdown menu
+                    var parent = this.closest('.dropdown');
+                    var menu = parent.querySelector('.dropdown-menu');
+
+                    // Toggle the show class
+                    if (menu.classList.contains('show')) {
+                        menu.classList.remove('show');
+                        parent.classList.remove('show');
+                        this.setAttribute('aria-expanded', 'false');
+                    } else {
+                        // Close all other dropdowns
+                        document.querySelectorAll('.dropdown-menu.show').forEach(function(openMenu) {
+                            openMenu.classList.remove('show');
+                            openMenu.closest('.dropdown').classList.remove('show');
+                            var toggle = openMenu.previousElementSibling;
+                            if (toggle) {
+                                toggle.setAttribute('aria-expanded', 'false');
+                            }
+                        });
+
+                        // Open this dropdown
+                        menu.classList.add('show');
+                        parent.classList.add('show');
+                        this.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                        menu.classList.remove('show');
+                        menu.closest('.dropdown').classList.remove('show');
+                        var toggle = menu.previousElementSibling;
+                        if (toggle) {
+                            toggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                }
+            });
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.navbar-nav .nav-link').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    if (document.body.classList.contains('menu-open') && window.innerWidth <= 768) {
+                        document.body.classList.remove('menu-open');
+                        bsCollapseInstance.hide();
+                    }
+                });
+            });
+
+            // Theme switcher
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlElement = document.documentElement;
+            const icon = themeToggle.querySelector('i');
+
+            // Check if user has a theme preference in localStorage
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme === 'dark') {
+                htmlElement.setAttribute('data-bs-theme', 'dark');
+                icon.classList.remove('bi-moon-stars');
+                icon.classList.add('bi-sun');
+            }
+
+            // Toggle theme when button is clicked
+            themeToggle.addEventListener('click', function() {
+                icon.classList.add('rotate');
+                
+                setTimeout(() => {
+                    if (htmlElement.getAttribute('data-bs-theme') === 'dark') {
+                    htmlElement.setAttribute('data-bs-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                        icon.classList.remove('bi-sun');
+                        icon.classList.add('bi-moon-stars');
+                    } else {
+                        htmlElement.setAttribute('data-bs-theme', 'dark');
+                        localStorage.setItem('theme', 'dark');
+                        icon.classList.remove('bi-moon-stars');
+                        icon.classList.add('bi-sun');
+                    }
+                }, 250);
+
+                setTimeout(() => {
+                    icon.classList.remove('rotate');
+                }, 500);
+            });
+
+            // Auto-dismiss alerts after 5 seconds
+            setTimeout(function() {
+                document.querySelectorAll('.alert').forEach(function(alert) {
+                    alert.classList.add('fade-out');
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 300);
+                });
+            }, 5000);
+
+            // Language switcher functionality
+            const currentFlag = document.getElementById('currentFlag');
+            const languageSwitcher = document.getElementById('languageSwitcher');
+
+            // Store original English text when Polish is selected
+            let originalTexts = {};
+
+            // Define translations for Polish only
+            const translations = {
+                pl: {
+                    // Navigation and common elements
+                    'job_offers': 'Oferty pracy',
+                    'companies': 'Firmy',
+                    'post_job': 'Dodaj ofertę',
+                    'sign_in': 'Zaloguj się',
+                    'candidate': 'Kandydat',
+                    'recruiter': 'Rekruter',
+                    'sign_up': 'ZAREJESTRUJ SIĘ',
+                    'my_account': 'MOJE KONTO',
+                    'profile': 'Profil',
+                    'applications': 'Aplikacje',
+                    'saved_jobs': 'Zapisane oferty',
+                    'logout': 'Wyloguj',
+                    'privacy_policy': 'Polityka prywatności – Warunki korzystania',
+                    'copyright': 'Copyright © 2025 JobHub – Wszelkie prawa zastrzeżone',
+                    'location_placeholder': 'np. Warszawa, Polska',
+                    'salary_placeholder': 'np. 10 000 - 15 000 PLN',
+                    'cover_letter_placeholder': 'Dlaczego jesteś odpowiednim kandydatem na to stanowisko?',
+                    'select_job_type': 'Wybierz rodzaj umowy',
+                    'full_time': 'Pełny etat',
+                    'part_time': 'Niepełny etat',
+                    'contract': 'Kontrakt',
+                    'temporary': 'Tymczasowa'
+                }
+            };
+
+            // Function to store original English text
+            function storeOriginalText(element, key) {
+                if (element && !originalTexts[key]) {
+                    originalTexts[key] = element.textContent;
+                }
+            }
+
+            // Function to apply translations or restore English
+            function handleLanguage(lang) {
+                const elements = {
+                    'job_offers': document.querySelector('.navbar-nav .nav-item:first-child .nav-link'),
+                    'companies': document.querySelector('.navbar-nav .nav-item:nth-child(2) .nav-link'),
+                    'post_job': document.querySelector('a.btn-sign-in span'),
+                    'sign_in': document.querySelector('#authDropdown span'),
+                    'candidate': document.querySelectorAll('.dropdown-item:nth-of-type(1)'),
+                    'recruiter': document.querySelectorAll('.dropdown-item:nth-of-type(2)'),
+                    'sign_up': document.querySelectorAll('.dropdown-header')[1],
+                    'my_account': document.querySelector('#userDropdown + .dropdown-menu .dropdown-header'),
+                    'profile': document.querySelector('#userDropdown + .dropdown-menu .dropdown-item:nth-of-type(1)'),
+                    'applications': document.querySelector('#userDropdown + .dropdown-menu .dropdown-item:nth-of-type(2)'),
+                    'saved_jobs': document.querySelector('#userDropdown + .dropdown-menu .dropdown-item:nth-of-type(3)'),
+                    'logout': document.querySelector('#userDropdown + .dropdown-menu .dropdown-item:nth-of-type(4)'),
+                    'privacy_policy': document.querySelector('footer .mb-3 a'),
+                    'copyright': document.querySelector('footer .text-secondary.small')
+                };
+
+                // Store or apply translations
+                for (const [key, element] of Object.entries(elements)) {
+                    if (element) {
+                            if (Array.isArray(element) || element instanceof NodeList) {
+                                element.forEach(el => {
+                                if (el) {
+                                    if (lang === 'pl') {
+                                        storeOriginalText(el, key);
+                                        if (translations.pl[key]) {
+                                            el.textContent = translations.pl[key];
+                                        }
+                                    } else {
+                                        // Restore original English text
+                                        if (originalTexts[key]) {
+                                            el.textContent = originalTexts[key];
+                                        }
+                                    }
+                                    }
+                                });
+                            } else {
+                            if (lang === 'pl') {
+                                storeOriginalText(element, key);
+                                if (translations.pl[key]) {
+                                    element.textContent = translations.pl[key];
+                                }
+                                    } else {
+                                // Restore original English text
+                                if (originalTexts[key]) {
+                                    element.textContent = originalTexts[key];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Update placeholders and other specific elements
+                if (lang === 'pl') {
+                const locationInput = document.querySelector('input[name="location"]');
+                if (locationInput) {
+                        storeOriginalText(locationInput, 'location_placeholder');
+                        locationInput.placeholder = translations.pl.location_placeholder;
+                }
+
+                const salaryInput = document.querySelector('input[name="salary"]');
+                if (salaryInput) {
+                        storeOriginalText(salaryInput, 'salary_placeholder');
+                        salaryInput.placeholder = translations.pl.salary_placeholder;
+                }
+
+                const coverLetterTextarea = document.querySelector('#coverLetter');
+                if (coverLetterTextarea) {
+                        storeOriginalText(coverLetterTextarea, 'cover_letter_placeholder');
+                        coverLetterTextarea.placeholder = translations.pl.cover_letter_placeholder;
+                    }
+                } else {
+                    // Restore original English placeholders
+                    ['location_placeholder', 'salary_placeholder', 'cover_letter_placeholder'].forEach(key => {
+                        const element = document.querySelector(`[placeholder="${translations.pl[key]}"]`);
+                        if (element && originalTexts[key]) {
+                            element.placeholder = originalTexts[key];
+                        }
+                    });
+                }
+
+                document.documentElement.setAttribute('lang', lang);
+            }
+
+            // Initialize with English
+                currentFlag.src = "{% static 'img/gb-flag.svg' %}";
+                currentFlag.alt = "English";
+            localStorage.setItem('language', 'en');
+
+            // Toggle language on click
+            languageSwitcher.addEventListener('click', function(e) {
+                    e.preventDefault();
+                const currentLanguage = localStorage.getItem('language') || 'en';
+                if (currentLanguage === 'en') {
+                        localStorage.setItem('language', 'pl');
+                    currentFlag.src = "{% static 'img/pl-flag.svg' %}";
+                    currentFlag.alt = "Polski";
+                    handleLanguage('pl');
+                } else {
+                    localStorage.setItem('language', 'en');
+                    currentFlag.src = "{% static 'img/gb-flag.svg' %}";
+                    currentFlag.alt = "English";
+                    handleLanguage('en');
+                    }
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

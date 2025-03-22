@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block title %}Login - JobHub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="auth-container">
+            <h1 class="auth-title">Welcome Back</h1>
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                </div>
+                <p class="text-center mt-3">
+                    Don't have an account? <a href="{% url 'authentication:signup' %}" class="text-decoration-none fw-bold">Sign up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Focus the first input field
+        const firstInput = document.querySelector('form input');
+        if (firstInput) {
+            firstInput.focus();
+        }
+    });
+</script>
+{% endblock %} 

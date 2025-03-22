@@ -1,0 +1,499 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block title %}Post a Job - JobHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <h1 class="h2 mb-4">Post a New Job</h1>
+                    <p class="text-muted mb-4">Fill out the form below to post a new job listing. All fields marked with * are required.</p>
+
+                    <form method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="title" class="form-label">Job Title *</label>
+                                <input type="text" class="form-control" id="title" name="title" placeholder="e.g., Senior Frontend Developer" required>
+                                <div class="invalid-feedback">Please provide a job title.</div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label for="company" class="form-label">Company Name *</label>
+                                <input type="text" class="form-control" id="company" name="company" placeholder="e.g., Tech Solutions Inc." required>
+                                <div class="invalid-feedback">Please provide a company name.</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="location" class="form-label">Location *</label>
+                                <input type="text" class="form-control" id="location" name="location" placeholder="e.g., Warsaw, Poland" required>
+                                <div class="invalid-feedback">Please provide a location.</div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label for="job_type" class="form-label">Job Type *</label>
+                                <select class="form-select" id="job_type" name="type" required>
+                                    <option value="" selected disabled>Select job type</option>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Contract">Contract</option>
+                                    <option value="Temporary">Temporary</option>
+                                    <option value="Internship">Internship</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a job type.</div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="min_salary" class="form-label">Minimum Salary (PLN)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="min_salary" name="min_salary" placeholder="e.g., 8000">
+                                    <span class="input-group-text">PLN</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="max_salary" class="form-label">Maximum Salary (PLN)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="max_salary" name="max_salary" placeholder="e.g., 15000">
+                                    <span class="input-group-text">PLN</span>
+                                </div>
+                                <input type="hidden" id="salary" name="salary" value="">
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" class="form-check-input" id="is_remote" name="is_remote">
+                                    <label class="form-check-label" for="is_remote">Remote Work Available</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" class="form-check-input" id="hide_salary" name="hide_salary">
+                                    <label class="form-check-label" for="hide_salary">Hide Salary Range</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="is_featured" name="is_featured">
+                                <label class="form-check-label" for="is_featured">Featured Job <span class="badge bg-warning text-dark ms-2">Featured</span></label>
+                                <div class="form-text mt-1">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Featured jobs are highlighted and always appear at the top of the listings
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Required Skills</label>
+                            <div class="skills-container border rounded p-3">
+                                <div class="skills-input-wrapper d-flex flex-wrap gap-2 mb-2">
+                                    <!-- Skills tags will be added here -->
+                                </div>
+                                <input type="text" class="form-control" id="skillInput" placeholder="Type a skill and press Enter">
+                                <input type="hidden" name="skills" id="skillsHidden">
+                                <input type="hidden" name="required_skills" id="requiredSkillsField">
+                                <div class="form-text mt-2">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    These skills will appear in the job listing as tags
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Job Description *</label>
+                            <div class="description-tabs mb-2">
+                                <button type="button" class="btn btn-sm btn-outline-primary active" data-section="description">Description</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-section="responsibilities">Responsibilities</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-section="requirements">Requirements</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-section="benefits">Benefits</button>
+                            </div>
+                            <textarea class="form-control" id="description" name="description" rows="8" required></textarea>
+                            <div class="invalid-feedback">Please provide a job description.</div>
+                            <div class="form-text mt-2">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Use Markdown for formatting. Headers (#), Lists (- or 1.), Bold (**text**), Italic (*text*)
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="company_logo" class="form-label">Company Logo</label>
+                            <input type="file" class="form-control" id="company_logo" name="company_logo" accept="image/*">
+                            <div class="form-text">Recommended size: 100x100px, Max size: 2MB</div>
+                        </div>
+
+                        <div class="d-flex gap-3 mt-5">
+                            <button type="submit" class="btn btn-primary btn-lg flex-grow-1" id="submitBtn">Post Job</button>
+                            <a href="{% url 'authentication:home' %}" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Form styling */
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--bs-border-color);
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(38, 132, 255, 0.1);
+    }
+
+    /* Skills input styling */
+    .skills-container {
+        background-color: var(--bs-body-bg);
+        transition: all 0.2s ease;
+    }
+
+    .skills-container:focus-within {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 3px rgba(38, 132, 255, 0.1);
+    }
+
+    .skill-tag {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .skill-tag .remove-skill {
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+    }
+
+    .skill-tag .remove-skill:hover {
+        opacity: 1;
+    }
+
+    /* Description tabs styling */
+    .description-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .description-tabs .btn {
+        border-radius: 1rem;
+        padding: 0.375rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .description-tabs .btn.active {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    /* Form switches */
+    .form-switch {
+        padding-left: 2.5em;
+    }
+
+    .form-switch .form-check-input {
+        width: 2.5em;
+        height: 1.5em;
+        margin-left: -2.5em;
+    }
+
+    .form-switch .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    /* Dark mode adjustments */
+    [data-bs-theme="dark"] .skills-container {
+        background-color: var(--dark-input);
+        border-color: var(--dark-border);
+    }
+
+    [data-bs-theme="dark"] .form-control,
+    [data-bs-theme="dark"] .form-select {
+        background-color: var(--dark-input);
+        border-color: var(--dark-border);
+        color: var(--bs-body-color);
+    }
+
+    [data-bs-theme="dark"] .input-group-text {
+        background-color: var(--dark-card);
+        border-color: var(--dark-border);
+        color: var(--bs-body-color);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation
+        const forms = document.querySelectorAll('.needs-validation');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // Add direct click handler to the submit button
+        submitBtn.addEventListener('click', function(e) {
+            const jobTypeSelect = document.getElementById('job_type');
+            if (jobTypeSelect.value === "" || jobTypeSelect.value === null) {
+                e.preventDefault();
+                alert("Please select a job type before submitting.");
+                jobTypeSelect.focus();
+                return false;
+            }
+        });
+        
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                
+                // Format salary before submission
+                const minSalary = document.getElementById('min_salary').value;
+                const maxSalary = document.getElementById('max_salary').value;
+                const hideSalary = document.getElementById('hide_salary').checked;
+                const salaryField = document.getElementById('salary');
+                const jobType = document.getElementById('job_type').value;
+                const descriptionField = document.getElementById('description');
+                const skillsHidden = document.getElementById('skillsHidden');
+                const requiredSkillsField = document.getElementById('requiredSkillsField');
+                
+                // Make sure job type is selected
+                if (!jobType) {
+                    event.preventDefault();
+                    const jobTypeSelect = document.getElementById('job_type');
+                    jobTypeSelect.setCustomValidity('Please select a job type');
+                    alert("Please select a job type before submitting.");
+                    return false;
+                } else {
+                    document.getElementById('job_type').setCustomValidity('');
+                }
+                
+                if (!hideSalary && minSalary && maxSalary) {
+                    salaryField.value = `${minSalary} - ${maxSalary} PLN`;
+                } else if (!hideSalary && minSalary) {
+                    salaryField.value = `From ${minSalary} PLN`;
+                } else if (!hideSalary && maxSalary) {
+                    salaryField.value = `Up to ${maxSalary} PLN`;
+                } else {
+                    salaryField.value = '';
+                }
+                
+                // Process skills for both the description and the required_skills field
+                const skillsArray = JSON.parse(skillsHidden.value || '[]');
+                
+                // Set the required_skills field for backend processing
+                requiredSkillsField.value = skillsHidden.value;
+                
+                // Add skills to the description if they're not already included
+                if (skillsArray.length > 0) {
+                    // Check if skills section already exists in the description
+                    if (!descriptionField.value.includes('# Required Skills')) {
+                        // Add skills section to the description
+                        descriptionField.value += `\n\n# Required Skills\n`;
+                        skillsArray.forEach(skill => {
+                            descriptionField.value += `- ${skill}\n`;
+                        });
+                    }
+                }
+                
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+        // Skills input handling
+        const skillInput = document.getElementById('skillInput');
+        const skillsContainer = document.querySelector('.skills-input-wrapper');
+        const skillsHidden = document.getElementById('skillsHidden');
+        let skills = [];
+
+        function addSkill(skill) {
+            if (skill && !skills.includes(skill)) {
+                skills.push(skill);
+                updateSkillTags();
+            }
+            skillInput.value = '';
+        }
+
+        function removeSkill(skill) {
+            skills = skills.filter(s => s !== skill);
+            updateSkillTags();
+        }
+
+        function updateSkillTags() {
+            skillsContainer.innerHTML = skills.map(skill => `
+                <span class="skill-tag">
+                    ${skill}
+                    <i class="bi bi-x remove-skill" data-skill="${skill}"></i>
+                </span>
+            `).join('');
+            skillsHidden.value = JSON.stringify(skills);
+
+            // Add event listeners to remove buttons
+            document.querySelectorAll('.remove-skill').forEach(btn => {
+                btn.addEventListener('click', () => removeSkill(btn.dataset.skill));
+            });
+            
+            // Update the requirements template with current skills
+            updateRequirementsTemplate();
+            
+            // If requirements tab is active, update the description field
+            const requirementsTabActive = document.querySelector('.description-tabs button[data-section="requirements"].active');
+            if (requirementsTabActive) {
+                updateDescriptionWithSkills();
+            }
+        }
+
+        function updateDescriptionWithSkills() {
+            const descriptionField = document.getElementById('description');
+            // Only update if the description is empty or already has a skills section
+            if (descriptionField.value.trim() === '' || descriptionField.value.includes('# Required Skills')) {
+                // Extract everything before the skills section if it exists
+                let beforeSkills = descriptionField.value;
+                if (descriptionField.value.includes('# Required Skills')) {
+                    beforeSkills = descriptionField.value.split('# Required Skills')[0];
+                }
+                
+                // Create the skills section
+                let skillsSection = '# Required Skills\n';
+                skills.forEach(skill => {
+                    skillsSection += `- ${skill}\n`;
+                });
+                
+                // Add "Nice to Have" section if not already there
+                if (!beforeSkills.includes('# Nice to Have')) {
+                    skillsSection += '\n# Nice to Have\n- \n- \n-';
+                }
+                
+                // Update the description field
+                descriptionField.value = beforeSkills + skillsSection;
+            }
+        }
+
+        skillInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addSkill(skillInput.value.trim());
+            }
+        });
+
+        // Description tabs handling
+        const descriptionTabs = document.querySelectorAll('.description-tabs button');
+        const descriptionField = document.getElementById('description');
+        const templates = {
+            description: `# Job Description
+- Write a brief overview of the position
+- Include the main responsibilities
+- Mention key technologies or tools used
+
+# About the Role
+...`,
+            responsibilities: `# Key Responsibilities
+- 
+- 
+- 
+
+# Daily Tasks
+- 
+- 
+-`,
+            requirements: `# Required Skills
+- 
+- 
+- 
+
+# Nice to Have
+- 
+- 
+-`,
+            benefits: `# What We Offer
+- Competitive salary
+- 
+- 
+
+# Additional Benefits
+- 
+- 
+-`
+        };
+
+        // Update the requirements template based on current skills
+        function updateRequirementsTemplate() {
+            if (skills.length > 0) {
+                templates.requirements = `# Required Skills\n`;
+                skills.forEach(skill => {
+                    templates.requirements += `- ${skill}\n`;
+                });
+                templates.requirements += `\n# Nice to Have\n- \n- \n-`;
+            }
+        }
+
+        descriptionTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                descriptionTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const section = tab.dataset.section;
+                
+                // If switching to requirements tab, update the template with current skills
+                if (section === 'requirements') {
+                    updateRequirementsTemplate();
+                }
+                
+                // Only replace content if the field is empty or we're switching to requirements with skills
+                if (descriptionField.value.trim() === '' || 
+                    (section === 'requirements' && skills.length > 0)) {
+                    descriptionField.value = templates[section];
+                }
+            });
+        });
+
+        // Salary range handling
+        const minSalary = document.getElementById('min_salary');
+        const maxSalary = document.getElementById('max_salary');
+        const hideSalary = document.getElementById('hide_salary');
+
+        function updateSalaryFields() {
+            const disabled = hideSalary.checked;
+            minSalary.disabled = disabled;
+            maxSalary.disabled = disabled;
+            if (disabled) {
+                minSalary.value = '';
+                maxSalary.value = '';
+            }
+        }
+
+        hideSalary.addEventListener('change', updateSalaryFields);
+    });
+</script>
+{% endblock %}

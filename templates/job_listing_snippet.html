@@ -1,0 +1,430 @@
+{% load job_tags %}
+
+<style>
+    /* Adjust job listing card to accommodate logo */
+    .job-listing {
+        position: relative !important;
+        padding: 20px 20px 20px 60px !important;
+        height: 120px !important;
+        background: var(--bs-body-bg) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+        z-index: 1 !important;
+        overflow: visible !important;
+        width: 1100px !important;
+        max-width: 90% !important;
+        margin: 0 auto !important;
+        transform-origin: center !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+    
+    /* Container for job listings to ensure proper centering */
+    .job-listings {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+        gap: 1rem !important;
+    }
+    
+    /* Position metadata at the bottom */
+    .job-listing-meta {
+        margin-top: auto !important; /* Push to bottom */
+        position: relative !important;
+        display: flex !important;
+        gap: 15px !important;
+        color: #666 !important;
+        font-size: 0.9rem !important;
+        padding-bottom: 0 !important;
+        padding-left: 0 !important; /* Remove any left padding */
+        margin-left: -2px!important; /* Align with job title and company name */
+    }
+    
+    /* Ensure the left container has proper spacing */
+    .job-listing-left {
+        position: relative !important;
+        padding-left: 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        gap: 4px !important;
+        height: 100% !important;
+        min-height: 80px !important;
+        z-index: 3 !important;
+        background: transparent !important;
+    }
+    
+    /* Style the job title */
+    .job-listing-title {
+        font-size: 1.25rem !important;
+        font-weight: 700 !important;
+        color: #333 !important;
+        margin: 0 !important;
+        padding-top: 5px !important;
+        line-height: 1.4 !important;
+        position: relative !important;
+        z-index: 3 !important;
+        background: transparent !important;
+    }
+
+    /* Style for company name */
+    .job-listing-company {
+        font-size: 0.85rem !important;
+        color: #666 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-weight: normal !important;
+        line-height: 1 !important;
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* Updated logo container styling for proper overlapping */
+    .job-listing-logo {
+        width: 80px !important;
+        height: 80px !important;
+        border-radius: 50% !important;
+        position: absolute !important;
+        left: -30px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        background: #2D2D2D !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+        border: none !important;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 10px 25px, rgba(0, 0, 0, 0.2) 0px 8px 10px !important;
+        z-index: 2 !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+    
+    /* Container for all job listing content */
+    .job-listing-info {
+        position: relative !important;
+        overflow: visible !important;
+        z-index: 3 !important;
+    }
+    
+    /* Updated placeholder styling */
+    .company-logo-placeholder {
+        font-size: 1.5rem !important;
+        font-weight: 600 !important;
+        color: #FFFFFF !important;
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background-color: transparent !important;
+    }
+    
+    /* Make images fit properly in circular container */
+    .job-listing-logo img {
+        width: 60% !important;
+        height: auto !important;
+        object-fit: contain !important;
+        filter: brightness(0) invert(1) !important;
+    }
+
+    /* Featured job listing styles */
+    .job-listing[data-featured="true"] {
+        background: rgba(255, 236, 179, 0.3) !important;
+        border-left: none !important;
+        border-right: 4px solid #FFC107 !important;
+    }
+
+    /* Add hover effects */
+    .job-listing:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 15px 60px rgba(0, 0, 0, 0.6) !important;
+        background: white !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+
+    .job-listing[data-featured="true"]:hover {
+        background: white !important;
+    }
+
+    .job-listing:hover .job-listing-logo {
+        transform: translateY(-50%) scale(1.05) !important;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 15px 35px, rgba(0, 0, 0, 0.15) 0px 10px 15px !important;
+    }
+
+    /* Add styles for the right container */
+    .job-listing-right {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        height: 100% !important;
+        padding-top: 8px !important;  /* Adjusted to align with title */
+    }
+
+    /* Style the salary */
+    .job-listing-salary {
+        font-weight: 600 !important;
+        color: #333 !important;
+        text-align: right !important;
+        line-height: 1.4 !important;
+        background-color: #f5f5f7 !important;
+        padding: 6px 12px !important;
+        border-radius: 8px !important;
+    }
+
+    /* Dark mode adjustment for salary */
+    [data-bs-theme="dark"] .job-listing-salary {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
+    }
+
+    /* Style the tags container */
+    .job-listing-tags {
+        margin-top: auto !important;
+        display: flex !important;
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+        justify-content: flex-end !important;
+    }
+
+    /* Update the details container */
+    .job-listing-details {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important; /* Added to ensure top alignment */
+        height: 80px !important;
+        width: 100% !important;
+        padding-top: 0 !important;
+    }
+
+    .job-listing-type {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        color: #666 !important;
+    }
+
+    /* Dark mode adjustments */
+    [data-bs-theme="dark"] .job-listing {
+        background: rgba(255, 255, 255, 0.05) !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7) !important;
+    }
+
+    [data-bs-theme="dark"] .job-listing:hover {
+        background: rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 15px 60px rgba(0, 0, 0, 0.8) !important;
+    }
+
+    [data-bs-theme="dark"] .job-listing[data-featured="true"] {
+        background: rgba(255, 236, 179, 0.1) !important;
+        border-right: 4px solid #FFC107 !important;
+        border-left: none !important;
+    }
+
+    [data-bs-theme="dark"] .job-listing[data-featured="true"]:hover {
+        background: rgba(255, 236, 179, 0.15) !important;
+    }
+
+    [data-bs-theme="dark"] .job-listing-title {
+        color: var(--bs-body-color) !important;
+    }
+
+    [data-bs-theme="dark"] .job-listing-company,
+    [data-bs-theme="dark"] .job-listing-meta,
+    [data-bs-theme="dark"] .job-listing-type {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+
+    [data-bs-theme="dark"] .job-listing-salary {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: var(--bs-body-color) !important;
+    }
+
+    [data-bs-theme="dark"] .badge {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    [data-bs-theme="dark"] .badge:hover {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+        .job-listing {
+            height: auto !important;
+            min-height: 160px !important;
+            padding: 20px 15px 20px 40px !important;
+            width: 100% !important;
+            max-width: 95% !important;
+        }
+        
+        .job-listing-details {
+            flex-direction: column !important;
+            height: auto !important;
+            gap: 10px !important;
+        }
+        
+        .job-listing-logo {
+            width: 60px !important;
+            height: 60px !important;
+            left: -20px !important;
+        }
+        
+        .job-listing-left {
+            width: 100% !important;
+            padding-left: 5px !important;
+        }
+        
+        .job-listing-right {
+            width: 100% !important;
+            padding-top: 0 !important;
+        }
+        
+        .job-listing-meta {
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            font-size: 0.8rem !important;
+            margin-top: 8px !important;
+        }
+        
+        .job-listing-salary {
+            width: 100% !important;
+            text-align: left !important;
+        }
+        
+        .job-listing-tags {
+            justify-content: flex-start !important;
+            margin-top: 10px !important;
+            width: 100% !important;
+        }
+        
+        .job-listing-title {
+            font-size: 1.1rem !important;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .job-listing {
+            padding: 15px 15px 15px 35px !important;
+            min-height: 180px !important;
+        }
+        
+        .job-listing-logo {
+            width: 50px !important;
+            height: 50px !important;
+            left: -15px !important;
+        }
+        
+        .company-logo-placeholder {
+            font-size: 1.2rem !important;
+        }
+        
+        .job-listing-meta {
+            row-gap: 5px !important;
+        }
+        
+        .job-listing-location, .job-listing-type, .job-listing-posted {
+            font-size: 0.75rem !important;
+            white-space: nowrap !important;
+        }
+        
+        .badge {
+            font-size: 0.7rem !important;
+            padding: 4px 8px !important;
+        }
+    }
+</style>
+
+<a href="{% url 'authentication:job_detail' job.id %}" class="job-listing text-decoration-none" {% if job.is_featured %}data-featured="true"{% endif %}>
+    <div class="job-listing-logo">
+        {% if job.company_logo %}
+            <img src="{{ job.company_logo.url }}" alt="{{ job.company }} Logo">
+        {% else %}
+            <div class="company-logo-placeholder">
+                {{ job.company|slice:":2"|upper }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="job-listing-info">
+        <div class="job-listing-details">
+            <div class="job-listing-left">
+                <h2 class="job-listing-title">
+                    {{ job.title }}
+                    {% if job.is_featured %}
+                        <span class="featured-badge">FEATURED</span>
+                    {% endif %}
+                    {% if job.is_new %}
+                        <span class="badge-new">NEW</span>
+                    {% endif %}
+                </h2>
+                <div class="job-listing-company">
+                    {{ job.company }}
+                </div>
+                <div class="job-listing-meta">
+                    <div class="job-listing-location">
+                        📍
+                        {{ job.location }}
+                    </div>
+                    <div class="job-listing-type">
+                        🕐
+                        {{ job.type }}
+                    </div>
+                    <div class="job-listing-posted text-normal">
+                        📌
+                        {{ job.posted_date|timesince|remove_minutes }} ago
+                    </div>
+                </div>
+            </div>
+            <div class="job-listing-right">
+                <div class="job-listing-salary">
+                    {{ job.salary }}
+                </div>
+                <div class="job-listing-tags">
+                    {% if job.tags.all %}
+                        {% for tag in job|get_job_tags %}
+                            <span class="badge">{{ tag.name }}</span>
+                        {% endfor %}
+                    {% elif job.requirements %}
+                        {% with skills=job.requirements|parse_requirements %}
+                            {% for skill in skills %}
+                                <span class="badge">{{ skill }}</span>
+                            {% endfor %}
+                        {% endwith %}
+                    {% else %}
+                        {% if 'python' in job.title|lower %}
+                            <span class="badge">Python</span>
+                        {% endif %}
+                        {% if 'django' in job.title|lower %}
+                            <span class="badge">Django</span>
+                        {% endif %}
+                        {% if 'react' in job.title|lower %}
+                            <span class="badge">React</span>
+                        {% endif %}
+                        {% if 'java' in job.title|lower %}
+                            <span class="badge">Java</span>
+                        {% endif %}
+                        {% if 'kotlin' in job.title|lower %}
+                            <span class="badge">Kotlin</span>
+                        {% endif %}
+                        {% if 'typescript' in job.title|lower %}
+                            <span class="badge">TypeScript</span>
+                        {% endif %}
+                        {% if 'javascript' in job.title|lower %}
+                            <span class="badge">JavaScript</span>
+                        {% endif %}
+                        {% if 'aws' in job.title|lower %}
+                            <span class="badge">AWS</span>
+                        {% endif %}
+                        {% if 'node.js' in job.title|lower %}
+                            <span class="badge">Node.js</span>
+                        {% endif %}
+                        {% if 'spring boot' in job.title|lower %}
+                            <span class="badge">Spring Boot</span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</a> 

@@ -1,0 +1,21 @@
+{% load job_tags %}
+
+<style>
+    /* Prevent italicization of time text */
+    .job-listing-posted.text-normal,
+    .job-listing-posted.text-normal span {
+        font-style: normal !important;
+    }
+</style>
+
+{% for job in jobs %}
+    {% include 'job_listing_snippet.html' with job=job %}
+{% empty %}
+    <div class="no-results">
+        <div class="text-center py-5">
+            <i class="bi bi-search text-muted display-1"></i>
+            <h3 class="mt-3">No matching jobs found</h3>
+            <p class="text-muted">Try adjusting your search criteria or browse all jobs</p>
+        </div>
+    </div>
+{% endfor %} 
