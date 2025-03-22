@@ -16,7 +16,7 @@ MEDIA_URL = '/media/'
 
 # PythonAnywhere and Production settings
 if 'pythonanywhere.com' in sys.modules or 'PYTHONANYWHERE_SITE' in os.environ:
-    DEBUG = False
+    DEBUG = True  # Temporarily set to True to see error details
     ALLOWED_HOSTS = ['batajin.pythonanywhere.com']
     
     # Static and Media files configuration for production
@@ -26,7 +26,7 @@ if 'pythonanywhere.com' in sys.modules or 'PYTHONANYWHERE_SITE' in os.environ:
     # Security settings
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False  # Temporarily disable SSL redirect
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_HSTS_SECONDS = 31536000  # 1 year
