@@ -5,7 +5,6 @@ import sys
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 SECRET_KEY = 'django-insecure-key-replace-in-production'
 
 # Static files (CSS, JavaScript, Images)
@@ -20,7 +19,7 @@ if 'pythonanywhere.com' in sys.modules or 'PYTHONANYWHERE_SITE' in os.environ:
     DEBUG = False
     ALLOWED_HOSTS = ['batajin.pythonanywhere.com']
     
-    # Static and Media files configuration
+    # Static and Media files configuration for production
     STATIC_ROOT = '/home/batajin/JobBoard/staticfiles'
     MEDIA_ROOT = '/home/batajin/JobBoard/media'
     
@@ -42,8 +41,6 @@ else:
 
 # Add this line for more verbose error reporting
 ADMIN_SITE_HEADER = "JobBoard Admin"
-
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -72,7 +69,7 @@ ROOT_URLCONF = 'jobhub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates")],  # Correctly join paths
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,28 +82,14 @@ TEMPLATES = [
     },
 ]
 
-
-
-
 WSGI_APPLICATION = 'jobhub.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-
-
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -123,45 +106,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# PythonAnywhere configuration
-if 'pythonanywhere.com' in sys.modules or 'PYTHONANYWHERE_SITE' in os.environ:
-    # PythonAnywhere-specific settings
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-    DEBUG = False  # Disable debug in production
-    ALLOWED_HOSTS = ['batajini.pythonanywhere.com', 'batajin.pythonanywhere.com']
-    
-    # Additional security settings for production
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -179,6 +127,7 @@ BOOTSTRAP5 = {
     "error_css_class": "is-invalid",
     "success_css_class": "is-valid",
 }
+
 # Add logging configuration
 LOGGING = {
     'version': 1,
@@ -198,18 +147,4 @@ LOGGING = {
         },
     },
 }
-
-# Production settings for PythonAnywhere
-if not DEBUG:
-    STATIC_ROOT = '/home/batajin/JobBoard/staticfiles'
-    MEDIA_ROOT = '/home/batajin/JobBoard/media'
-    
-    # Security settings
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
-    SECURE_HSTS_SECONDS = 31536000  # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
