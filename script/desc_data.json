@@ -1,102 +1,124 @@
 {
-    "id": "senior-ux-engineer-link-group-remote",
+    "id": "mid-python-engineer-tooploox-remote",
     "apply": {
+        "email": "",
         "option": "url",
-        "leadCollection": false,
+        "leadCollection": true,
         "referenceNumber": "",
         "externalPortalLinks": [],
-        "leadCollectionInfoClause": ""
+        "leadCollectionInfoClause": "Administratorem Twoich danych osobowych jest Tooploox, z siedzib\u0105 pod adresem T\u0119czowa 7, Wroc\u0142aw. W sprawie swoich danych mo\u017cesz si\u0119 z nami skontaktowa\u0107 pod adresem e-mail: paulina.orzechowska@tooploox.com. Twoje dane przetwarzane s\u0105 dla potrzeb nawi\u0105zania kontaktu w ramach prowadzonego procesu rekrutacyjnego. Twoje dane otrzymali\u015bmy od No Fluff Jobs, poniewa\u017c wyrazi\u0142e\u015b ch\u0119\u0107 nawi\u0105zania z Tob\u0105 kontaktu poprzez Formularz Kontaktowy. Przetwarzanie Twoich danych jest niezb\u0119dne do podj\u0119cia kontaktu zgodnie z Twoim zg\u0142oszeniem przez Formularz Kontaktowy (art. 6 ust. 1a Rozporz\u0105dzenia UE 2016/679 - RODO). Twoje dane osobowe zostan\u0105 usuni\u0119te po zako\u0144czeniu obecnego procesu rekrutacyjnego, chyba \u017ce wyrazisz odr\u0119bne zgody. Przys\u0142uguje Ci prawo dost\u0119pu, poprawiania, modyfikowania, uaktualniania, sprostowania, \u017c\u0105dania przeniesienia lub usuni\u0119cia danych, cofni\u0119cia zgody lub wniesienia sprzeciwu."
     },
     "specs": {
         "details": {
-            "custom": []
+            "custom": [],
+            "flexibleHours": true
         },
         "help4Ua": false,
         "dailyTasks": [
-            "Projektowanie i prototypowanie interfejs\u00f3w \u2013 tworzenie makiet, prototyp\u00f3w oraz docelowych rozwi\u0105za\u0144 UX/UI dla aplikacji i platform AI.",
-            "Badania i analiza potrzeb u\u017cytkownik\u00f3w \u2013 przeprowadzanie warsztat\u00f3w, test\u00f3w u\u017cyteczno\u015bci, ankiet i wywiad\u00f3w, zw\u0142aszcza w kontek\u015bcie interakcji z systemami AI (np. Chatboty, rekomendacje, panele zarz\u0105dzania modelami).",
-            "Wsp\u00f3\u0142praca z zespo\u0142ami Data Science / ML \u2013 konsultowanie rozwi\u0105za\u0144 interfejsowych i przep\u0142ywu informacji, projektowanie sposob\u00f3w wizualizacji wynik\u00f3w lub interakcji z modelami.",
-            "Optymalizacja procesu projektowego \u2013 definiowanie i wdra\u017canie standard\u00f3w projektowych, bibliotek komponent\u00f3w, wytycznych zwi\u0105zanych z u\u017cyteczno\u015bci\u0105.",
-            "Integracja element\u00f3w AI w interfejsach \u2013 tworzenie projekt\u00f3w uwzgl\u0119dniaj\u0105cych mechanizmy LLM, system\u00f3w wieloagentowych czy RAG (Retrieval-Augmented Generation) w taki spos\u00f3b, by zapewni\u0107 przyjazn\u0105 interakcj\u0119 u\u017cytkownika z technologi\u0105.",
-            "Monitorowanie trend\u00f3w i innowacji \u2013 ci\u0105g\u0142e poszukiwanie nowych metod, narz\u0119dzi i rozwi\u0105za\u0144 w obszarze AI i UX, dzielenie si\u0119 wiedz\u0105 z zespo\u0142em i interesariuszami."
+            "Design and implement back-end systems and APIs using state-of-the-art technologies and practices.",
+            "Communicate with US-based clients on a daily basis.",
+            "Develop a solid codebase covered with automated sets of tests.",
+            "Learn new skills and technologies as you go.",
+            "Finally, your work will have a big impact on product development and the direction in which it moves."
         ],
         "referral": {
-            "allowed": true
+            "allowed": false
         }
     },
-    "title": "Senior UX Engineer",
+    "title": "Mid Python Engineer ",
     "basics": {
-        "category": "ux",
+        "category": "backend",
         "seniority": [
-            "Senior"
-        ]
+            "Mid"
+        ],
+        "technology": "Python"
     },
     "company": {
-        "url": "http://linkgroup.pl/",
+        "url": "https://www.tooploox.com/",
         "logo": {
-            "original": "companies/logos/original/link_group_240px_20230907_142205.png",
-            "jobs_details": "companies/logos/jobs_details/link_group_240px_20230907_142205.png",
-            "jobs_listing": "companies/logos/jobs_listing/link_group_240px_20230907_142205.png",
-            "jobs_details_2x": "companies/logos/jobs_details_2x/link_group_240px_20230907_142205.png",
-            "jobs_listing_2x": "companies/logos/jobs_listing_2x/link_group_240px_20230907_142205.png",
-            "companies_details": "companies/logos/companies_details/link_group_240px_20230907_142205.png",
-            "companies_listing": "companies/logos/companies_listing/link_group_240px_20230907_142205.png",
-            "jobs_details_webp": "companies/logos/jobs_details/link_group_240px_20230907_142205.webp",
-            "jobs_listing_webp": "companies/logos/jobs_listing/link_group_240px_20230907_142205.webp",
-            "companies_details_2x": "companies/logos/companies_details_2x/link_group_240px_20230907_142205.png",
-            "companies_listing_2x": "companies/logos/companies_listing_2x/link_group_240px_20230907_142205.png",
-            "jobs_details_2x_webp": "companies/logos/jobs_details_2x/link_group_240px_20230907_142205.webp",
-            "jobs_listing_2x_webp": "companies/logos/jobs_listing_2x/link_group_240px_20230907_142205.webp",
-            "original_pixel_image": "companies/logos/original_pixel_image/link_group_240px_20230907_142205.png",
-            "companies_details_webp": "companies/logos/companies_details/link_group_240px_20230907_142205.webp",
-            "companies_listing_webp": "companies/logos/companies_listing/link_group_240px_20230907_142205.webp",
-            "companies_details_2x_webp": "companies/logos/companies_details_2x/link_group_240px_20230907_142205.webp",
-            "companies_listing_2x_webp": "companies/logos/companies_listing_2x/link_group_240px_20230907_142205.webp"
+            "original": "companies/logos/original/tpx_logo_sign_3_20210126_150641.png",
+            "jobs_details": "companies/logos/jobs_details/tpx_logo_sign_3_20210126_150641.png",
+            "jobs_listing": "companies/logos/jobs_listing/tpx_logo_sign_3_20210126_150641.png",
+            "jobs_details_2x": "companies/logos/jobs_details_2x/tpx_logo_sign_3_20210126_150641.png",
+            "jobs_listing_2x": "companies/logos/jobs_listing_2x/tpx_logo_sign_3_20210126_150641.png",
+            "companies_details": "companies/logos/companies_details/tpx_logo_sign_3_20210126_150641.png",
+            "companies_listing": "companies/logos/companies_listing/tpx_logo_sign_3_20210126_150641.png",
+            "companies_details_2x": "companies/logos/companies_details_2x/tpx_logo_sign_3_20210126_150641.png",
+            "companies_listing_2x": "companies/logos/companies_listing_2x/tpx_logo_sign_3_20210126_150641.png"
         },
-        "name": "Link Group",
-        "size": "40+",
-        "video": ""
+        "name": "Tooploox",
+        "size": "170",
+        "video": "https://youtu.be/6tF_7dVCTuE?si=ADgt_AWd753OaW3k"
     },
     "details": {
         "quote": "",
         "position": "",
-        "description": "<ul>\n<li><strong>Projektowanie\u00a0i\u00a0prototypowanie\u00a0interfejs\u00f3w</strong>\u00a0\u2013\u00a0tworzenie\u00a0makiet,\u00a0prototyp\u00f3w\u00a0oraz\u00a0docelowych\u00a0rozwi\u0105za\u0144\u00a0UX/UI\u00a0dla\u00a0aplikacji\u00a0i\u00a0platform\u00a0AI.</li>\n<li><strong>Badania\u00a0i\u00a0analiza\u00a0potrzeb\u00a0u\u017cytkownik\u00f3w</strong>\u00a0\u2013\u00a0przeprowadzanie\u00a0warsztat\u00f3w,\u00a0test\u00f3w\u00a0u\u017cyteczno\u015bci,\u00a0ankiet\u00a0i\u00a0wywiad\u00f3w,\u00a0zw\u0142aszcza\u00a0w\u00a0kontek\u015bcie\u00a0interakcji\u00a0z\u00a0systemami\u00a0AI\u00a0(np.\u00a0Chatboty,\u00a0rekomendacje,\u00a0panele\u00a0zarz\u0105dzania\u00a0modelami).</li>\n<li><strong>Wsp\u00f3\u0142praca\u00a0z\u00a0zespo\u0142ami\u00a0Data\u00a0Science\u00a0/\u00a0ML</strong>\u00a0\u2013\u00a0konsultowanie\u00a0rozwi\u0105za\u0144\u00a0interfejsowych\u00a0i\u00a0przep\u0142ywu\u00a0informacji,\u00a0projektowanie\u00a0sposob\u00f3w\u00a0wizualizacji\u00a0wynik\u00f3w\u00a0lub\u00a0interakcji\u00a0z\u00a0modelami.</li>\n<li><strong>Optymalizacja\u00a0procesu\u00a0projektowego</strong>\u00a0\u2013\u00a0definiowanie\u00a0i\u00a0wdra\u017canie\u00a0standard\u00f3w\u00a0projektowych,\u00a0bibliotek\u00a0komponent\u00f3w,\u00a0wytycznych\u00a0zwi\u0105zanych\u00a0z\u00a0u\u017cyteczno\u015bci\u0105.</li>\n<li><strong>Integracja\u00a0element\u00f3w\u00a0AI\u00a0w\u00a0interfejsach</strong>\u00a0\u2013\u00a0tworzenie\u00a0projekt\u00f3w\u00a0uwzgl\u0119dniaj\u0105cych\u00a0mechanizmy\u00a0LLM,\u00a0system\u00f3w\u00a0wieloagentowych\u00a0czy\u00a0RAG\u00a0(Retrieval-Augmented\u00a0Generation)\u00a0w\u00a0taki\u00a0spos\u00f3b,\u00a0by\u00a0zapewni\u0107\u00a0przyjazn\u0105\u00a0interakcj\u0119\u00a0u\u017cytkownika\u00a0z\u00a0technologi\u0105.</li>\n<li><strong>Monitorowanie\u00a0trend\u00f3w\u00a0i\u00a0innowacji</strong> \u2013\u00a0ci\u0105g\u0142e\u00a0poszukiwanie\u00a0nowych\u00a0metod,\u00a0narz\u0119dzi\u00a0i\u00a0rozwi\u0105za\u0144\u00a0w\u00a0obszarze\u00a0AI\u00a0i\u00a0UX,\u00a0dzielenie\u00a0si\u0119\u00a0wiedz\u0105\u00a0z\u00a0zespo\u0142em\u00a0i\u00a0interesariuszami.</li>\n</ul>",
+        "description": "<p>We are Tooploox, an AI software development company offering custom AI solutions and services. We help innovative companies and startups design and build digital products with generative AI, mobile, and web technologies.</p>\n<p>Our team, consisting of nearly 200 experts including our R&amp;D team of over 40 engineers, many with PhDs, has pioneered AI solutions across industries like healthcare, fashion, and e-commerce. We\u2019ve published over 15 research papers in top conferences like NeurIPS and ICML.</p>\n<p>Feel invited!</p>",
         "quoteAuthor": ""
     },
     "benefits": {
-        "benefits": [],
+        "benefits": [
+            "Sport subscription",
+            "Training budget",
+            "Private healthcare"
+        ],
         "equipment": {
             "computer": "",
             "monitors": "",
             "operatingSystems": {
                 "lin": false,
-                "mac": false,
+                "mac": true,
                 "win": false
             }
         },
-        "officePerks": []
+        "officePerks": [
+            "Free coffee",
+            "Gym",
+            "Bike parking",
+            "Playroom",
+            "Shower",
+            "Free snacks",
+            "Free beverages",
+            "In-house trainings",
+            "Modern office",
+            "Startup atmosphere",
+            "No dress code"
+        ]
     },
-    "consents": {
-        "infoClause": "Administratorem danych przetwarzanych w zwi\u0105zku z Twoj\u0105 aplikacj\u0105 jest sp\u00f3\u0142ka Link Group Sp. z o.o. z siedzib\u0105 w Warszawie, al. Jerozolimskie 142A (02-305 Warszawa). Administrator wyznaczy\u0142 inspektora ochrony danych osobowych z kt\u00f3rym mo\u017ce si\u0119 skontaktowa\u0107 poprzez wys\u0142anie wiadomo\u015bci e-mail na adres: iod@linkgroup.pl. Szczeg\u00f3\u0142owe informacje na temat przetwarzania Twoich danych osobowych znajduj\u0105 si\u0119 poni\u017cej.\n\nI. TRE\u015a\u0106 OBOWI\u0104ZKU INFORMACYJNEGO (ART. 13 RODO)\nTre\u015b\u0107 obowi\u0105zku informacyjnego z art. 13 RODO dla kandydat\u00f3w bior\u0105cych udzia\u0142 w rekrutacji\n\nAdministratorem Pani/Pana danych osobowych jest: \nLink Group Sp. z o.o. z siedzib\u0105 w Warszawie, al. Jerozolimskie 142A (02-305 Warszawa), adres e-mail: kontakt@linkgroup.pl, wpisan\u0105 do rejestru przedsi\u0119biorc\u00f3w\nKrajowego Rejestru S\u0105dowego prowadzonego przez S\u0105d Rejonowym dla m. st. Warszawy w Warszawie, XII Wydzia\u0142 Gospodarczy Krajowego Rejestru S\u0105dowego,\nnumer KRS: 0000614921, numer NIP: 5252657506, numer REGON; 36434784200000, (dalej \u201eAdministrator\u201d).\n\nAdministrator powo\u0142a\u0142 inspektora ochrony danych osobowych (\u201eIOD\u201d). W celu skontaktowania z IOD nale\u017cy wys\u0142a\u0107 wiadomo\u015b\u0107 e-mail na adres: iod@linkgroup.pl lub\npoczt\u0105 na adres:\nInspektor Ochrony Danych - Link Group Sp. z o.o, Aleje Jerozolimskie 142A, 02-305 Warszawa.\n\nPani/Pana dane b\u0119d\u0105 przetwarzane w celu przeprowadzenia rekrutacji na stanowisko pracy u Administratora lub w celu przeprowadzenia rekrutacji na wsp\u00f3\u0142pracownika\nAdministratora. W przypadku wyra\u017cenia dobrowolnej i opcjonalnej zgody, dane b\u0119d\u0105 przetwarzane tak\u017ce dla cel\u00f3w przysz\u0142ych rekrutacji prowadzonych przez Administratora.\n\nNie b\u0119dzie Pani/Pan podlega\u0107 decyzji, kt\u00f3ra opiera si\u0119 wy\u0142\u0105cznie na zautomatyzowanym przetwarzaniu, w tym profilowaniu, i kt\u00f3ra wywo\u0142uje wobec Pani/Pana skutki prawne lub w podobny spos\u00f3b istotnie wp\u0142ywa na Pani/Pana sytuacj\u0119.\n\nPodanie danych przez Pani\u0105/Pana - jako kandydata na stanowisko pracy, w zakresie okre\u015blonym w art. 22 1 \u00a7 1 i 2 Kodeksu pracy, jest obowi\u0105zkiem ustawowym, a\nkonsekwencj\u0105 ich niepodania b\u0119dzie niemo\u017cno\u015b\u0107 wzi\u0119cia udzia\u0142u w rekrutacji. W pozosta\u0142ym zakresie podanie danych jest dobrowolne. Podanie danych przez\nkandydata na wsp\u00f3\u0142pracownika jest dobrowolne jednak konsekwencj\u0105 ich niepodania b\u0119dzie niemo\u017cno\u015b\u0107 wzi\u0119cia udzia\u0142u w rekrutacji.\n\nPodstaw\u0105 prawn\u0105 przetwarzania Pani/Pana danych jest::\n1) w przypadku rekrutacji na stanowisko pracy:\n\na) art. 6 ust. 1 lit. c rozporz\u0105dzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27.04.2016 r. w sprawie ochrony os\u00f3b fizycznych w zwi\u0105zku z\nprzetwarzaniem danych osobowych i w sprawie swobodnego przep\u0142ywu takich danych oraz uchylenia dyrektywy 95/46/WE (og\u00f3lne rozporz\u0105dzenie o ochronie\ndanych) \u2013 dalej: RODO w zw. z art. 22 1 Kodeksu pracy w zakresie niezb\u0119dnym do wype\u0142nienia obowi\u0105zk\u00f3w prawnych Administratora;\nb) art. 6 ust. 1 lit. f RODO, tj. prawnie uzasadniony interes Administratora polegaj\u0105cy na:\n- poszukiwaniu pracownik\u00f3w oraz prowadzeniu post\u0119powa\u0144 rekrutacyjnych zmierzaj\u0105cych do zatrudnienia pracownika, kt\u00f3rego kwalifikacje najbardziej\nodpowiadaj\u0105 zapotrzebowaniu Administratora,\n- dochodzeniu ewentualnych roszcze\u0144 lub obrony przed nimi;\nc) art. 6 ust. 1 lit. a RODO \u2013 je\u017celi wyrazi Pani/Pan zgod\u0119 na przetwarzanie danych dla cel\u00f3w przysz\u0142ej rekrutacji oraz w przypadku podania przez Pani\u0105/Pana danych innych ni\u017c wymagane na podstawie obowi\u0105zuj\u0105cych przepis\u00f3w prawa (np. wizerunek, zainteresowania);\n2) w przypadku rekrutacji na wsp\u00f3\u0142pracownik\u00f3w:\na) art. 6 ust. 1 lit. b) RODO\u2013 w zakresie niezb\u0119dnym do zawarcia i wykonania umowy,\nb) art. 6 ust. 1 lit. c) RODO \u2013 w zakresie niezb\u0119dnym do wype\u0142nienia obowi\u0105zku prawnego ci\u0105\u017c\u0105cego na Administratorze,\nc) art. 6 ust. 1 lit. f) RODO \u2013 prawnie uzasadniony interes Administratora, polegaj\u0105cy na poszukiwaniu cz\u0142onk\u00f3w zespo\u0142u, kt\u00f3rych kwalifikacje najbardziej odpowiadaj\u0105 zapotrzebowaniu Administratora oraz na prowadzeniu post\u0119powa\u0144 rekrutacyjnych zmierzaj\u0105cych do nawi\u0105zania wsp\u00f3\u0142pracy,\nd) art. 6 ust. 1 lit. a RODO \u2013 je\u017celi Pani/Pan wyrazi zgod\u0119 na przetwarzanie danych\ndla cel\u00f3w przysz\u0142ej rekrutacji.\n\nW zakresie, w jakim dane przetwarzane s\u0105 na podstawie odr\u0119bnej zgody, przys\u0142uguje Pani/Panu prawo do cofni\u0119cia zgody w dowolnym momencie.\nPozostanie to jednak bez wp\u0142ywu na zgodno\u015b\u0107 z prawem przetwarzania danych, kt\u00f3rego dokonano przed jej cofni\u0119ciem. W tym samym przypadku przys\u0142uguje r\u00f3wnie\u017c Pani/Panu prawo do przenoszenia danych.\n\nOdbiorcami Pani/Pana danych osobowych mog\u0105 by\u0107:\n1. podmioty wspieraj\u0105ce proces rekrutacji (m. in. bran\u017cowe portale internetowe, portale po\u015brednictwa pracy),\n2. podmioty \u015bwiadcz\u0105ce us\u0142ugi audytowe,\n3. podmioty \u015bwiadcz\u0105ce us\u0142ugi prawne,\n4. podmioty dostarczaj\u0105ce oprogramowanie i narz\u0119dzia informatyczne\nwykorzystywane przez Administratora,\n5. podmioty \u015bwiadcz\u0105ce us\u0142ugi informatyczne,\n6. podmioty wspieraj\u0105ce Administratora w zakresie hostingu oraz utrzymania serwer\u00f3w,\n7. podmiot dostarczaj\u0105cy poczt\u0119 elektroniczn\u0105,\n8. klienci Administratora na rzecz kt\u00f3rych Administrator \u015bwiadczy us\u0142ugi w ramach swojej dzia\u0142alno\u015bci w zakresie wsparcia proces\u00f3w technicznych i technologicznych (tzw. outsource us\u0142ug IT)\n9. podmioty kt\u00f3rym Administrator musi przekazywa\u0107 dane na gruncie obowi\u0105zuj\u0105cych przepis\u00f3w prawa.\n\nZ uwagi na wykorzystywane narz\u0119dzia i systemy IT oraz mo\u017cliwo\u015b\u0107 przekazywania aplikacji klientom Administratora w ramach us\u0142ug wsparcia IT, Pani/Pana dane mog\u0105\nby\u0107 przekazane poza Europejski Obszar Gospodarczy, w tym tak\u017ce do kraj\u00f3w, kt\u00f3re nie zosta\u0142y uznane przez Komisj\u0119 Europejsk\u0105 za zapewniaj\u0105ce odpowiedni stopie\u0144 ochrony danych osobowych, w\u00f3wczas, przekazanie danych osobowych nast\u0105pi na podstawie prawnej przewidzianej w RODO. Pani/Pana dane osobowe b\u0119d\u0105 przetwarzane do zako\u0144czenia procesu rekrutacji. W przypadku wyra\u017cenia odr\u0119bnej zgody na przetwarzanie danych dla cel\u00f3w przysz\u0142ych rekrutacji, dane b\u0119d\u0105 przetwarzane a\u017c do zako\u0144czenia tych rekrutacji albo do czasu cofni\u0119cia zgody na przetwarzanie danych, jednak nie d\u0142u\u017cej ni\u017c przez okres 9 miesi\u0119cy. W przypadku przetwarzania danych na podstawie prawnie uzasadnionych interes\u00f3w Administratora, Pani/Pana dane osobowe b\u0119d\u0105 przetwarzane przez czas niezb\u0119dny do jego realizacji, w tym zakresie nie d\u0142u\u017cej jednak ni\u017c do czasu uznania za uzasadniony zg\u0142oszonego przez Pani\u0105/Pana sprzeciwu wobec przetwarzania Pani/Pana danych, podyktowanego Pani/Pana szczeg\u00f3ln\u0105 sytuacj\u0105.\n\nPrzys\u0142uguje Pani/Panu prawo dost\u0119pu do danych oraz otrzymania ich kopii, ich poprawiania, \u017c\u0105dania ich usuni\u0119cia, a tak\u017ce prawo do ograniczenia przetwarzania.\n\nZ przyczyn zwi\u0105zanych z Pani/Pana szczeg\u00f3ln\u0105 sytuacj\u0105, przys\u0142uguje Pani/Panu prawo sprzeciwu wobec przetwarzania danych osobowych, je\u017celi Administrator przetwarza dane osobowe na podstawie swojego prawnie uzasadnionego interesu.\n\nDodatkowo, przys\u0142uguje Pani/Panu tak\u017ce prawo wniesienia skargi do organu nadzorczego, kt\u00f3rym w Polsce jest Prezes Urz\u0119du Ochrony Danych Osobowych, je\u017celi dane s\u0105 przetwarzane niezgodnie z wymogami prawnymi.",
-        "futureConsent": true,
-        "futureConsentRequired": false,
-        "futureConsentMsg": "Wyra\u017cam zgod\u0119 na przetwarzanie danych osobowych zawartych w dostarczonych dokumentach aplikacyjnych przez sp\u00f3\u0142k\u0119 Link Group Sp. z o.o. z siedzib\u0105 w Warszawie, al. Jerozolimskie 142A (02-305 Warszawa) b\u0119d\u0105c\u0105 administratorem danych osobowych, w tym wizerunku dla cel\u00f3w zwi\u0105zanych z uczestnictwem w przysz\u0142ych procesach rekrutacyjnych prowadzonych przez administratora. Dane osobowe b\u0119d\u0105 przetwarzane przez czas 24 miesi\u0119cy. Przyjmuj\u0119 do wiadomo\u015bci, \u017ce  zgoda mo\u017ce by\u0107 w ka\u017cdej chwili cofni\u0119ta za po\u015brednictwem poczty e-mail na adres: iod@linkgroup.pl lub poczt\u0105 tradycyjn\u0105 na adres administratora wskazany powy\u017cej w tre\u015bci zgody.",
-        "personalDataRequestLink": "iod@linkgroup.pl"
-    },
+    "consents": {},
     "location": {
         "places": [
             {
                 "city": "Remote",
-                "url": "senior-ux-engineer-link-group-remote"
+                "url": "mid-python-engineer-tooploox-remote"
             },
             {
                 "country": {
                     "code": "POL",
                     "name": "Poland"
                 },
-                "province": "lower-silesian",
-                "url": "senior-ux-engineer-link-group-lower-silesian",
-                "provinceOnly": true
+                "city": "Warsaw",
+                "street": "Foksal 18",
+                "postalCode": "00-372",
+                "geoLocation": {
+                    "latitude": 52.2336441,
+                    "longitude": 21.0198752
+                },
+                "url": "mid-python-engineer-tooploox-warsaw"
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "city": "Wroclaw",
+                "street": "T\u0119czowa 7",
+                "postalCode": "53-601",
+                "geoLocation": {
+                    "latitude": 51.1069033,
+                    "longitude": 17.0179455
+                },
+                "url": "mid-python-engineer-tooploox-wroclaw"
             },
             {
                 "country": {
@@ -104,7 +126,7 @@
                     "name": "Poland"
                 },
                 "province": "kuyavian-pomeranian",
-                "url": "senior-ux-engineer-link-group-kuyavian-pomeranian",
+                "url": "mid-python-engineer-tooploox-kuyavian-pomeranian",
                 "provinceOnly": true
             },
             {
@@ -113,7 +135,7 @@
                     "name": "Poland"
                 },
                 "province": "lodz",
-                "url": "senior-ux-engineer-link-group-lodz",
+                "url": "mid-python-engineer-tooploox-lodz",
                 "provinceOnly": true
             },
             {
@@ -122,7 +144,7 @@
                     "name": "Poland"
                 },
                 "province": "lublin",
-                "url": "senior-ux-engineer-link-group-lublin",
+                "url": "mid-python-engineer-tooploox-lublin",
                 "provinceOnly": true
             },
             {
@@ -131,7 +153,7 @@
                     "name": "Poland"
                 },
                 "province": "lubusz",
-                "url": "senior-ux-engineer-link-group-lubusz",
+                "url": "mid-python-engineer-tooploox-lubusz",
                 "provinceOnly": true
             },
             {
@@ -140,16 +162,7 @@
                     "name": "Poland"
                 },
                 "province": "lesser-poland",
-                "url": "senior-ux-engineer-link-group-lesser-poland",
-                "provinceOnly": true
-            },
-            {
-                "country": {
-                    "code": "POL",
-                    "name": "Poland"
-                },
-                "province": "masovian",
-                "url": "senior-ux-engineer-link-group-masovian",
+                "url": "mid-python-engineer-tooploox-lesser-poland",
                 "provinceOnly": true
             },
             {
@@ -158,7 +171,7 @@
                     "name": "Poland"
                 },
                 "province": "opole",
-                "url": "senior-ux-engineer-link-group-opole",
+                "url": "mid-python-engineer-tooploox-opole",
                 "provinceOnly": true
             },
             {
@@ -167,7 +180,7 @@
                     "name": "Poland"
                 },
                 "province": "subcarpathian",
-                "url": "senior-ux-engineer-link-group-subcarpathian",
+                "url": "mid-python-engineer-tooploox-subcarpathian",
                 "provinceOnly": true
             },
             {
@@ -176,7 +189,7 @@
                     "name": "Poland"
                 },
                 "province": "podlaskie",
-                "url": "senior-ux-engineer-link-group-podlaskie",
+                "url": "mid-python-engineer-tooploox-podlaskie",
                 "provinceOnly": true
             },
             {
@@ -185,7 +198,7 @@
                     "name": "Poland"
                 },
                 "province": "pomeranian",
-                "url": "senior-ux-engineer-link-group-pomeranian",
+                "url": "mid-python-engineer-tooploox-pomeranian",
                 "provinceOnly": true
             },
             {
@@ -194,7 +207,7 @@
                     "name": "Poland"
                 },
                 "province": "silesian",
-                "url": "senior-ux-engineer-link-group-silesian",
+                "url": "mid-python-engineer-tooploox-silesian",
                 "provinceOnly": true
             },
             {
@@ -203,7 +216,7 @@
                     "name": "Poland"
                 },
                 "province": "holy-cross",
-                "url": "senior-ux-engineer-link-group-holy-cross",
+                "url": "mid-python-engineer-tooploox-holy-cross",
                 "provinceOnly": true
             },
             {
@@ -212,7 +225,7 @@
                     "name": "Poland"
                 },
                 "province": "warmian-masurian",
-                "url": "senior-ux-engineer-link-group-warmian-masurian",
+                "url": "mid-python-engineer-tooploox-warmian-masurian",
                 "provinceOnly": true
             },
             {
@@ -221,7 +234,7 @@
                     "name": "Poland"
                 },
                 "province": "greater-poland",
-                "url": "senior-ux-engineer-link-group-greater-poland",
+                "url": "mid-python-engineer-tooploox-greater-poland",
                 "provinceOnly": true
             },
             {
@@ -230,7 +243,7 @@
                     "name": "Poland"
                 },
                 "province": "west-pomeranian",
-                "url": "senior-ux-engineer-link-group-west-pomeranian",
+                "url": "mid-python-engineer-tooploox-west-pomeranian",
                 "provinceOnly": true
             }
         ],
@@ -250,11 +263,19 @@
         "originalSalary": {
             "currency": "PLN",
             "types": {
+                "permanent": {
+                    "period": "Month",
+                    "range": [
+                        12000.0,
+                        16000.0
+                    ],
+                    "paidHoliday": true
+                },
                 "b2b": {
                     "period": "Month",
                     "range": [
-                        15000.0,
-                        22000.0
+                        13000.0,
+                        18000.0
                     ],
                     "paidHoliday": false
                 }
@@ -266,7 +287,7 @@
     "recruitment": {
         "languages": [
             {
-                "code": "pl"
+                "code": "en"
             }
         ],
         "onlineInterviewAvailable": true
@@ -274,110 +295,100 @@
     "requirements": {
         "musts": [
             {
-                "value": "UX",
+                "value": "Python",
                 "type": "main"
             },
             {
-                "value": "UI",
+                "value": "Git",
+                "type": "main"
+            },
+            {
+                "value": "API",
                 "type": "main"
             }
         ],
         "nices": [
             {
-                "value": "AI",
+                "value": "React",
                 "type": "main"
             },
             {
-                "value": "HTML",
+                "value": "CI/CD",
                 "type": "main"
             },
             {
-                "value": "CSS",
+                "value": "Django",
                 "type": "main"
             },
             {
-                "value": "JavaScript",
+                "value": "NoSQL",
                 "type": "main"
             },
             {
-                "value": "Figma",
+                "value": "SQL",
                 "type": "main"
             },
             {
-                "value": "Sketch",
-                "type": "main"
-            },
-            {
-                "value": "Adobe",
-                "type": "main"
-            },
-            {
-                "value": "CIS",
-                "type": "main"
-            },
-            {
-                "value": "CA",
-                "type": "main"
-            },
-            {
-                "value": "R",
+                "value": "GraphQL",
                 "type": "main"
             }
         ],
-        "description": "<h3><strong></strong></h3>\n<ul>\n<li><strong>Ponad\u00a010\u00a0lat\u00a0do\u015bwiadczenia</strong>\u00a0w\u00a0projektowaniu\u00a0UX/UI\u00a0i\u00a0rozwoju\u00a0aplikacji\u00a0(webowych,\u00a0mobilnych,\u00a0desktopowych)\u00a0\u2013\u00a0mile\u00a0widziane\u00a0portfolio\u00a0potwierdzaj\u0105ce\u00a0realizacj\u0119\u00a0z\u0142o\u017conych\u00a0projekt\u00f3w.</li>\n<li><strong>Zrozumienie\u00a0aspekt\u00f3w\u00a0AI</strong>.</li>\n<li><strong>Umiej\u0119tno\u015bci\u00a0techniczne</strong>\u00a0\u2013\u00a0znajomo\u015b\u0107\u00a0j\u0119zyk\u00f3w\u00a0front-end\u00a0(HTML,\u00a0CSS,\u00a0JavaScript)\u00a0i\u00a0narz\u0119dzi\u00a0do\u00a0prototypowania\u00a0(Figma,\u00a0Sketch,\u00a0Adobe\u00a0XD,\u00a0itp.),\u00a0a\u00a0tak\u017ce\u00a0ch\u0119\u0107\u00a0pracy\u00a0w\u00a0\u015bcis\u0142ej\u00a0kooperacji\u00a0z\u00a0zespo\u0142ami\u00a0deweloperskimi.</li>\n<li><strong>Do\u015bwiadczenie\u00a0w\u00a0prowadzeniu\u00a0bada\u0144\u00a0UX</strong>\u00a0\u2013\u00a0projektowanie\u00a0i\u00a0analizowanie\u00a0test\u00f3w\u00a0u\u017cyteczno\u015bci,\u00a0prowadzenie\u00a0wywiad\u00f3w,\u00a0tworzenie\u00a0person\u00a0i\u00a0user\u00a0journey.</li>\n<li><strong>Rozwini\u0119te\u00a0umiej\u0119tno\u015bci\u00a0komunikacyjne</strong>\u00a0\u2013\u00a0potrafisz\u00a0w\u00a0jasny\u00a0spos\u00f3b\u00a0prezentowa\u0107\u00a0pomys\u0142y\u00a0i\u00a0uzasadnia\u0107\u00a0decyzje\u00a0projektowe\u00a0przed\u00a0zespo\u0142ami\u00a0technicznymi\u00a0oraz\u00a0biznesowymi.</li>\n<li><strong>Bardzo\u00a0dobra\u00a0znajomo\u015b\u0107\u00a0j\u0119zyka\u00a0angielskiego</strong>\u00a0\u2013\u00a0umo\u017cliwiaj\u0105ca\u00a0swobodn\u0105\u00a0komunikacj\u0119\u00a0w\u00a0mi\u0119dzynarodowym\u00a0\u015brodowisku\u00a0oraz\u00a0tworzenie\u00a0dokumentacji\u00a0projektowej.</li>\n<li>Mile\u00a0widziane\u00a0do\u015bwiadczenie\u00a0w\u00a0metodykach\u00a0<strong>Agile/Scrum</strong> oraz\u00a0wiedza\u00a0z\u00a0zakresu\u00a0projekt\u00f3w\u00a0R&amp;D\u00a0w\u00a0obszarze\u00a0AI.</li>\n</ul>",
+        "description": "<ul>\n<li>Experience in implementing real back-end APIs for a single page application or mobile application.</li>\n<li>Team-oriented approach and knowledge of the Agile process.</li>\n<li>Experience in the use of GIT.</li>\n<li>Ability to write testable code.</li>\n<li>Fluency in English and Polish (you will attend meetings with English speaking clients).</li>\n<li>Familiarity with frontend development.</li>\n</ul>\n<p></p>\n<h3>It would be great if you also have:</h3>\n<ul>\n<li>Familiarity with Django.</li>\n<li>Proven experience in FinTech or Payroll industries.</li>\n<li>Experience in Frontend development.</li>\n<li>Familiarity with automation work (CI/CD) and infrastructure management (e.g. AWS, GCP, Kubernetes).</li>\n<li>Experience with NoSQL/SQL databases.</li>\n<li>Familiarity with asynchronous Python, GraphQL or message queues.</li>\n</ul>",
         "languages": [
             {
                 "type": "MUST",
-                "code": "en"
+                "code": "pl",
+                "level": "C1"
             },
             {
                 "type": "MUST",
-                "code": "pl"
+                "code": "en",
+                "level": "B2"
             }
         ]
     },
-    "posted": 1742592691745,
+    "posted": 1742247758990,
     "postedOrRenewedDaysAgo": 0,
-    "expiresAt": "2025-04-20T23:59:59",
+    "expiresAt": "2025-04-16T23:59:59",
     "status": "PUBLISHED",
-    "postingUrl": "senior-ux-engineer-link-group-remote",
+    "postingUrl": "mid-python-engineer-tooploox-remote",
     "metadata": {
         "sectionLanguages": {
-            "description": "pl",
-            "requirements.description": "pl",
-            "daily-tasks": "pl"
+            "description": "en",
+            "daily-tasks": "en",
+            "requirements.description": "en"
         }
     },
     "regions": [
         "pl"
     ],
-    "reference": "2MNROO2T",
+    "reference": "PAG077LL",
     "meta": {
         "videosInCompanyProfileVisible": true
     },
-    "companyUrl": "/company/link-group-ccywok00",
+    "companyUrl": "/company/tooploox-7br9popl",
     "seo": {
-        "title": "Senior UX Engineer @ Link Group",
-        "description": "Senior UX Engineer @ Link Group Fully remote job 15.0k-22.0k (B2B) PLN / month"
+        "title": "Mid Python Engineer  @ Tooploox",
+        "description": "Mid Python Engineer  @ Tooploox Fully remote job PLN per month: 13.0k-18.0k (B2B), 12.0k-16.0k (UoP)"
     },
     "analytics": {
         "lastBump": 0,
         "lastBumpType": "SYSTEM",
-        "previousBumpCount": 0,
-        "nextBump": 1,
-        "nextBumpType": "SYSTEM",
-        "nextBumpCount": 9,
-        "emissionDay": 0,
+        "previousBumpCount": 3,
+        "nextBump": 4,
+        "nextBumpType": "ADDITIONAL",
+        "nextBumpCount": 4,
+        "emissionDay": 5,
         "productType": "EXPERT",
-        "emissionBumps": 9,
+        "emissionBumps": 7,
         "emissionLength": 30,
-        "emission": "GESYKY",
+        "emission": "CKMYNL",
         "addons": {
-            "bump": false,
-            "publication": true,
+            "bump": true,
+            "publication": false,
             "offerOfTheDay": false,
             "topInSearch": false,
-            "highlighted": false
+            "highlighted": true
         },
         "topInSearchConfig": {
             "pairs": []
