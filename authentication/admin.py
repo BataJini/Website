@@ -1,7 +1,15 @@
 from django.contrib import admin
+from .models import CustomUser, Job
+
+# Temporary simplified admin to debug issues
+admin.site.register(CustomUser)
+admin.site.register(Job)
+
+# Commenting out the complex admin classes for debugging
+'''
+from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from .models import CustomUser, Job
 
 class CustomUserAdmin(UserAdmin):
     list_display = ('username', 'email', 'full_name', 'is_staff', 'date_joined')
@@ -72,3 +80,4 @@ class JobAdmin(admin.ModelAdmin):
     
     def view_on_site(self, obj):
         return None  # Disable the "View on site" link since we don't have a public view
+'''

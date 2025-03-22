@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('django-admin/', admin.site.urls),  # Alternative admin URL for testing
     path('', include('authentication.urls')),
     path('jobs/', views.redirect_to_home, name='redirect_to_jobs'),
 ]

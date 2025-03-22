@@ -12,6 +12,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['batajini.pythonanywhere.com', 'batajin.pythonanywhere.com', 'localhost', '127.0.0.1']
 
+# Add this line for more verbose error reporting
+ADMIN_SITE_HEADER = "JobBoard Admin"
+
 
 
 INSTALLED_APPS = [
