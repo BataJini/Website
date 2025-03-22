@@ -8,9 +8,37 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-key-replace-in-production'
 
-DEBUG = True
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-ALLOWED_HOSTS = ['batajini.pythonanywhere.com', 'batajin.pythonanywhere.com', 'localhost', '127.0.0.1']
+# Media files
+MEDIA_URL = '/media/'
+
+# PythonAnywhere and Production settings
+if 'pythonanywhere.com' in sys.modules or 'PYTHONANYWHERE_SITE' in os.environ:
+    DEBUG = False
+    ALLOWED_HOSTS = ['batajin.pythonanywhere.com']
+    
+    # Static and Media files configuration
+    STATIC_ROOT = '/home/batajin/JobBoard/staticfiles'
+    MEDIA_ROOT = '/home/batajin/JobBoard/media'
+    
+    # Security settings
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+else:
+    DEBUG = True
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Add this line for more verbose error reporting
 ADMIN_SITE_HEADER = "JobBoard Admin"
