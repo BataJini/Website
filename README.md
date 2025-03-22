@@ -1,90 +1,47 @@
-# JobBoard Web Scraper
+# JobBoard
 
-This project includes a web scraper for job listings and a Django-based job board application.
+A Django-based job board application with automated scraping of NoFluffJobs listings.
 
-## Setup Instructions
+## Setup
 
-1. **Clone the Repository**
+1. **Clone and install dependencies**
 ```bash
 git clone <repository-url>
 cd JobBoard
-```
-
-2. **Create and Activate Virtual Environment**
-
-For Windows:
-```bash
 python -m venv venv
-venv\Scripts\activate
-```
-
-For macOS/Linux:
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-3. **Install Requirements**
-```bash
+source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 ```
 
-4. **Install Chrome Browser**
-The scraper uses Chrome WebDriver. Make sure you have Google Chrome installed on your system.
-- Download Chrome from: https://www.google.com/chrome/
-
-5. **Run the Job Scraper**
+2. **Run the application**
 ```bash
-python scripts/JobScraper.py
-```
-
-The scraper will:
-- Launch Chrome in headless mode
-- Scrape job listings from specified websites
-- Save the results in the `job_data` directory
-
-6. **Import Jobs to Database**
-```bash
-python scripts/job_scraper.py
+python manage.py runserver
 ```
 
 ## Features
 
+- Browse job listings with clean interface
+- Filter jobs by various criteria
+- View detailed job information
 - Automated job scraping from NoFluffJobs
-- Handles duplicate job listings
-- Extracts detailed job information including:
-  - Job title
-  - Company name
-  - Location
-  - Salary
-  - Job type
-  - Required skills
 
-## Requirements
+## Job Scraping
 
-- Python 3.8 or higher
-- Google Chrome browser
-- All Python packages listed in requirements.txt
+To import new job listings:
 
-## Troubleshooting
+```bash
+python script/auto_update_jobs.py
+```
 
-If you encounter any issues:
+This script:
+1. Scrapes current job listings from NoFluffJobs
+2. Formats the data appropriately
+3. Imports them into the database
 
-1. **WebDriver Issues**
-   - The script uses `webdriver_manager` which should automatically download the correct ChromeDriver
-   - If you get WebDriver errors, try updating Chrome to the latest version
+## Deployment
 
-2. **Package Installation Issues**
-   - Make sure you're using the latest pip: `python -m pip install --upgrade pip`
-   - If a package fails to install, try installing it separately
+The application is configured to work on both local and production environments.
 
-3. **Permission Issues**
-   - On Linux/macOS, you might need to run commands with sudo
-   - Make sure the script has write permissions in the job_data directory
+## License
 
-## Notes
-
-- The scraper is configured to run in headless mode by default
-- Job data is saved in JSON format
-- Duplicate jobs are automatically filtered out
-- The scraper includes error handling and retry mechanisms
+This project is proprietary and confidential.
