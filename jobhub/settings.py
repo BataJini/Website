@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-key-replace-in-production'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['batajini.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['batajini.pythonanywhere.com', 'batajin.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 
@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_bootstrap5',
     'taggit',
-    'authentication',
+    'authentication.apps.AuthenticationConfig',
 ]
 
 MIDDLEWARE = [
@@ -122,6 +122,7 @@ if 'pythonanywhere.com' in sys.modules or 'PYTHONANYWHERE_SITE' in os.environ:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     STATICFILES_DIRS = []  # Clear this as we're using the same directory for STATIC_ROOT
+    DEBUG = False  # Disable debug in production
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
