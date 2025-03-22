@@ -120,9 +120,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # PythonAnywhere configuration
 if 'pythonanywhere.com' in sys.modules or 'PYTHONANYWHERE_SITE' in os.environ:
     # PythonAnywhere-specific settings
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Keep consistent with local
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     DEBUG = False  # Disable debug in production
+    ALLOWED_HOSTS = ['batajini.pythonanywhere.com', 'batajin.pythonanywhere.com']
+    
+    # Additional security settings for production
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
