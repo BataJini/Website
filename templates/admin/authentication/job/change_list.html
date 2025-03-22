@@ -4,7 +4,7 @@
 {% block object-tools-items %}
     {% if not show_archived %}
         <li>
-            <a href="{% url 'admin:job-archived' %}" class="viewlink">
+            <a href="{% url 'admin:authentication_job_archived' %}" class="viewlink">
                 View Archived Jobs ({{ archived_count }})
             </a>
         </li>

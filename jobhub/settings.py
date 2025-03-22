@@ -171,3 +171,17 @@ LOGGING = {
     },
 }
 
+# Production settings for PythonAnywhere
+if not DEBUG:
+    STATIC_ROOT = '/home/batajin/JobBoard/staticfiles'
+    MEDIA_ROOT = '/home/batajin/JobBoard/media'
+    
+    # Security settings
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+

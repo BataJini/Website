@@ -12,6 +12,6 @@ urlpatterns = [
     path('post-job/', views.post_job_view, name='post_job'),
     path('job/<int:job_id>/delete/', views.delete_job, name='delete_job'),
     path('my-jobs/', views.my_jobs, name='my_jobs'),
-    path('admin/users/', views.user_list, name='user_list'),
+    path('manage/users/', views.user_list, name='user_list'),
     path('ajax/search-jobs/', views.search_jobs_ajax, name='search_jobs_ajax'),  # New AJAX endpoint
 ]

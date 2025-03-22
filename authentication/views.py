@@ -235,7 +235,7 @@ def delete_job(request, job_id):
 def user_list(request):
     """View to display all registered users (only accessible to staff members)"""
     users = CustomUser.objects.all().order_by('-date_joined')
-    return render(request, 'admin/user_list.html', {'users': users})
+    return render(request, 'authentication/user_list.html', {'users': users})
 
 def search_jobs_ajax(request):
     """AJAX view for searching jobs without page reload"""
