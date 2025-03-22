@@ -109,8 +109,6 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -119,12 +117,11 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Add this section for PythonAnywhere
+# PythonAnywhere configuration
 if 'pythonanywhere.com' in sys.modules or 'PYTHONANYWHERE_SITE' in os.environ:
     # PythonAnywhere-specific settings
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Keep consistent with local
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-    STATICFILES_DIRS = []  # Clear this as we're using the same directory for STATIC_ROOT
     DEBUG = False  # Disable debug in production
 
 # Default primary key field type
@@ -146,7 +143,6 @@ BOOTSTRAP5 = {
     "error_css_class": "is-invalid",
     "success_css_class": "is-valid",
 }
-
 # Add logging configuration
 LOGGING = {
     'version': 1,
@@ -166,3 +162,4 @@ LOGGING = {
         },
     },
 }
+
