@@ -24,12 +24,6 @@ def home(request):
 
     # Filter jobs based on search parameters
     jobs = Job.objects.filter(is_archived=False).order_by('-is_featured', '-posted_date')
-    
-    # Debug: Print featured jobs to console
-    featured_jobs = Job.objects.filter(is_featured=True, is_archived=False)
-    print(f"FEATURED JOBS: {featured_jobs.count()}")
-    for job in featured_jobs:
-        print(f"Featured job: {job.id} - {job.title} - is_featured={job.is_featured}")
 
     if query:
         # Split the query into individual terms
@@ -59,21 +53,51 @@ def home(request):
     if parttime:
         jobs = jobs.filter(type='Part-time')
 
+    # Group jobs by title and company, combining locations
+    job_groups = {}
+    
     # Mark jobs as new if they were posted within the last 2 days
     now = timezone.now()
     two_days_ago = now - timedelta(days=2)
 
-    # Create a new list to ensure featured flag persists
-    jobs_list = []
     for job in jobs:
-        # Clone the job to make sure properties don't get lost
-        job.is_new = job.posted_date >= two_days_ago
-        # Explicitly set is_featured
-        if Job.objects.filter(id=job.id, is_featured=True).exists():
-            job.is_featured = True
-            print(f"Setting job {job.id} - {job.title} as featured in template")
-        
+        key = (job.title.lower(), job.company.lower())
+        if key not in job_groups:
+            # Use this job as the base
+            job.is_new = job.posted_date >= two_days_ago
+            if Job.objects.filter(id=job.id, is_featured=True).exists():
+                job.is_featured = True
+            
+            # Initialize combined locations
+            job.combined_locations = {job.location}
+            if job.is_remote:
+                job.combined_locations.add('Remote')
+            
+            job_groups[key] = job
+        else:
+            # Update existing job with additional location
+            base_job = job_groups[key]
+            base_job.combined_locations.add(job.location)
+            if job.is_remote:
+                base_job.combined_locations.add('Remote')
+            
+            # Keep featured status if either job is featured
+            if Job.objects.filter(id=job.id, is_featured=True).exists():
+                base_job.is_featured = True
+            
+            # Keep newer posted date
+            if job.posted_date > base_job.posted_date:
+                base_job.posted_date = job.posted_date
+                base_job.is_new = job.posted_date >= two_days_ago
+
+    # Convert combined locations to string
+    jobs_list = []
+    for job in job_groups.values():
+        job.location = ' / '.join(sorted(job.combined_locations))
         jobs_list.append(job)
+
+    # Sort the final list by featured status and posted date
+    jobs_list.sort(key=lambda x: (-x.is_featured, -x.posted_date.timestamp()))
 
     context = {
         'query': query,
@@ -91,6 +115,68 @@ def job_detail(request, job_id):
     try:
         job = Job.objects.get(id=job_id, is_archived=False)
         logger.debug(f'Found job: {job.title}')
+        
+        # Handle job application submission
+        if request.method == 'POST':
+            # Redirect to the company's application website if available
+            if job.job_url:
+                return redirect(job.job_url)
+            else:
+                # If no URL is available, just show a success message
+                messages.success(request, 'Your application has been submitted successfully!')
+                return redirect('authentication:job_detail', job_id=job_id)
+        
+        # Find similar jobs based on tags, title keywords, and job type
+        similar_jobs = Job.objects.filter(
+            is_archived=False
+        ).exclude(id=job_id).order_by('-is_featured', '-posted_date')
+        
+        # First priority: Match by tags
+        if job.tags.exists():
+            tagged_jobs = similar_jobs.filter(tags__in=job.tags.all()).distinct()
+            if tagged_jobs.count() >= 5:
+                similar_jobs = tagged_jobs[:5]
+            else:
+                # Second priority: Match by title keywords
+                title_words = [word.lower() for word in job.title.split() if len(word) > 3]
+                title_filter = Q()
+                for word in title_words:
+                    title_filter |= Q(title__icontains=word)
+                
+                # Combine tag matches with title matches
+                keyword_jobs = similar_jobs.filter(title_filter).exclude(id__in=tagged_jobs.values_list('id', flat=True))
+                similar_jobs = list(tagged_jobs) + list(keyword_jobs)
+                
+                # Third priority: Match by job type if we still need more
+                if len(similar_jobs) < 5:
+                    type_jobs = Job.objects.filter(
+                        type=job.type, is_archived=False
+                    ).exclude(id=job_id).exclude(
+                        id__in=[j.id for j in similar_jobs]
+                    ).order_by('-is_featured', '-posted_date')
+                    
+                    similar_jobs = similar_jobs + list(type_jobs)
+        
+        # Fallback: If no similar jobs found by tags or keywords, use job type
+        else:
+            title_words = [word.lower() for word in job.title.split() if len(word) > 3]
+            title_filter = Q()
+            for word in title_words:
+                title_filter |= Q(title__icontains=word)
+            
+            keyword_jobs = similar_jobs.filter(title_filter)
+            if keyword_jobs.count() >= 5:
+                similar_jobs = keyword_jobs[:5]
+            else:
+                # Use job type as fallback
+                type_jobs = similar_jobs.filter(type=job.type).exclude(
+                    id__in=keyword_jobs.values_list('id', flat=True)
+                )
+                similar_jobs = list(keyword_jobs) + list(type_jobs)
+        
+        # Limit to maximum 5 jobs
+        similar_jobs = similar_jobs[:5]
+        
     except Job.DoesNotExist:
         logger.error(f'Job with id {job_id} not found')
         return render(request, '404.html', {'message': 'Job not found'}, status=404)
@@ -99,7 +185,8 @@ def job_detail(request, job_id):
         return render(request, '404.html', {'message': 'An error occurred'}, status=404)
     
     context = {
-        'job': job
+        'job': job,
+        'similar_jobs': similar_jobs
     }
     return render(request, 'authentication/job_detail.html', context)
 
@@ -276,20 +363,51 @@ def search_jobs_ajax(request):
     if parttime:
         jobs = jobs.filter(type='Part-time')
 
+    # Group jobs by title and company, combining locations
+    job_groups = {}
+    
     # Mark jobs as new if they were posted within the last 2 days
     now = timezone.now()
     two_days_ago = now - timedelta(days=2)
 
-    # Create a new list to ensure featured flag persists
-    jobs_list = []
     for job in jobs:
-        # Clone the job to make sure properties don't get lost
-        job.is_new = job.posted_date >= two_days_ago
-        # Explicitly set is_featured
-        if Job.objects.filter(id=job.id, is_featured=True).exists():
-            job.is_featured = True
-        
+        key = (job.title.lower(), job.company.lower())
+        if key not in job_groups:
+            # Use this job as the base
+            job.is_new = job.posted_date >= two_days_ago
+            if Job.objects.filter(id=job.id, is_featured=True).exists():
+                job.is_featured = True
+            
+            # Initialize combined locations
+            job.combined_locations = {job.location}
+            if job.is_remote:
+                job.combined_locations.add('Remote')
+            
+            job_groups[key] = job
+        else:
+            # Update existing job with additional location
+            base_job = job_groups[key]
+            base_job.combined_locations.add(job.location)
+            if job.is_remote:
+                base_job.combined_locations.add('Remote')
+            
+            # Keep featured status if either job is featured
+            if Job.objects.filter(id=job.id, is_featured=True).exists():
+                base_job.is_featured = True
+            
+            # Keep newer posted date
+            if job.posted_date > base_job.posted_date:
+                base_job.posted_date = job.posted_date
+                base_job.is_new = job.posted_date >= two_days_ago
+
+    # Convert combined locations to string
+    jobs_list = []
+    for job in job_groups.values():
+        job.location = ' / '.join(sorted(job.combined_locations))
         jobs_list.append(job)
+
+    # Sort the final list by featured status and posted date
+    jobs_list.sort(key=lambda x: (-x.is_featured, -x.posted_date.timestamp()))
 
     # Render just the job listings HTML
     html = render_to_string('job_listings_partial.html', {'jobs': jobs_list})

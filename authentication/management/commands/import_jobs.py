@@ -93,23 +93,52 @@ class Command(BaseCommand):
             
             return "Salary not specified"
 
-    def format_requirements(self, must_haves, responsibilities):
-        """Format requirements and responsibilities as HTML"""
+    def format_responsibilities(self, responsibilities):
+        """Format responsibilities as HTML"""
         result = ""
         
-        if must_haves and len(must_haves) > 0:
-            result += "<h4>Required Skills:</h4>\n<ul>"
-            for skill in must_haves:
-                result += f"\n<li>{skill}</li>"
-            result += "\n</ul>\n"
-            
         if responsibilities and len(responsibilities) > 0:
-            result += "<h4>Responsibilities:</h4>\n<ul>"
+            result += "<h4>Your Responsibilities:</h4>\n<ul>"
             for task in responsibilities:
-                result += f"\n<li>{task}</li>"
+                if isinstance(task, dict) and 'value' in task:
+                    result += f"\n<li>{task['value']}</li>"
+                elif isinstance(task, str):
+                    result += f"\n<li>{task}</li>"
             result += "\n</ul>"
             
         return result
+
+    def extract_must_have_skills(self, must_haves):
+        """Extract must-have skills as a JSON array for display in the skills card"""
+        if not must_haves:
+            return None
+            
+        skills = []
+        for skill in must_haves:
+            if isinstance(skill, dict) and 'value' in skill:
+                skills.append(skill['value'])
+            elif isinstance(skill, str):
+                skills.append(skill)
+                
+        if skills:
+            return json.dumps(skills)
+        return None
+        
+    def extract_nice_to_have_skills(self, nice_haves):
+        """Extract nice-to-have skills as a JSON array for display in the skills card"""
+        if not nice_haves:
+            return None
+            
+        skills = []
+        for skill in nice_haves:
+            if isinstance(skill, dict) and 'value' in skill:
+                skills.append(skill['value'])
+            elif isinstance(skill, str):
+                skills.append(skill)
+                
+        if skills:
+            return json.dumps(skills)
+        return None
 
     def handle(self, *args, **options):
         try:
@@ -129,11 +158,14 @@ class Command(BaseCommand):
                     if places and len(places) > 0:
                         location = places[0].get('city', 'Remote')
                 
-                # Format requirements
-                formatted_requirements = self.format_requirements(
-                    job_data.get('must_haves', []),
+                # Format responsibilities as HTML for the Your Responsibilities card
+                formatted_responsibilities = self.format_responsibilities(
                     job_data.get('responsibilities', [])
                 )
+                
+                # Extract must-have and nice-to-have skills for the respective cards
+                must_have_skills = self.extract_must_have_skills(job_data.get('must_haves', []))
+                nice_to_have_skills = self.extract_nice_to_have_skills(job_data.get('nice_to_have', []))
                 
                 # Format salary
                 formatted_salary = self.format_salary(job_data.get('salary_range', ''))
@@ -141,11 +173,10 @@ class Command(BaseCommand):
                 # Prepare job data
                 job_defaults = {
                     'description': job_data.get('full_description', ''),
-                    'requirements': formatted_requirements,
                     'salary': formatted_salary,
                     'job_url': job_data.get('job_post_url', ''),
                     'is_remote': 'Remote' in str(location),
-                    'type': 'Full-time',  # Default value as it's not in the JSON
+                    'type': job_data.get('employment_type', 'Full-time'),
                     'posted_date': timezone.now(),
                 }
 
@@ -157,13 +188,40 @@ class Command(BaseCommand):
                     defaults=job_defaults
                 )
 
+                # Update specific fields
+                if not created:
+                    for key, value in job_defaults.items():
+                        setattr(job, key, value)
+                
+                # Add must-have skills to requirements field
+                if must_have_skills:
+                    job.requirements = must_have_skills
+                    
+                # Save formatted responsibilities to requirements if there are no must-have skills
+                # or to description if must-have skills exist
+                if formatted_responsibilities:
+                    if not must_have_skills:
+                        job.requirements = formatted_responsibilities
+                    else:
+                        # If we have both, append responsibilities to the description
+                        current_desc = job.description or ""
+                        if not current_desc.endswith(formatted_responsibilities):
+                            job.description = current_desc + "\n\n" + formatted_responsibilities
+                
+                # Add nice-to-have skills field
+                if nice_to_have_skills:
+                    job.nice_to_have = nice_to_have_skills
+                    
+                # Save changes
+                job.save()
+
                 # Download and save company logo
                 if job_data.get('logo'):
                     logo_file = self.download_logo(job_data['logo'])
                     if logo_file:
                         job.company_logo = logo_file
                         job.save()
-                
+                        
                 # Add skills as tags
                 if 'must_haves' in job_data and job_data['must_haves']:
                     # Clear existing tags first to avoid duplicates on updates
@@ -193,10 +251,6 @@ class Command(BaseCommand):
                         self.style.SUCCESS(f'Created job: {job.title} at {job.company}')
                     )
                 else:
-                    # Update existing job
-                    for key, value in job_defaults.items():
-                        setattr(job, key, value)
-                    job.save()
                     jobs_updated += 1
                     self.stdout.write(
                         self.style.SUCCESS(f'Updated job: {job.title} at {job.company}')

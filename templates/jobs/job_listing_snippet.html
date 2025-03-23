@@ -1,0 +1,50 @@
+{% load static %}
+{% load humanize %}
+{% load job_tags %}
+
+<div class="job-listing" data-featured="{{ job.featured|yesno:'true,false' }}">
+    <div class="job-listing-logo">
+        {% if job.company_logo %}
+            <img src="{{ job.company_logo.url }}" alt="{{ job.company_name }} logo">
+        {% else %}
+            <div class="company-logo-placeholder">{{ job.company_name|slice:":1" }}</div>
+        {% endif %}
+    </div>
+    
+    <div class="job-listing-info">
+        <div class="job-listing-details">
+            <div class="job-listing-left">
+                <h2 class="job-listing-title">
+                    {{ job.title }}
+                    {% if job.featured %}
+                        <span class="badge bg-warning">Featured</span>
+                    {% endif %}
+                </h2>
+                <span class="job-listing-company">{{ job.company_name }}</span>
+                <div class="job-listing-meta">
+                    <span>{{ job.location|format_location }}</span>
+                    <span>{{ job.job_type }}</span>
+                    <span class="job-listing-posted">Posted {{ job.created_at|naturaltime }}</span>
+                </div>
+            </div>
+            
+            <div class="job-listing-right">
+                {% if job.salary %}
+                    <span class="job-listing-salary">{{ job.salary }}</span>
+                {% endif %}
+                
+                <div class="job-listing-tags">
+                    {% if job.tags.all|length > 0 and job.tags.all.0.name|length > 15 %}
+                        {% for tag in job.tags.all|slice:":3" %}
+                            <span class="badge">{{ tag.name|format_tag }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {% for tag in job.tags.all %}
+                            <span class="badge">{{ tag.name|format_tag }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

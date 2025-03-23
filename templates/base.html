@@ -242,19 +242,28 @@
             box-shadow: 0 1px 0 0 rgba(38, 132, 255, 0.1);
         }
 
+        /* Fix for dark rectangle in navbar */
+        [data-bs-theme="dark"] .navbar-nav,
+        [data-bs-theme="dark"] .navbar-nav.me-auto,
+        [data-bs-theme="dark"] .navbar-collapse {
+            background-color: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
         [data-bs-theme="dark"] .navbar-brand:hover {
             color: white !important;
             text-shadow: 0 0 15px rgba(38, 132, 255, 0.5);
         }
 
         [data-bs-theme="dark"] .dropdown-menu {
-            background: var(--dark-card);
-            border-color: var(--dark-border);
+            background-color: #1E1E1E !important;
+            border-color: #2D2D2D !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         [data-bs-theme="dark"] .dropdown-divider {
-            border-color: var(--dark-border);
+            border-color: #2D2D2D !important;
         }
 
         [data-bs-theme="dark"] .form-control {
@@ -1167,6 +1176,28 @@
         [data-bs-theme="dark"] .job-listing-tags .badge:hover {
             background-color: rgba(255, 255, 255, 0.15) !important;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3) !important; /* Increased hover shadow for dark mode */
+        }
+
+        /* Fix for dark mode navbar background */
+        [data-bs-theme="dark"] .navbar-nav {
+            background-color: transparent !important;
+        }
+        
+        [data-bs-theme="dark"] .navbar-collapse {
+            background-color: transparent !important;
+        }
+
+        /* Override Bootstrap navbar styles */
+        .navbar-collapse {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+        
+        .navbar-nav, 
+        .navbar-nav.me-auto, 
+        ul.navbar-nav {
+            background-color: transparent !important;
+            box-shadow: none !important;
         }
     </style>
 </head>

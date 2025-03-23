@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/jobs.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container text-center">
+        <h1 class="hero-title">Find Your Next Job</h1>
+        <p class="hero-subtitle">Discover opportunities that match your skills and aspirations</p>
+        
+        <div class="search-container">
+            <form id="searchForm" class="search-input-wrapper">
+                <div id="searchTags" class="search-tags"></div>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search jobs by title, company, or keywords...">
+                <button type="submit" class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+        
+        <div class="hero-tags">
+            {% for category in categories %}
+                <button class="btn-category" data-category="{{ category.id }}">
+                    <i class="{{ category.icon }}"></i>
+                    {{ category.name }}
+                </button>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <div class="jobs-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Latest Jobs</h1>
+                <button class="btn-filters" data-bs-toggle="modal" data-bs-target="#jobFiltersModal">
+                    <i class="fas fa-sliders-h me-2"></i>
+                    Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="jobs-content">
+        <div class="job-listings">
+            {% for job in jobs %}
+                {% include 'jobs/job_listing_snippet.html' with job=job %}
+            {% empty %}
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h3>No jobs found</h3>
+                    <p class="text-muted">Try adjusting your search criteria</p>
+                </div>
+            {% endfor %}
+        </div>
+        
+        {% if is_paginated %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Filters Modal -->
+<div class="modal fade" id="jobFiltersModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Filter Jobs</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="filter-section">
+                    <h6 class="filter-section-title">
+                        <i class="fas fa-briefcase me-2"></i>
+                        Job Type
+                    </h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for type in job_types %}
+                            <input type="checkbox" class="btn-check" id="type{{ type.id }}" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="type{{ type.id }}">{{ type.name }}</label>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h6 class="filter-section-title">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        Location
+                    </h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for location in locations %}
+                            <input type="checkbox" class="btn-check" id="location{{ location.id }}" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="location{{ location.id }}">{{ location.name }}</label>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h6 class="filter-section-title">
+                        <i class="fas fa-dollar-sign me-2"></i>
+                        Salary Range
+                    </h6>
+                    <div class="salary-range-container">
+                        <div class="salary-range-slider">
+                            <div class="slider-track"></div>
+                            <input type="range" class="salary-range" id="minSalary" min="0" max="200000" value="0">
+                            <input type="range" class="salary-range" id="maxSalary" min="0" max="200000" value="200000">
+                        </div>
+                        <div class="salary-inputs">
+                            <div class="salary-input-group">
+                                <label for="minSalaryInput">Min</label>
+                                <input type="number" id="minSalaryInput" class="form-control" value="0">
+                            </div>
+                            <span class="salary-input-divider">-</span>
+                            <div class="salary-input-group">
+                                <label for="maxSalaryInput">Max</label>
+                                <input type="number" id="maxSalaryInput" class="form-control" value="200000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="applyFiltersBtn" class="btn btn-primary">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/jobs.js' %}"></script>
+{% endblock %} 

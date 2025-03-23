@@ -364,7 +364,7 @@
                 <div class="job-listing-meta">
                     <div class="job-listing-location">
                         📍
-                        {{ job.location }}
+                        {{ job.location|format_location }}
                     </div>
                     <div class="job-listing-type">
                         🕐
@@ -382,14 +382,20 @@
                 </div>
                 <div class="job-listing-tags">
                     {% if job.tags.all %}
-                        {% for tag in job|get_job_tags %}
-                            <span class="badge">{{ tag.name }}</span>
+                        {% for tag in job|get_job_tags|limit_tags %}
+                            <span class="badge">{{ tag.name|format_tag }}</span>
                         {% endfor %}
                     {% elif job.requirements %}
                         {% with skills=job.requirements|parse_requirements %}
-                            {% for skill in skills %}
-                                <span class="badge">{{ skill }}</span>
-                            {% endfor %}
+                            {% if skills|length > 0 and skills.0|length > 15 %}
+                                {% for skill in skills|slice:":3" %}
+                                    <span class="badge">{{ skill|format_tag }}</span>
+                                {% endfor %}
+                            {% else %}
+                                {% for skill in skills %}
+                                    <span class="badge">{{ skill|format_tag }}</span>
+                                {% endfor %}
+                            {% endif %}
                         {% endwith %}
                     {% else %}
                         {% if 'python' in job.title|lower %}

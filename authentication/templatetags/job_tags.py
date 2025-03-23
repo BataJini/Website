@@ -1,6 +1,7 @@
 from django import template
 import json
 import re
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -18,6 +19,24 @@ def parse_requirements(requirements_json):
         if requirements_json and isinstance(requirements_json, str):
             return [requirements_json]
     return []
+
+@register.filter
+def format_location(location_str):
+    """
+    Format location string to use commas between locations instead of slashes.
+    If there are more than 2 locations, show first 2 followed by '+ X more'
+    """
+    if not location_str:
+        return ""
+    
+    locations = location_str.split(' / ')
+    
+    if len(locations) <= 2:
+        return ", ".join(locations)
+    else:
+        first_two = locations[:2]
+        remaining = len(locations) - 2
+        return f"{', '.join(first_two)} + {remaining} more"
 
 @register.filter
 def remove_minutes(timesince_str):
@@ -55,4 +74,44 @@ def get_job_tags(job):
     """
     if hasattr(job, 'tags'):
         return job.tags.all()
-    return [] 
+    return []
+
+@register.filter
+def format_tag(tag_name):
+    """
+    Format skill tag name - if it has more than 3 words, truncate it
+    to show only the first 3 words followed by '...'
+    """
+    if not tag_name:
+        return ""
+    
+    words = tag_name.split()
+    
+    if len(words) > 3:
+        return " ".join(words[:3]) + "..."
+    else:
+        return tag_name
+
+@register.filter
+def limit_tags(tags):
+    """
+    If any tag has long text (>15 chars), return only 3 tags,
+    otherwise return all tags
+    """
+    if not tags:
+        return []
+    
+    has_long_tags = any(len(str(tag.name)) > 15 for tag in tags)
+    
+    if has_long_tags:
+        return tags[:3]
+    return tags
+
+@register.filter
+def safe_html(html_text):
+    """
+    Mark HTML text as safe for rendering in templates
+    """
+    if not html_text:
+        return ""
+    return mark_safe(html_text) 

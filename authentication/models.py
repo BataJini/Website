@@ -27,6 +27,7 @@ class Job(models.Model):
     ], default='Full-time')
     posted_date = models.DateTimeField(default=timezone.now)
     requirements = models.TextField(blank=True, null=True)
+    nice_to_have = models.TextField(blank=True, null=True)
     created_by = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='jobs', null=True, blank=True)
     
     # Add company logo field
