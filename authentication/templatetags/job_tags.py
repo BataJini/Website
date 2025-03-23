@@ -114,4 +114,4 @@ def safe_html(html_text):
     """
     if not html_text:
         return ""
-    return mark_safe(html_text) 
+    return mark_safe(html_text)

@@ -153,19 +153,10 @@ class Command(BaseCommand):
             for job_data in nofluff_data:
                 # Get location
                 location = "Remote"
-                is_remote = False
-                
                 if isinstance(job_data.get('location'), dict) and 'places' in job_data.get('location', {}):
                     places = job_data['location']['places']
                     if places and len(places) > 0:
                         location = places[0].get('city', 'Remote')
-                        
-                # Check if job is remote
-                is_remote = job_data.get('is_remote', False) or 'remote' in str(location).lower()
-                
-                # If remote, update the location string accordingly
-                if is_remote and 'remote' not in str(location).lower():
-                    location = f"{location} (Remote)"
                 
                 # Format responsibilities as HTML for the Your Responsibilities card
                 formatted_responsibilities = self.format_responsibilities(
@@ -184,37 +175,24 @@ class Command(BaseCommand):
                     'description': job_data.get('full_description', ''),
                     'salary': formatted_salary,
                     'job_url': job_data.get('job_post_url', ''),
-                    'is_remote': is_remote,
+                    'is_remote': 'Remote' in str(location),
                     'type': job_data.get('employment_type', 'Full-time'),
                     'posted_date': timezone.now(),
                 }
 
-                # Try to find existing job by title and company
-                existing_jobs = Job.objects.filter(
+                # Try to get or create the job
+                job, created = Job.objects.get_or_create(
                     title=job_data.get('title', ''),
-                    company=job_data.get('company', '')
+                    company=job_data.get('company', ''),
+                    location=location,
+                    defaults=job_defaults
                 )
-                
-                if existing_jobs.exists():
-                    # Update existing job
-                    job = existing_jobs.first()
-                    # Update job data including location
+
+                # Update specific fields
+                if not created:
                     for key, value in job_defaults.items():
                         setattr(job, key, value)
-                    job.location = location
-                    job.save()
-                    created = False
-                else:
-                    # Create new job
-                    job = Job(
-                        title=job_data.get('title', ''),
-                        company=job_data.get('company', ''),
-                        location=location,
-                        **job_defaults
-                    )
-                    job.save()
-                    created = True
-
+                
                 # Add must-have skills to requirements field
                 if must_have_skills:
                     job.requirements = must_have_skills

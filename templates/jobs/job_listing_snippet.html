@@ -34,15 +34,9 @@
                 {% endif %}
                 
                 <div class="job-listing-tags">
-                    {% if job.tags.all|length > 0 and job.tags.all.0.name|length > 15 %}
-                        {% for tag in job.tags.all|slice:":3" %}
-                            <span class="badge">{{ tag.name|format_tag }}</span>
-                        {% endfor %}
-                    {% else %}
-                        {% for tag in job.tags.all %}
-                            <span class="badge">{{ tag.name|format_tag }}</span>
-                        {% endfor %}
-                    {% endif %}
+                    {% for tag in job.tags.all|limit_tags %}
+                        <span class="badge">{{ tag.name|format_tag }}</span>
+                    {% endfor %}
                 </div>
             </div>
         </div>

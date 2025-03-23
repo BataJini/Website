@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/jobs.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/hero.css' %}" />
     {% block extra_css %}{% endblock %}
     <style>
         /* Reset and base styles */
@@ -276,22 +276,6 @@
             background-color: var(--dark-hover);
             border-color: var(--primary-color);
             color: var(--bs-input-color);
-            box-shadow: 0 0 0 0.2rem rgba(38, 132, 255, 0.25);
-        }
-
-        /* Ensure search inputs are properly styled in dark mode */
-        [data-bs-theme="dark"] input[type="text"],
-        [data-bs-theme="dark"] input[type="search"],
-        [data-bs-theme="dark"] #searchInput,
-        [data-bs-theme="dark"] #visibleSearchInput,
-        [data-bs-theme="dark"] .search-input-wrapper input {
-            background-color: var(--dark-input) !important;
-            color: var(--bs-input-color) !important;
-            border-color: var(--dark-border) !important;
-        }
-        
-        [data-bs-theme="dark"] .search-input-wrapper {
-            background-color: transparent !important;
         }
 
         [data-bs-theme="dark"] .card {

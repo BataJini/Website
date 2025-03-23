@@ -1,0 +1,64 @@
+{% load static %}
+
+<div class="hero-section">
+    <div class="container h-100">
+        <div class="row justify-content-center h-100 align-items-center">
+            <div class="col-lg-10 text-center">
+                <h1 class="hero-title">Find Your Dream Tech Job</h1>
+                <h2 class="hero-subtitle">Discover opportunities that match your skills and aspirations</h2>
+
+                <div class="hero-tags" id="heroTags">
+                    <!-- Tags will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <div class="jobs-header">
+        <div class="container-fluid px-0">
+            <div class="row justify-content-center mx-0">
+                <div class="col-lg-12 text-center">
+                    <form action="{% url 'authentication:home' %}" method="GET" class="mb-3 search-form">
+                        <div class="search-container">
+                            <div class="search-input-wrapper">
+                                <div class="search-tags" id="searchTags"></div>
+                                <input type="hidden" name="q" value="{{ query }}" id="hiddenSearchInput">
+                                <input type="text" class="form-control" id="visibleSearchInput" placeholder="Search jobs..." aria-label="Search jobs">
+                                <button type="submit" class="search-button" aria-label="Search">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="job-categories d-flex justify-content-center flex-wrap gap-2 mb-3">
+                        <button class="btn btn-filters" type="button" data-bs-toggle="modal" data-bs-target="#jobFiltersModal">
+                            <i class="bi bi-funnel me-2"></i>Filters
+                        </button>
+                        <div class="vr mx-2 d-none d-md-inline-block"></div>
+                        <button class="btn btn-category" type="button" data-category="it">
+                            <i class="bi bi-laptop me-2"></i>IT
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="marketing">
+                            <i class="bi bi-megaphone me-2"></i>Marketing
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="customer-service">
+                            <i class="bi bi-headset me-2"></i>Customer Service
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="sales">
+                            <i class="bi bi-graph-up me-2"></i>Sales
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="hr">
+                            <i class="bi bi-people me-2"></i>HR
+                        </button>
+                        <button class="btn btn-category" type="button" data-category="engineering">
+                            <i class="bi bi-gear me-2"></i>Engineering
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
