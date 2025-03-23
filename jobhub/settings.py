@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-key-replace-in-production'
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
 
 # Media files
 MEDIA_URL = '/media/'
