@@ -1,56 +1,58 @@
 // Jobs functionality for JobHub
 document.addEventListener('DOMContentLoaded', function() {
-    // Salary range slider functionality
+    // Double Range Slider functionality
     const minRange = document.getElementById('minSalaryRange');
     const maxRange = document.getElementById('maxSalaryRange');
     const minInput = document.getElementById('minSalaryInput');
     const maxInput = document.getElementById('maxSalaryInput');
     const track = document.querySelector('.slider-track');
-
-    // Create tooltips
-    const minTooltip = document.createElement('div');
-    minTooltip.className = 'salary-tooltip min-tooltip';
-    minTooltip.style.opacity = '0'; // Hide tooltip by default
-    const maxTooltip = document.createElement('div');
-    maxTooltip.className = 'salary-tooltip max-tooltip';
-    maxTooltip.style.opacity = '0'; // Hide tooltip by default
-
-    // Insert tooltips after range inputs
-    if (minRange && maxRange) {
-        minRange.parentNode.insertBefore(minTooltip, minRange.nextSibling);
-        maxRange.parentNode.insertBefore(maxTooltip, maxRange.nextSibling);
-    }
+    const minHandle = document.getElementById('minSalaryHandle');
+    const maxHandle = document.getElementById('maxSalaryHandle');
+    const minTooltip = document.getElementById('minSalaryTooltip');
+    const maxTooltip = document.getElementById('maxSalaryTooltip');
+    
+    // Track whether handles are being dragged
+    let minHandleActive = false;
+    let maxHandleActive = false;
 
     // Format number with thousand separators
     function formatNumber(num) {
         return new Intl.NumberFormat('pl-PL').format(num);
     }
 
-    // Update track color and tooltips
-    function updateTrack() {
-        if (!minRange || !maxRange || !track) return;
+    // Update slider visuals based on range values
+    function updateSlider() {
+        if (!minRange || !maxRange || !track || !minHandle || !maxHandle) return;
 
+        const min = parseInt(minRange.min);
+        const max = parseInt(minRange.max);
+        const range = max - min;
+        
         const minVal = parseInt(minRange.value);
         const maxVal = parseInt(maxRange.value);
-        const minPos = ((minVal - parseInt(minRange.min)) / (parseInt(minRange.max) - parseInt(minRange.min))) * 100;
-        const maxPos = ((maxVal - parseInt(minRange.min)) / (parseInt(minRange.max) - parseInt(minRange.min))) * 100;
         
-        // Update the track color to show selected range
-        track.style.background = `linear-gradient(to right, 
-            var(--bs-border-color) ${minPos}%, 
-            var(--primary-color) ${minPos}%, 
-            var(--primary-color) ${maxPos}%, 
-            var(--bs-border-color) ${maxPos}%)`;
-
-        // Position tooltips to match handle positions
-        minTooltip.style.left = `calc(${minPos}%)`;
-        maxTooltip.style.left = `calc(${maxPos}%)`;
+        // Calculate percentages for positioning
+        const minPercent = ((minVal - min) / range) * 100;
+        const maxPercent = ((maxVal - min) / range) * 100;
         
-        // Update tooltip content
+        // Position handles
+        minHandle.style.left = `${minPercent}%`;
+        maxHandle.style.left = `${maxPercent}%`;
+        
+        // Position tooltips and update their content
+        minTooltip.style.left = `${minPercent}%`;
+        maxTooltip.style.left = `${maxPercent}%`;
         minTooltip.textContent = `${formatNumber(minVal)} PLN`;
         maxTooltip.textContent = `${formatNumber(maxVal)} PLN`;
-
-        // Update input values
+        
+        // Update track highlighting
+        track.style.background = `linear-gradient(to right, 
+            var(--bs-border-color) ${minPercent}%, 
+            var(--primary-color) ${minPercent}%, 
+            var(--primary-color) ${maxPercent}%, 
+            var(--bs-border-color) ${maxPercent}%)`;
+        
+        // Update input fields
         if (minInput) minInput.value = minVal;
         if (maxInput) maxInput.value = maxVal;
     }
@@ -61,34 +63,18 @@ document.addEventListener('DOMContentLoaded', function() {
         return parseInt(str.replace(/\s/g, '').replace(/\./g, '').replace(/,/g, '')) || 0;
     }
 
-    // Update range inputs with smooth animation
+    // Set up range input event listeners
     if (minRange) {
         minRange.addEventListener('input', function() {
             const minVal = parseInt(this.value);
             const maxVal = parseInt(maxRange.value);
             
+            // Prevent min from exceeding max
             if (minVal > maxVal) {
                 this.value = maxVal;
             }
             
-            updateTrack();
-        });
-        
-        // Show/hide tooltip on interaction
-        minRange.addEventListener('mousedown', function() {
-            minTooltip.style.opacity = '1';
-        });
-        
-        minRange.addEventListener('mouseup', function() {
-            minTooltip.style.opacity = '0';
-        });
-        
-        minRange.addEventListener('touchstart', function() {
-            minTooltip.style.opacity = '1';
-        });
-        
-        minRange.addEventListener('touchend', function() {
-            minTooltip.style.opacity = '0';
+            updateSlider();
         });
     }
 
@@ -97,44 +83,225 @@ document.addEventListener('DOMContentLoaded', function() {
             const minVal = parseInt(minRange.value);
             const maxVal = parseInt(this.value);
             
+            // Prevent max from being less than min
             if (maxVal < minVal) {
                 this.value = minVal;
             }
             
-            updateTrack();
-        });
-        
-        // Show/hide tooltip on interaction
-        maxRange.addEventListener('mousedown', function() {
-            maxTooltip.style.opacity = '1';
-        });
-        
-        maxRange.addEventListener('mouseup', function() {
-            maxTooltip.style.opacity = '0';
-        });
-        
-        maxRange.addEventListener('touchstart', function() {
-            maxTooltip.style.opacity = '1';
-        });
-        
-        maxRange.addEventListener('touchend', function() {
-            maxTooltip.style.opacity = '0';
+            updateSlider();
         });
     }
+    
+    // Set up handle drag events
+    if (minHandle) {
+        // Show tooltip on mouseover
+        minHandle.addEventListener('mouseover', function() {
+            minTooltip.style.opacity = '1';
+        });
+        
+        minHandle.addEventListener('mouseout', function() {
+            if (!minHandleActive) {
+                minTooltip.style.opacity = '0';
+            }
+        });
+        
+        // Handle mouse/touch events for dragging
+        minHandle.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            minHandleActive = true;
+            minHandle.classList.add('active');
+            minTooltip.style.opacity = '1';
+            document.addEventListener('mousemove', handleMinDrag);
+            document.addEventListener('mouseup', stopMinDrag);
+        });
+        
+        minHandle.addEventListener('touchstart', function(e) {
+            minHandleActive = true;
+            minHandle.classList.add('active');
+            minTooltip.style.opacity = '1';
+            document.addEventListener('touchmove', handleMinDrag);
+            document.addEventListener('touchend', stopMinDrag);
+        });
+    }
+    
+    if (maxHandle) {
+        // Show tooltip on mouseover
+        maxHandle.addEventListener('mouseover', function() {
+            maxTooltip.style.opacity = '1';
+        });
+        
+        maxHandle.addEventListener('mouseout', function() {
+            if (!maxHandleActive) {
+                maxTooltip.style.opacity = '0';
+            }
+        });
+        
+        // Handle mouse/touch events for dragging
+        maxHandle.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            maxHandleActive = true;
+            maxHandle.classList.add('active');
+            maxTooltip.style.opacity = '1';
+            document.addEventListener('mousemove', handleMaxDrag);
+            document.addEventListener('mouseup', stopMaxDrag);
+        });
+        
+        maxHandle.addEventListener('touchstart', function(e) {
+            maxHandleActive = true;
+            maxHandle.classList.add('active');
+            maxTooltip.style.opacity = '1';
+            document.addEventListener('touchmove', handleMaxDrag);
+            document.addEventListener('touchend', stopMaxDrag);
+        });
+    }
+    
+    // Handle drag functions
+    function handleMinDrag(e) {
+        if (!minHandleActive) return;
+        
+        const sliderRect = track.getBoundingClientRect();
+        let clientX = e.clientX;
+        
+        // Handle touch events
+        if (e.touches && e.touches[0]) {
+            clientX = e.touches[0].clientX;
+        }
+        
+        // Calculate position as percentage
+        let position = (clientX - sliderRect.left) / sliderRect.width;
+        position = Math.max(0, Math.min(position, 1));
+        
+        // Calculate value based on position
+        const min = parseInt(minRange.min);
+        const max = parseInt(minRange.max);
+        const step = parseInt(minRange.step) || 1;
+        const range = max - min;
+        
+        // Calculate value and round to nearest step
+        let value = min + (position * range);
+        value = Math.round(value / step) * step;
+        
+        // Get current max value
+        const maxVal = parseInt(maxRange.value);
+        
+        // Check if min handle is pushing the max handle
+        if (value >= maxVal) {
+            // Push the max handle along with the min handle
+            const newMaxVal = Math.min(value, max);
+            maxRange.value = newMaxVal;
+            maxHandle.style.left = `${((newMaxVal - min) / range) * 100}%`;
+            maxTooltip.style.left = `${((newMaxVal - min) / range) * 100}%`;
+            maxTooltip.textContent = `${formatNumber(newMaxVal)} PLN`;
+            maxTooltip.style.opacity = '1';
+            
+            // Add visual indicators for pushing
+            minHandle.classList.add('pushing');
+            maxHandle.classList.add('active', 'pushed');
+        } else {
+            // If not pushing, remove indicator classes
+            minHandle.classList.remove('pushing');
+            maxHandle.classList.remove('active', 'pushed');
+        }
+        
+        // Update min range input
+        minRange.value = value;
+        updateSlider();
+        
+        // Ensure tooltip stays visible during drag
+        minTooltip.style.opacity = '1';
+    }
+    
+    function handleMaxDrag(e) {
+        if (!maxHandleActive) return;
+        
+        const sliderRect = track.getBoundingClientRect();
+        let clientX = e.clientX;
+        
+        // Handle touch events
+        if (e.touches && e.touches[0]) {
+            clientX = e.touches[0].clientX;
+        }
+        
+        // Calculate position as percentage
+        let position = (clientX - sliderRect.left) / sliderRect.width;
+        position = Math.max(0, Math.min(position, 1));
+        
+        // Calculate value based on position
+        const min = parseInt(maxRange.min);
+        const max = parseInt(maxRange.max);
+        const step = parseInt(maxRange.step) || 1;
+        const range = max - min;
+        
+        // Calculate value and round to nearest step
+        let value = min + (position * range);
+        value = Math.round(value / step) * step;
+        
+        // Get current min value
+        const minVal = parseInt(minRange.value);
+        
+        // Check if max handle is pushing the min handle
+        if (value <= minVal) {
+            // Push the min handle along with the max handle
+            const newMinVal = Math.max(value, min);
+            minRange.value = newMinVal;
+            minHandle.style.left = `${((newMinVal - min) / range) * 100}%`;
+            minTooltip.style.left = `${((newMinVal - min) / range) * 100}%`;
+            minTooltip.textContent = `${formatNumber(newMinVal)} PLN`;
+            minTooltip.style.opacity = '1';
+            
+            // Add visual indicators for pushing
+            maxHandle.classList.add('pushing');
+            minHandle.classList.add('active', 'pushed');
+        } else {
+            // If not pushing, remove indicator classes
+            maxHandle.classList.remove('pushing');
+            minHandle.classList.remove('active', 'pushed');
+        }
+        
+        // Update max range input
+        maxRange.value = value;
+        updateSlider();
+        
+        // Ensure tooltip stays visible during drag
+        maxTooltip.style.opacity = '1';
+    }
+    
+    function stopMinDrag() {
+        minHandleActive = false;
+        minHandle.classList.remove('active', 'pushing');
+        minTooltip.style.opacity = '0';
+        document.removeEventListener('mousemove', handleMinDrag);
+        document.removeEventListener('mouseup', stopMinDrag);
+        document.removeEventListener('touchmove', handleMinDrag);
+        document.removeEventListener('touchend', stopMinDrag);
+        
+        // Remove pushed state from max handle when drag stops
+        maxHandle.classList.remove('pushed');
+    }
+    
+    function stopMaxDrag() {
+        maxHandleActive = false;
+        maxHandle.classList.remove('active', 'pushing');
+        maxTooltip.style.opacity = '0';
+        document.removeEventListener('mousemove', handleMaxDrag);
+        document.removeEventListener('mouseup', stopMaxDrag);
+        document.removeEventListener('touchmove', handleMaxDrag);
+        document.removeEventListener('touchend', stopMaxDrag);
+        
+        // Remove pushed state from min handle when drag stops
+        minHandle.classList.remove('pushed');
+    }
 
-    // Update number inputs
+    // Update input fields
     if (minInput) {
         minInput.addEventListener('input', function() {
             const minVal = parseFormattedNumber(this.value);
             const maxVal = parseInt(maxRange.value);
             
             if (!isNaN(minVal)) {
-                if (minVal > maxVal) {
-                    minRange.value = maxVal;
-                } else {
-                    minRange.value = minVal;
-                }
-                updateTrack();
+                // Ensure min doesn't exceed max
+                minRange.value = Math.min(minVal, maxVal);
+                updateSlider();
             }
         });
         
@@ -153,12 +320,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxVal = parseFormattedNumber(this.value);
             
             if (!isNaN(maxVal)) {
-                if (maxVal < minVal) {
-                    maxRange.value = minVal;
-                } else {
-                    maxRange.value = maxVal;
-                }
-                updateTrack();
+                // Ensure max isn't less than min
+                maxRange.value = Math.max(maxVal, minVal);
+                updateSlider();
             }
         });
         
@@ -171,43 +335,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initialize track and tooltips
-    if (minRange && maxRange) {
-        updateTrack();
-        
-        // Set cursor styles
-        minRange.style.cursor = 'grab';
-        maxRange.style.cursor = 'grab';
+    // Initialize slider
+    if (track) {
+        updateSlider();
     }
-
-    // Add active states for range inputs
-    [minRange, maxRange].forEach(range => {
-        if (!range) return;
-        
-        range.addEventListener('mousedown', function() {
-            this.style.cursor = 'grabbing';
-        });
-
-        range.addEventListener('mouseup', function() {
-            this.style.cursor = 'grab';
-        });
-
-        range.addEventListener('mouseleave', function() {
-            this.style.cursor = 'grab';
-        });
-    });
 
     // Clear filters
     const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     if (clearFiltersBtn) {
         clearFiltersBtn.addEventListener('click', function() {
-            // Reset salary range with animation
+            // Reset salary range
             if (minRange && maxRange) {
+                // Use smooth animation for resetting
                 const duration = 300;
                 const startMin = parseInt(minRange.value);
                 const startMax = parseInt(maxRange.value);
                 const endMin = parseInt(minRange.min);
-                const endMax = parseInt(minRange.max);
+                const endMax = parseInt(maxRange.max);
                 
                 const startTime = performance.now();
                 
@@ -218,10 +362,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Easing function for smooth animation
                     const easeProgress = 1 - Math.pow(1 - progress, 3);
                     
-                    minRange.value = startMin + (endMin - startMin) * easeProgress;
-                    maxRange.value = startMax + (endMax - startMax) * easeProgress;
+                    minRange.value = Math.round(startMin + (endMin - startMin) * easeProgress);
+                    maxRange.value = Math.round(startMax + (endMax - startMax) * easeProgress);
                     
-                    updateTrack();
+                    updateSlider();
                     
                     if (progress < 1) {
                         requestAnimationFrame(animate);
@@ -230,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 requestAnimationFrame(animate);
             }
-
+            
             // Reset all checkboxes for experience, workplace, employment, and work type
             document.querySelectorAll('.filter-experience, .filter-workplace, .filter-employment, .filter-work-type').forEach(checkbox => {
                 checkbox.checked = false;
@@ -296,15 +440,40 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // 7. Salary Range
-            const minSalary = parseInt(document.getElementById('minSalaryRange').value);
-            const maxSalary = parseInt(document.getElementById('maxSalaryRange').value);
-            const minDefault = parseInt(document.getElementById('minSalaryRange').min);
-            const maxDefault = parseInt(document.getElementById('maxSalaryRange').max);
+            let minSalary, maxSalary, minDefault, maxDefault;
+            
+            // Try with minSalaryRange/maxSalaryRange first (from index.html)
+            const minSalaryRangeEl = document.getElementById('minSalaryRange');
+            const maxSalaryRangeEl = document.getElementById('maxSalaryRange');
+            
+            // Fall back to minSalary/maxSalary (from job_list.html) if the above don't exist
+            const minSalaryEl = document.getElementById('minSalary');
+            const maxSalaryEl = document.getElementById('maxSalary');
+            
+            if (minSalaryRangeEl && maxSalaryRangeEl) {
+                minSalary = parseInt(minSalaryRangeEl.value);
+                maxSalary = parseInt(maxSalaryRangeEl.value);
+                minDefault = parseInt(minSalaryRangeEl.min);
+                maxDefault = parseInt(maxSalaryRangeEl.max);
+            } else if (minSalaryEl && maxSalaryEl) {
+                minSalary = parseInt(minSalaryEl.value);
+                maxSalary = parseInt(maxSalaryEl.value);
+                minDefault = parseInt(minSalaryEl.min);
+                maxDefault = parseInt(maxSalaryEl.max);
+            } else {
+                // If neither set of elements exists, use defaults
+                minSalary = 0;
+                maxSalary = 200000;
+                minDefault = 0;
+                maxDefault = 200000;
+            }
             
             if (minSalary > minDefault || maxSalary < maxDefault) {
                 const salaryTag = createSearchTag(
                     `${new Intl.NumberFormat('pl-PL').format(minSalary)} - ${new Intl.NumberFormat('pl-PL').format(maxSalary)} PLN`,
-                    'bi-currency-dollar'
+                    'bi-currency-dollar',
+                    'salary-filter',
+                    { minSalary: minSalary, maxSalary: maxSalary }
                 );
                 searchTags.appendChild(salaryTag);
             }
@@ -395,7 +564,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to create a search tag element
-    function createSearchTag(text, iconClass = 'bi-tag') {
+    function createSearchTag(text, iconClass = 'bi-tag', dataAttribute = '', dataValue = {}) {
         const tag = document.createElement('div');
         tag.className = 'search-tag';
         
@@ -409,6 +578,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         tag.appendChild(icon);
         tag.appendChild(textSpan);
+        
+        // Add data attributes
+        if (dataAttribute) {
+            tag.setAttribute(`data-${dataAttribute}`, JSON.stringify(dataValue));
+        }
         
         // Add click event to remove tag
         tag.addEventListener('click', function() {
@@ -869,6 +1043,35 @@ document.addEventListener('DOMContentLoaded', function() {
         const fulltimeCheckbox = document.querySelector('input[name="fulltime"]');
         const parttimeCheckbox = document.querySelector('input[name="parttime"]');
         
+        // Get salary range values
+        let minSalary, maxSalary, minDefault, maxDefault;
+        
+        // Try with minSalaryRange/maxSalaryRange first (from index.html)
+        const minSalaryRangeEl = document.getElementById('minSalaryRange');
+        const maxSalaryRangeEl = document.getElementById('maxSalaryRange');
+        
+        // Fall back to minSalary/maxSalary (from job_list.html) if the above don't exist
+        const minSalaryEl = document.getElementById('minSalary');
+        const maxSalaryEl = document.getElementById('maxSalary');
+        
+        if (minSalaryRangeEl && maxSalaryRangeEl) {
+            minSalary = parseInt(minSalaryRangeEl.value);
+            maxSalary = parseInt(maxSalaryRangeEl.value);
+            minDefault = parseInt(minSalaryRangeEl.min);
+            maxDefault = parseInt(maxSalaryRangeEl.max);
+        } else if (minSalaryEl && maxSalaryEl) {
+            minSalary = parseInt(minSalaryEl.value);
+            maxSalary = parseInt(maxSalaryEl.value);
+            minDefault = parseInt(minSalaryEl.min);
+            maxDefault = parseInt(maxSalaryEl.max);
+        } else {
+            // If neither set of elements exists, use defaults
+            minSalary = 0;
+            maxSalary = 200000;
+            minDefault = 0;
+            maxDefault = 200000;
+        }
+        
         // Build query parameters
         let params = new URLSearchParams();
         if (searchQuery) params.append('q', searchQuery);
@@ -876,6 +1079,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (remoteCheckbox && remoteCheckbox.checked) params.append('remote', 'true');
         if (fulltimeCheckbox && fulltimeCheckbox.checked) params.append('fulltime', 'true');
         if (parttimeCheckbox && parttimeCheckbox.checked) params.append('parttime', 'true');
+        
+        // Add salary range parameters if they're different from defaults
+        if (minSalary > minDefault) params.append('min_salary', minSalary);
+        if (maxSalary < maxDefault) params.append('max_salary', maxSalary);
         
         // Add a minimum delay to ensure the animation is visible (at least 500ms)
         const fetchStart = Date.now();

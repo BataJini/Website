@@ -390,6 +390,78 @@
     opacity: 0.7;
 }
 
+/* Job Listing Tags */
+.job-listing-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.job-listing-tags .badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.35rem 0.75rem;
+    border-radius: 1rem;
+    background-color: #f0f0f0;
+    color: #666;
+    text-transform: none;
+    letter-spacing: normal;
+    white-space: nowrap;
+}
+
+/* Filter Modal Styles */
+.filter-section {
+    border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.1);
+    padding-bottom: 1.5rem;
+}
+
+.filter-section:last-child {
+    border-bottom: none;
+}
+
+.filter-section-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--bs-body-color);
+    display: flex;
+    align-items: center;
+}
+
+.filter-section-content {
+    padding-left: 0.5rem;
+}
+
+/* Dark Mode Styles */
+[data-bs-theme="dark"] .search-tag {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+[data-bs-theme="dark"] .search-tag:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-bs-theme="dark"] .job-listing-tags .badge {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+[data-bs-theme="dark"] .filter-section {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Hover Effects for Job Listings */
+.job-listing:hover .job-listing-tags .badge {
+    background-color: rgba(38, 132, 255, 0.1);
+    color: var(--primary-color);
+}
+
+[data-bs-theme="dark"] .job-listing:hover .job-listing-tags .badge {
+    background-color: rgba(38, 132, 255, 0.2);
+    color: #fff;
+}
+
 /* Modal Specific Styles */
 #jobFiltersModal .modal-content {
     border-radius: 1rem;
