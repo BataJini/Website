@@ -159,4 +159,197 @@
 
 {% block extra_js %}
 <script src="{% static 'js/jobs.js' %}"></script>
+<script>
+    // Add this script to specifically initialize the salary slider on this page
+    document.addEventListener('DOMContentLoaded', function() {
+        // Basic slider initialization
+        const minRange = document.getElementById('minSalaryRange');
+        const maxRange = document.getElementById('maxSalaryRange');
+        const minInput = document.getElementById('minSalaryInput');
+        const maxInput = document.getElementById('maxSalaryInput');
+        const track = document.querySelector('.slider-track');
+        const minHandle = document.getElementById('minSalaryHandle');
+        const maxHandle = document.getElementById('maxSalaryHandle');
+        const minTooltip = document.getElementById('minSalaryTooltip');
+        const maxTooltip = document.getElementById('maxSalaryTooltip');
+        
+        if (minRange && maxRange && track && minHandle && maxHandle) {
+            // Format number with thousand separators
+            function formatNumber(num) {
+                return new Intl.NumberFormat('pl-PL').format(num);
+            }
+            
+            // Update slider visuals based on range values
+            function updateSlider() {
+                const min = parseInt(minRange.min);
+                const max = parseInt(minRange.max);
+                const range = max - min;
+                
+                const minVal = parseInt(minRange.value);
+                const maxVal = parseInt(maxRange.value);
+                
+                // Calculate percentages for positioning
+                const minPercent = ((minVal - min) / range) * 100;
+                const maxPercent = ((maxVal - min) / range) * 100;
+                
+                // Position handles
+                minHandle.style.left = `${minPercent}%`;
+                maxHandle.style.left = `${maxPercent}%`;
+                
+                // Position tooltips and update their content
+                minTooltip.style.left = `${minPercent}%`;
+                maxTooltip.style.left = `${maxPercent}%`;
+                minTooltip.textContent = `${formatNumber(minVal)} PLN`;
+                maxTooltip.textContent = `${formatNumber(maxVal)} PLN`;
+                
+                // Update track highlighting
+                track.style.background = `linear-gradient(to right, 
+                    var(--bs-border-color) ${minPercent}%, 
+                    #0d6efd ${minPercent}%, 
+                    #0d6efd ${maxPercent}%, 
+                    var(--bs-border-color) ${maxPercent}%)`;
+                
+                // Update input fields
+                if (minInput) minInput.value = minVal;
+                if (maxInput) maxInput.value = maxVal;
+            }
+            
+            // Set up event listeners
+            minRange.addEventListener('input', function() {
+                const minVal = parseInt(this.value);
+                const maxVal = parseInt(maxRange.value);
+                
+                // Prevent min from exceeding max
+                if (minVal > maxVal) {
+                    this.value = maxVal;
+                }
+                
+                updateSlider();
+            });
+            
+            maxRange.addEventListener('input', function() {
+                const minVal = parseInt(minRange.value);
+                const maxVal = parseInt(this.value);
+                
+                // Prevent max from being less than min
+                if (maxVal < minVal) {
+                    this.value = minVal;
+                }
+                
+                updateSlider();
+            });
+            
+            // Initialize slider on load
+            updateSlider();
+        }
+    });
+</script>
+<style>
+    /* Ensure slider styling works regardless of external CSS */
+    .double-range-slider {
+        position: relative;
+        height: 50px;
+        width: 100%;
+        margin: 10px auto;
+    }
+    
+    .slider-track {
+        position: absolute;
+        width: 100%;
+        height: 6px;
+        background: #e9ecef;
+        border-radius: 3px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+    
+    .slider-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 5;
+    }
+    
+    .min-input {
+        z-index: 6;
+    }
+    
+    .range-handle {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #0d6efd;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        top: 50%;
+        transform: translate(-50%, -50%);
+        cursor: grab;
+        z-index: 4;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .min-handle {
+        left: 0%;
+    }
+    
+    .max-handle {
+        left: 100%;
+    }
+    
+    .slider-tooltip {
+        position: absolute;
+        background: #0d6efd;
+        color: white;
+        font-size: 0.75rem;
+        padding: 2px 6px;
+        border-radius: 3px;
+        transform: translateX(-50%);
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+    }
+    
+    .min-tooltip {
+        left: 0%;
+        opacity: 1;
+    }
+    
+    .max-tooltip {
+        left: 100%;
+        opacity: 1;
+    }
+    
+    .slider-tooltip:after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid #0d6efd;
+    }
+    
+    .salary-inputs {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+    
+    .salary-input-group {
+        width: 45%;
+    }
+    
+    .salary-input-divider {
+        padding: 0 5px;
+    }
+</style>
 {% endblock %} 
