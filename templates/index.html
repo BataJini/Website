@@ -108,32 +108,36 @@
                             <i class="bi bi-currency-dollar me-2"></i>Salary Range
                         </h6>
                         <div class="filter-section-content">
-                            <div class="salary-range-container">
-                                <div class="salary-range-slider">
+                            <div class="salary-range-container text-center">
+                                <div class="double-range-slider">
                                     <div class="slider-track"></div>
-                                    <input type="range" class="salary-range" id="minSalaryRange" min="0" max="50000" value="0" step="1000">
-                                    <input type="range" class="salary-range" id="maxSalaryRange" min="0" max="50000" value="50000" step="1000">
+                                    <div class="slider-handles">
+                                        <div class="range-handle min-handle" id="minSalaryHandle"></div>
+                                        <div class="range-handle max-handle" id="maxSalaryHandle"></div>
                                     </div>
-                                <div class="salary-inputs d-flex align-items-center gap-2 mt-3">
-                                    <div class="salary-input-group">
-                                        <label for="minSalaryInput" class="form-label small">Min</label>
+                                    <div class="slider-tooltips">
+                                        <div class="slider-tooltip min-tooltip" id="minSalaryTooltip">0 PLN</div>
+                                        <div class="slider-tooltip max-tooltip" id="maxSalaryTooltip">50000 PLN</div>
+                                    </div>
+                                    <input type="range" class="slider-input min-input" id="minSalaryRange" min="0" max="50000" value="0" step="1000">
+                                    <input type="range" class="slider-input max-input" id="maxSalaryRange" min="0" max="50000" value="50000" step="1000">
+                                </div>
+                                <div class="salary-inputs d-flex align-items-center justify-content-between mt-3">
+                                    <div class="d-flex align-items-center gap-2 salary-input-wrapper">
                                         <div class="input-group">
                                             <span class="input-group-text">PLN</span>
                                             <input type="number" class="form-control" id="minSalaryInput" placeholder="0">
-                                    </div>
-                                    </div>
-                                    <div class="salary-input-divider">-</div>
-                                    <div class="salary-input-group">
-                                        <label for="maxSalaryInput" class="form-label small">Max</label>
+                                        </div>
+                                        <div class="salary-input-divider">-</div>
                                         <div class="input-group">
                                             <span class="input-group-text">PLN</span>
                                             <input type="number" class="form-control" id="maxSalaryInput" placeholder="50000">
-                                    </div>
-                                </div>
-                                    </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
                     <!-- Location Section -->
                     <div class="filter-section mb-4">

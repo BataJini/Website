@@ -331,6 +331,8 @@ def search_jobs_ajax(request):
     remote = request.GET.get('remote', False)
     fulltime = request.GET.get('fulltime', False)
     parttime = request.GET.get('parttime', False)
+    min_salary = request.GET.get('min_salary', None)
+    max_salary = request.GET.get('max_salary', None)
 
     # Filter jobs based on search parameters
     jobs = Job.objects.filter(is_archived=False).order_by('-is_featured', '-posted_date')
@@ -362,6 +364,61 @@ def search_jobs_ajax(request):
 
     if parttime:
         jobs = jobs.filter(type='Part-time')
+    
+    # Handle salary range filtering
+    if min_salary is not None or max_salary is not None:
+        # Convert to integers
+        min_salary = int(min_salary) if min_salary is not None else 0
+        max_salary = int(max_salary) if max_salary is not None else float('inf')
+        
+        # Filter jobs that have a salary field first
+        jobs_with_salary = []
+        
+        for job in jobs:
+            # Only process jobs with salary information
+            if job.salary:
+                # Extract numeric values from salary string using regex
+                # Common formats: "30000-40000", "30k-40k", "30,000 - 40,000", etc.
+                import re
+                # Extract all numbers from the salary string
+                salary_numbers = re.findall(r'\d+[k,]?\d*', job.salary.lower())
+                
+                if salary_numbers:
+                    # Process each extracted number
+                    parsed_numbers = []
+                    for num in salary_numbers:
+                        # Remove commas
+                        num = num.replace(',', '')
+                        # Handle 'k' suffix (multiply by 1000)
+                        if 'k' in num:
+                            num = int(float(num.replace('k', '')) * 1000)
+                        else:
+                            num = int(num)
+                        parsed_numbers.append(num)
+                    
+                    # If we have at least one number
+                    if parsed_numbers:
+                        # If there's only one number, assume it's the minimum
+                        if len(parsed_numbers) == 1:
+                            job_min_salary = parsed_numbers[0]
+                            job_max_salary = parsed_numbers[0]
+                        else:
+                            # Sort the numbers to find min and max
+                            job_min_salary = min(parsed_numbers)
+                            job_max_salary = max(parsed_numbers)
+                        
+                        # Check if the job's salary range overlaps with the requested range
+                        if (job_max_salary >= min_salary and job_min_salary <= max_salary):
+                            jobs_with_salary.append(job)
+                else:
+                    # No numbers found in salary string, skip this job
+                    continue
+            else:
+                # No salary information
+                continue
+        
+        # Replace the original jobs queryset with the filtered list
+        jobs = jobs_with_salary
 
     # Group jobs by title and company, combining locations
     job_groups = {}

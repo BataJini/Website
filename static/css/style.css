@@ -1470,6 +1470,10 @@ iframe {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .job-card__company {

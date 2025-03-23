@@ -32,18 +32,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const minVal = parseInt(minRange.value);
         const maxVal = parseInt(maxRange.value);
-        const percent1 = (minVal - parseInt(minRange.min)) / (parseInt(minRange.max) - parseInt(minRange.min)) * 100;
-        const percent2 = (maxVal - parseInt(minRange.min)) / (parseInt(minRange.max) - parseInt(minRange.min)) * 100;
+        const minPos = ((minVal - parseInt(minRange.min)) / (parseInt(minRange.max) - parseInt(minRange.min))) * 100;
+        const maxPos = ((maxVal - parseInt(minRange.min)) / (parseInt(minRange.max) - parseInt(minRange.min))) * 100;
         
+        // Update the track color to show selected range
         track.style.background = `linear-gradient(to right, 
-            var(--bs-border-color) ${percent1}%, 
-            var(--primary-color) ${percent1}%, 
-            var(--primary-color) ${percent2}%, 
-            var(--bs-border-color) ${percent2}%)`;
+            var(--bs-border-color) ${minPos}%, 
+            var(--primary-color) ${minPos}%, 
+            var(--primary-color) ${maxPos}%, 
+            var(--bs-border-color) ${maxPos}%)`;
 
-        // Update tooltips position but keep them hidden
-        minTooltip.style.left = `${percent1}%`;
-        maxTooltip.style.left = `${percent2}%`;
+        // Position tooltips to match handle positions
+        minTooltip.style.left = `calc(${minPos}%)`;
+        maxTooltip.style.left = `calc(${maxPos}%)`;
+        
+        // Update tooltip content
         minTooltip.textContent = `${formatNumber(minVal)} PLN`;
         maxTooltip.textContent = `${formatNumber(maxVal)} PLN`;
 
@@ -71,13 +74,21 @@ document.addEventListener('DOMContentLoaded', function() {
             updateTrack();
         });
         
-        // Remove tooltip show/hide events
-        minRange.addEventListener('mouseover', function() {
-            // Do nothing - keep tooltip hidden
+        // Show/hide tooltip on interaction
+        minRange.addEventListener('mousedown', function() {
+            minTooltip.style.opacity = '1';
         });
         
-        minRange.addEventListener('mouseout', function() {
-            // Do nothing - keep tooltip hidden
+        minRange.addEventListener('mouseup', function() {
+            minTooltip.style.opacity = '0';
+        });
+        
+        minRange.addEventListener('touchstart', function() {
+            minTooltip.style.opacity = '1';
+        });
+        
+        minRange.addEventListener('touchend', function() {
+            minTooltip.style.opacity = '0';
         });
     }
 
@@ -93,13 +104,21 @@ document.addEventListener('DOMContentLoaded', function() {
             updateTrack();
         });
         
-        // Remove tooltip show/hide events
-        maxRange.addEventListener('mouseover', function() {
-            // Do nothing - keep tooltip hidden
+        // Show/hide tooltip on interaction
+        maxRange.addEventListener('mousedown', function() {
+            maxTooltip.style.opacity = '1';
         });
         
-        maxRange.addEventListener('mouseout', function() {
-            // Do nothing - keep tooltip hidden
+        maxRange.addEventListener('mouseup', function() {
+            maxTooltip.style.opacity = '0';
+        });
+        
+        maxRange.addEventListener('touchstart', function() {
+            maxTooltip.style.opacity = '1';
+        });
+        
+        maxRange.addEventListener('touchend', function() {
+            maxTooltip.style.opacity = '0';
         });
     }
 
@@ -155,6 +174,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize track and tooltips
     if (minRange && maxRange) {
         updateTrack();
+        
+        // Set cursor styles
+        minRange.style.cursor = 'grab';
+        maxRange.style.cursor = 'grab';
     }
 
     // Add active states for range inputs

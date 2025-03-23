@@ -65,6 +65,10 @@
         position: relative !important;
         z-index: 3 !important;
         background: transparent !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 600px !important;
     }
 
     /* Style for company name */
@@ -230,6 +234,10 @@
 
     [data-bs-theme="dark"] .job-listing-title {
         color: var(--bs-body-color) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 600px !important;
     }
 
     [data-bs-theme="dark"] .job-listing-company,
@@ -335,6 +343,27 @@
         .badge {
             font-size: 0.7rem !important;
             padding: 4px 8px !important;
+        }
+    }
+
+    /* Media queries for responsiveness */
+    @media (max-width: 992px) {
+        .job-listing-title {
+            max-width: 400px !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .job-listing-title {
+            max-width: 300px !important;
+            font-size: 1.1rem !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .job-listing-title {
+            max-width: 200px !important;
+            font-size: 1rem !important;
         }
     }
 </style>
