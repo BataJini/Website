@@ -440,10 +440,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // 7. Salary Range
-            const minSalary = parseInt(document.getElementById('minSalaryRange').value);
-            const maxSalary = parseInt(document.getElementById('maxSalaryRange').value);
-            const minDefault = parseInt(document.getElementById('minSalaryRange').min);
-            const maxDefault = parseInt(document.getElementById('maxSalaryRange').max);
+            let minSalary, maxSalary, minDefault, maxDefault;
+            
+            // Try with minSalaryRange/maxSalaryRange first (from index.html)
+            const minSalaryRangeEl = document.getElementById('minSalaryRange');
+            const maxSalaryRangeEl = document.getElementById('maxSalaryRange');
+            
+            // Fall back to minSalary/maxSalary (from job_list.html) if the above don't exist
+            const minSalaryEl = document.getElementById('minSalary');
+            const maxSalaryEl = document.getElementById('maxSalary');
+            
+            if (minSalaryRangeEl && maxSalaryRangeEl) {
+                minSalary = parseInt(minSalaryRangeEl.value);
+                maxSalary = parseInt(maxSalaryRangeEl.value);
+                minDefault = parseInt(minSalaryRangeEl.min);
+                maxDefault = parseInt(maxSalaryRangeEl.max);
+            } else if (minSalaryEl && maxSalaryEl) {
+                minSalary = parseInt(minSalaryEl.value);
+                maxSalary = parseInt(maxSalaryEl.value);
+                minDefault = parseInt(minSalaryEl.min);
+                maxDefault = parseInt(maxSalaryEl.max);
+            } else {
+                // If neither set of elements exists, use defaults
+                minSalary = 0;
+                maxSalary = 200000;
+                minDefault = 0;
+                maxDefault = 200000;
+            }
             
             if (minSalary > minDefault || maxSalary < maxDefault) {
                 const salaryTag = createSearchTag(
@@ -1021,10 +1044,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const parttimeCheckbox = document.querySelector('input[name="parttime"]');
         
         // Get salary range values
-        const minSalary = parseInt(document.getElementById('minSalaryRange').value);
-        const maxSalary = parseInt(document.getElementById('maxSalaryRange').value);
-        const minDefault = parseInt(document.getElementById('minSalaryRange').min);
-        const maxDefault = parseInt(document.getElementById('maxSalaryRange').max);
+        let minSalary, maxSalary, minDefault, maxDefault;
+        
+        // Try with minSalaryRange/maxSalaryRange first (from index.html)
+        const minSalaryRangeEl = document.getElementById('minSalaryRange');
+        const maxSalaryRangeEl = document.getElementById('maxSalaryRange');
+        
+        // Fall back to minSalary/maxSalary (from job_list.html) if the above don't exist
+        const minSalaryEl = document.getElementById('minSalary');
+        const maxSalaryEl = document.getElementById('maxSalary');
+        
+        if (minSalaryRangeEl && maxSalaryRangeEl) {
+            minSalary = parseInt(minSalaryRangeEl.value);
+            maxSalary = parseInt(maxSalaryRangeEl.value);
+            minDefault = parseInt(minSalaryRangeEl.min);
+            maxDefault = parseInt(maxSalaryRangeEl.max);
+        } else if (minSalaryEl && maxSalaryEl) {
+            minSalary = parseInt(minSalaryEl.value);
+            maxSalary = parseInt(maxSalaryEl.value);
+            minDefault = parseInt(minSalaryEl.min);
+            maxDefault = parseInt(maxSalaryEl.max);
+        } else {
+            // If neither set of elements exists, use defaults
+            minSalary = 0;
+            maxSalary = 200000;
+            minDefault = 0;
+            maxDefault = 200000;
+        }
         
         // Build query parameters
         let params = new URLSearchParams();
