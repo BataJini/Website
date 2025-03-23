@@ -121,10 +121,18 @@
                         Salary Range
                     </h6>
                     <div class="salary-range-container">
-                        <div class="salary-range-slider">
+                        <div class="double-range-slider">
                             <div class="slider-track"></div>
-                            <input type="range" class="salary-range" id="minSalary" min="0" max="200000" value="0">
-                            <input type="range" class="salary-range" id="maxSalary" min="0" max="200000" value="200000">
+                            <div class="slider-handles">
+                                <div class="range-handle min-handle" id="minSalaryHandle"></div>
+                                <div class="range-handle max-handle" id="maxSalaryHandle"></div>
+                            </div>
+                            <div class="slider-tooltips">
+                                <div class="slider-tooltip min-tooltip" id="minSalaryTooltip">0 PLN</div>
+                                <div class="slider-tooltip max-tooltip" id="maxSalaryTooltip">200000 PLN</div>
+                            </div>
+                            <input type="range" class="slider-input min-input" id="minSalaryRange" min="0" max="200000" value="0" step="1000">
+                            <input type="range" class="slider-input max-input" id="maxSalaryRange" min="0" max="200000" value="200000" step="1000">
                         </div>
                         <div class="salary-inputs">
                             <div class="salary-input-group">
