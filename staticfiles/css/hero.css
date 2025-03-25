@@ -356,6 +356,7 @@
 
 .btn-filters:hover {
     background-color: var(--secondary-color);
+    color: white;
 }
 
 /* Search Tags Container */
@@ -390,33 +391,50 @@
     opacity: 0.7;
 }
 
-/* Modal Specific Styles */
-#jobFiltersModal .modal-content {
+/* Job Listing Tags */
+.job-listing-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.job-listing-tags .badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.35rem 0.75rem;
     border-radius: 1rem;
-    border: none;
-    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0;
+    color: #666;
+    text-transform: none;
+    letter-spacing: normal;
+    white-space: nowrap;
 }
 
-#jobFiltersModal .modal-header {
-    border-bottom-color: rgba(var(--bs-body-color-rgb), 0.1);
+/* Dark Mode Styles */
+[data-bs-theme="dark"] .search-tag {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
 }
 
-#jobFiltersModal .modal-footer {
-    border-top-color: rgba(var(--bs-body-color-rgb), 0.1);
+[data-bs-theme="dark"] .search-tag:hover {
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
-[data-bs-theme="dark"] #jobFiltersModal .modal-content {
-    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+[data-bs-theme="dark"] .job-listing-tags .badge {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
 }
 
-/* Form Elements in Filter Modal */
-.form-check-label {
-    cursor: pointer;
+/* Hover Effects for Job Listings */
+.job-listing:hover .job-listing-tags .badge {
+    background-color: rgba(38, 132, 255, 0.1);
+    color: var(--primary-color);
 }
 
-.form-check-input:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+[data-bs-theme="dark"] .job-listing:hover .job-listing-tags .badge {
+    background-color: rgba(38, 132, 255, 0.2);
+    color: #fff;
 }
 
 /* Show More Tags Link */

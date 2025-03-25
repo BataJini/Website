@@ -129,22 +129,22 @@
                                 <div class="range-handle min-handle" id="minSalaryHandle"></div>
                                 <div class="range-handle max-handle" id="maxSalaryHandle"></div>
                             </div>
-                            <div class="slider-tooltips" style="display: none;">
+                            <div class="slider-tooltips">
                                 <div class="slider-tooltip min-tooltip" id="minSalaryTooltip">0 PLN</div>
                                 <div class="slider-tooltip max-tooltip" id="maxSalaryTooltip">200000 PLN</div>
                             </div>
-                            <input type="range" class="slider-input min-input" id="minSalaryRange" min="0" max="200000" value="0" step="1000">
-                            <input type="range" class="slider-input max-input" id="maxSalaryRange" min="0" max="200000" value="200000" step="1000">
+                            <input type="range" class="slider-input min-input" id="minSalaryRange" min="0" max="200000" value="0" step="500">
+                            <input type="range" class="slider-input max-input" id="maxSalaryRange" min="0" max="200000" value="200000" step="500">
                         </div>
                         <div class="salary-inputs">
                             <div class="salary-input-group">
                                 <label for="minSalaryInput">Min</label>
-                                <input type="number" id="minSalaryInput" class="form-control" value="0">
+                                <input type="number" id="minSalaryInput" class="form-control" value="0" step="500" min="0" max="200000">
                             </div>
                             <span class="salary-input-divider">-</span>
                             <div class="salary-input-group">
                                 <label for="maxSalaryInput">Max</label>
-                                <input type="number" id="maxSalaryInput" class="form-control" value="200000">
+                                <input type="number" id="maxSalaryInput" class="form-control" value="200000" step="500" min="0" max="200000">
                             </div>
                         </div>
                     </div>

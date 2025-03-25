@@ -115,3 +115,54 @@ def safe_html(html_text):
     if not html_text:
         return ""
     return mark_safe(html_text)
+
+@register.filter
+def split(value, delimiter=','):
+    """
+    Split a string by delimiter and return a list
+    """
+    if not value:
+        return []
+    return value.split(delimiter)
+
+@register.filter
+def extract_tech_tags(job_title, max_tags=None):
+    """
+    Extract technology tags from job title and limit to max_tags if specified.
+    If job title is longer than 40 characters, limit to 3 tags max unless otherwise specified.
+    """
+    if not job_title:
+        return []
+    
+    # Default max_tags based on title length if not specified
+    if max_tags is None:
+        max_tags = 3 if len(job_title) > 40 else 999
+    
+    job_title_lower = job_title.lower()
+    tech_tags = []
+    
+    # List of technology keywords to look for
+    technologies = [
+        'python', 'django', 'react', 'java', 'kotlin',
+        'typescript', 'javascript', 'aws', 'node.js', 'spring boot'
+    ]
+    
+    # Add tags that appear in the title
+    for tech in technologies:
+        if tech in job_title_lower and len(tech_tags) < max_tags:
+            tech_tags.append(tech.title())
+    
+    return tech_tags
+
+@register.filter
+def limit_title_tags(job_title, tags):
+    """
+    If the job title is longer than 40 characters, limit to 3 tags,
+    otherwise return all tags
+    """
+    if not tags:
+        return []
+    
+    if len(job_title) > 40:
+        return tags[:3]
+    return tags

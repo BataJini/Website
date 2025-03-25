@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
-from .models import Job, CustomUser  # Import the Job model and CustomUser model
+from .models import Job, CustomUser, City  # Add City to imports
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.admin.views.decorators import staff_member_required
@@ -13,6 +13,12 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 
 logger = logging.getLogger('django')
+
+def get_cities(request):
+    """Ajax view to get filtered cities based on search term"""
+    search = request.GET.get('term', '')
+    cities = City.objects.filter(name__icontains=search).values_list('name', flat=True)[:10]
+    return JsonResponse(list(cities), safe=False)
 
 def home(request):
     # Get search parameters from the request

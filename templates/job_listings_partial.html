@@ -6,16 +6,58 @@
     .job-listing-posted.text-normal span {
         font-style: normal !important;
     }
+    
+    /* Load more button styling */
+    .load-more-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .btn-load-more {
+        background-color: var(--bs-body-bg);
+        color: var(--bs-body-color);
+        border: 1px solid rgba(var(--bs-body-color-rgb), 0.2);
+        padding: 10px 28px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    
+    .btn-load-more:hover {
+        background-color: rgba(var(--bs-body-color-rgb), 0.08);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
 </style>
 
-{% for job in jobs %}
-    {% include 'job_listing_snippet.html' with job=job %}
-{% empty %}
-    <div class="no-results">
-        <div class="text-center py-5">
-            <i class="bi bi-search text-muted display-1"></i>
-            <h3 class="mt-3">No matching jobs found</h3>
-            <p class="text-muted">Try adjusting your search criteria or browse all jobs</p>
+<div class="job-listings-wrapper">
+    {% for job in jobs|slice:":25" %}
+        {% include 'job_listing_snippet.html' with job=job %}
+    {% empty %}
+        <div class="no-results">
+            <div class="text-center py-5">
+                <i class="bi bi-search text-muted display-1"></i>
+                <h3 class="mt-3">No matching jobs found</h3>
+                <p class="text-muted">Try adjusting your search criteria or browse all jobs</p>
+            </div>
         </div>
+    {% endfor %}
+</div>
+
+{% if jobs|length > 25 %}
+    <div class="load-more-container">
+        <button id="loadMoreBtn" class="btn btn-load-more" data-current="25" data-total="{{ jobs|length }}">
+            Load More Jobs
+        </button>
     </div>
-{% endfor %} 
+    
+    <div class="hidden-job-listings" style="display: none;">
+        {% for job in jobs|slice:"25:" %}
+            {% include 'job_listing_snippet.html' with job=job %}
+        {% endfor %}
+    </div>
+{% endif %} 

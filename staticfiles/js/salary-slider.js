@@ -64,9 +64,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 #0d6efd ${maxPercent}%, 
                 var(--bs-border-color, #e9ecef) ${maxPercent}%)`;
             
-            // Update input fields
-            if (minInput) minInput.value = minVal;
-            if (maxInput) maxInput.value = maxVal;
+            // Only update input fields if they don't have focus (to prevent overwriting user input)
+            if (minInput && document.activeElement !== minInput) {
+                minInput.value = minVal;
+            }
+            if (maxInput && document.activeElement !== maxInput) {
+                maxInput.value = maxVal;
+            }
         }
         
         // Set up event listeners
@@ -77,6 +81,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Prevent min from exceeding max
             if (minVal > maxVal) {
                 this.value = maxVal;
+            }
+            
+            // Force update the input field with the current slider value
+            if (minInput) {
+                minInput.value = parseInt(this.value);
             }
             
             updateSlider();
@@ -91,38 +100,109 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.value = minVal;
             }
             
+            // Force update the input field with the current slider value
+            if (maxInput) {
+                maxInput.value = parseInt(this.value);
+            }
+            
             updateSlider();
         });
         
         // Also update when number inputs change
         if (minInput) {
-            minInput.addEventListener('change', function() {
+            // Update the slider in real-time as the user types
+            minInput.addEventListener('input', function() {
+                let value = parseInt(this.value);
+                
+                // Only update if it's a valid number
+                if (!isNaN(value)) {
+                    // Enforce minimum limit of 0
+                    if (value < 0) {
+                        value = 0;
+                        this.value = value;
+                    }
+                    
+                    // Ensure value is within allowed range
+                    value = Math.max(0, Math.min(value, parseInt(minRange.max)));
+                    
+                    const maxVal = parseInt(maxRange.value);
+                    
+                    // Update the slider, ensuring min doesn't exceed max
+                    minRange.value = Math.min(value, maxVal);
+                    
+                    // Update the slider visuals
+                    updateSlider();
+                }
+            });
+            
+            // Keep the update on blur for safety (in case JS errors occur)
+            minInput.addEventListener('blur', function() {
                 let value = parseInt(this.value);
                 if (isNaN(value)) value = 0;
-                const maxVal = parseInt(maxRange.value);
                 
-                if (value > maxVal) {
-                    value = maxVal;
+                // Enforce minimum limit of 0
+                if (value < 0) {
+                    value = 0;
                     this.value = value;
                 }
                 
-                minRange.value = value;
+                // Ensure value is within allowed range
+                value = Math.max(0, Math.min(value, parseInt(minRange.max)));
+                
+                const maxVal = parseInt(maxRange.value);
+                
+                // Update the slider, ensuring min doesn't exceed max
+                minRange.value = Math.min(value, maxVal);
                 updateSlider();
             });
         }
         
         if (maxInput) {
-            maxInput.addEventListener('change', function() {
+            // Update the slider in real-time as the user types
+            maxInput.addEventListener('input', function() {
+                let value = parseInt(this.value);
+                
+                // Only update if it's a valid number
+                if (!isNaN(value)) {
+                    // Enforce maximum limit
+                    const maxLimit = parseInt(maxRange.max);
+                    if (value > maxLimit) {
+                        value = maxLimit;
+                        this.value = value;
+                    }
+                    
+                    // Ensure value is within allowed range
+                    value = Math.max(0, Math.min(value, maxLimit));
+                    
+                    const minVal = parseInt(minRange.value);
+                    
+                    // Update the slider, ensuring max isn't less than min
+                    maxRange.value = Math.max(value, minVal);
+                    
+                    // Update the slider visuals
+                    updateSlider();
+                }
+            });
+            
+            // Keep the update on blur for safety (in case JS errors occur)
+            maxInput.addEventListener('blur', function() {
                 let value = parseInt(this.value);
                 if (isNaN(value)) value = parseInt(maxRange.max);
-                const minVal = parseInt(minRange.value);
                 
-                if (value < minVal) {
-                    value = minVal;
+                // Enforce maximum limit
+                const maxLimit = parseInt(maxRange.max);
+                if (value > maxLimit) {
+                    value = maxLimit;
                     this.value = value;
                 }
                 
-                maxRange.value = value;
+                // Ensure value is within allowed range
+                value = Math.max(0, Math.min(value, maxLimit));
+                
+                const minVal = parseInt(minRange.value);
+                
+                // Update the slider, ensuring max isn't less than min
+                maxRange.value = Math.max(value, minVal);
                 updateSlider();
             });
         }

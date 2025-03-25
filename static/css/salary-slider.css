@@ -2,8 +2,9 @@
 .double-range-slider {
     position: relative;
     height: 50px;
-    width: 100%;
-    margin: 10px auto;
+    width: 100%; /* Reverted to original full width */
+    margin: 10px auto; /* Centered with auto margin */
+    overflow: visible !important; /* Ensure handles can extend outside */
 }
 
 .slider-track {
@@ -41,8 +42,9 @@
     top: 50%;
     transform: translate(-50%, -50%);
     cursor: grab;
-    z-index: 4;
+    z-index: 1050 !important; /* Increased z-index to be above Bootstrap modal */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: visible !important; /* Ensure handle is fully visible */
 }
 
 .min-handle {
@@ -55,7 +57,7 @@
 
 .slider-tooltip {
     position: absolute;
-    background: #0d6efd;
+    background: #000000;
     color: white;
     font-size: 0.75rem;
     padding: 2px 6px;

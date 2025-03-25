@@ -414,12 +414,18 @@
                 </div>
                 <div class="job-listing-tags">
                     {% if job.tags.all %}
-                        {% for tag in job|get_job_tags|limit_tags %}
-                            <span class="badge">{{ tag.name|format_tag }}</span>
-                        {% endfor %}
+                        {% if job.title|length > 40 %}
+                            {% for tag in job|get_job_tags|limit_tags|slice:":3" %}
+                                <span class="badge">{{ tag.name|format_tag }}</span>
+                            {% endfor %}
+                        {% else %}
+                            {% for tag in job|get_job_tags|limit_tags %}
+                                <span class="badge">{{ tag.name|format_tag }}</span>
+                            {% endfor %}
+                        {% endif %}
                     {% elif job.requirements %}
                         {% with skills=job.requirements|parse_requirements %}
-                            {% if skills|length > 0 and skills.0|length > 15 %}
+                            {% if job.title|length > 40 or skills|length > 0 and skills.0|length > 15 %}
                                 {% for skill in skills|slice:":3" %}
                                     <span class="badge">{{ skill|format_tag }}</span>
                                 {% endfor %}
@@ -430,36 +436,9 @@
                             {% endif %}
                         {% endwith %}
                     {% else %}
-                        {% if 'python' in job.title|lower %}
-                            <span class="badge">Python</span>
-                        {% endif %}
-                        {% if 'django' in job.title|lower %}
-                            <span class="badge">Django</span>
-                        {% endif %}
-                        {% if 'react' in job.title|lower %}
-                            <span class="badge">React</span>
-                        {% endif %}
-                        {% if 'java' in job.title|lower %}
-                            <span class="badge">Java</span>
-                        {% endif %}
-                        {% if 'kotlin' in job.title|lower %}
-                            <span class="badge">Kotlin</span>
-                        {% endif %}
-                        {% if 'typescript' in job.title|lower %}
-                            <span class="badge">TypeScript</span>
-                        {% endif %}
-                        {% if 'javascript' in job.title|lower %}
-                            <span class="badge">JavaScript</span>
-                        {% endif %}
-                        {% if 'aws' in job.title|lower %}
-                            <span class="badge">AWS</span>
-                        {% endif %}
-                        {% if 'node.js' in job.title|lower %}
-                            <span class="badge">Node.js</span>
-                        {% endif %}
-                        {% if 'spring boot' in job.title|lower %}
-                            <span class="badge">Spring Boot</span>
-                        {% endif %}
+                        {% for tech_tag in job.title|extract_tech_tags %}
+                            <span class="badge">{{ tech_tag }}</span>
+                        {% endfor %}
                     {% endif %}
                 </div>
             </div>

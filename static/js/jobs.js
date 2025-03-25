@@ -52,9 +52,14 @@ document.addEventListener('DOMContentLoaded', function() {
             var(--primary-color) ${maxPercent}%, 
             var(--bs-border-color) ${maxPercent}%)`;
         
-        // Update input fields
-        if (minInput) minInput.value = minVal;
-        if (maxInput) maxInput.value = maxVal;
+        // Only update input fields if they don't have focus
+        // This prevents overriding user input while they're typing
+        if (minInput && document.activeElement !== minInput) {
+            minInput.value = minVal;
+        }
+        if (maxInput && document.activeElement !== maxInput) {
+            maxInput.value = maxVal;
+        }
     }
 
     // Parse number removing thousand separators
@@ -74,6 +79,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.value = maxVal;
             }
             
+            // Force update the input field with the current slider value
+            if (minInput) {
+                minInput.value = parseInt(this.value);
+            }
+            
             updateSlider();
         });
     }
@@ -86,6 +96,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Prevent max from being less than min
             if (maxVal < minVal) {
                 this.value = minVal;
+            }
+            
+            // Force update the input field with the current slider value
+            if (maxInput) {
+                maxInput.value = parseInt(this.value);
             }
             
             updateSlider();
@@ -197,6 +212,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add visual indicators for pushing
             minHandle.classList.add('pushing');
             maxHandle.classList.add('active', 'pushed');
+            
+            // Force update max input field
+            if (maxInput) {
+                maxInput.value = newMaxVal;
+            }
         } else {
             // If not pushing, remove indicator classes
             minHandle.classList.remove('pushing');
@@ -205,6 +225,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update min range input
         minRange.value = value;
+        
+        // Force update min input field
+        if (minInput) {
+            minInput.value = value;
+        }
+        
         updateSlider();
         
         // Ensure tooltip stays visible during drag
@@ -252,6 +278,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add visual indicators for pushing
             maxHandle.classList.add('pushing');
             minHandle.classList.add('active', 'pushed');
+            
+            // Force update min input field
+            if (minInput) {
+                minInput.value = newMinVal;
+            }
         } else {
             // If not pushing, remove indicator classes
             maxHandle.classList.remove('pushing');
@@ -260,6 +291,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update max range input
         maxRange.value = value;
+        
+        // Force update max input field
+        if (maxInput) {
+            maxInput.value = value;
+        }
+        
         updateSlider();
         
         // Ensure tooltip stays visible during drag
@@ -295,42 +332,164 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update input fields
     if (minInput) {
         minInput.addEventListener('input', function() {
+            const input = this.value.trim();
+            // Allow empty input while typing
+            if (input === '') return;
+            
+            const minVal = parseFormattedNumber(input);
+            // Only proceed if it's a valid number
+            if (!isNaN(minVal)) {
+                // Enforce minimum limit of 0
+                if (minVal < 0) {
+                    this.value = "0";
+                    return;
+                }
+                
+                // Constrain to min and max range values
+                const constrainedVal = Math.max(parseInt(minRange.min), Math.min(minVal, parseInt(minRange.max)));
+                
+                const maxVal = parseInt(maxRange.value);
+                
+                // Ensure min doesn't exceed max
+                minRange.value = Math.min(constrainedVal, maxVal);
+                
+                // Now update the slider immediately
+                updateSlider();
+            }
+        });
+        
+        // Keep this for consistency/backwards compatibility
+        minInput.addEventListener('change', function() {
             const minVal = parseFormattedNumber(this.value);
             const maxVal = parseInt(maxRange.value);
             
             if (!isNaN(minVal)) {
+                // Enforce minimum limit of 0
+                if (minVal < 0) {
+                    this.value = "0";
+                    const constrainedVal = 0;
+                    minRange.value = constrainedVal;
+                    updateSlider();
+                    return;
+                }
+                
+                // Constrain to min and max range values
+                const constrainedVal = Math.max(parseInt(minRange.min), Math.min(minVal, parseInt(minRange.max)));
+                
                 // Ensure min doesn't exceed max
-                minRange.value = Math.min(minVal, maxVal);
+                minRange.value = Math.min(constrainedVal, maxVal);
+                
+                // Now update the slider
                 updateSlider();
             }
         });
         
         // Format inputs on focus out
         minInput.addEventListener('blur', function() {
-            const val = parseFormattedNumber(this.value);
+            const input = this.value.trim();
+            // If empty, use the current slider value
+            if (input === '') {
+                this.value = minRange.value;
+                return;
+            }
+            
+            const val = parseFormattedNumber(input);
             if (!isNaN(val)) {
-                this.value = formatNumber(val);
+                // Enforce minimum limit of 0
+                if (val < 0) {
+                    this.value = "0";
+                    minRange.value = 0;
+                    updateSlider();
+                    return;
+                }
+                
+                const maxVal = parseInt(maxRange.value);
+                const constrainedVal = Math.max(parseInt(minRange.min), Math.min(val, parseInt(minRange.max)));
+                minRange.value = Math.min(constrainedVal, maxVal);
+                updateSlider();
             }
         });
     }
 
     if (maxInput) {
         maxInput.addEventListener('input', function() {
+            const input = this.value.trim();
+            // Allow empty input while typing
+            if (input === '') return;
+            
+            const maxVal = parseFormattedNumber(input);
+            // Only proceed if it's a valid number
+            if (!isNaN(maxVal)) {
+                // Enforce maximum limit
+                const maxLimit = parseInt(maxRange.max);
+                if (maxVal > maxLimit) {
+                    this.value = maxLimit.toString();
+                    return;
+                }
+                
+                // Constrain to min and max range values
+                const constrainedVal = Math.max(parseInt(maxRange.min), Math.min(maxVal, maxLimit));
+                
+                const minVal = parseInt(minRange.value);
+                
+                // Ensure max isn't less than min
+                maxRange.value = Math.max(constrainedVal, minVal);
+                
+                // Now update the slider immediately
+                updateSlider();
+            }
+        });
+        
+        // Keep this for consistency/backwards compatibility
+        maxInput.addEventListener('change', function() {
             const minVal = parseInt(minRange.value);
             const maxVal = parseFormattedNumber(this.value);
             
             if (!isNaN(maxVal)) {
+                // Enforce maximum limit
+                const maxLimit = parseInt(maxRange.max);
+                if (maxVal > maxLimit) {
+                    this.value = maxLimit.toString();
+                    maxRange.value = maxLimit;
+                    updateSlider();
+                    return;
+                }
+                
+                // Constrain to min and max range values
+                const constrainedVal = Math.max(parseInt(maxRange.min), Math.min(maxVal, maxLimit));
+                
                 // Ensure max isn't less than min
-                maxRange.value = Math.max(maxVal, minVal);
+                maxRange.value = Math.max(constrainedVal, minVal);
+                
+                // Now update the slider
                 updateSlider();
             }
         });
         
         // Format inputs on focus out
         maxInput.addEventListener('blur', function() {
-            const val = parseFormattedNumber(this.value);
+            const input = this.value.trim();
+            // If empty, use the current slider value
+            if (input === '') {
+                this.value = maxRange.value;
+                return;
+            }
+            
+            const val = parseFormattedNumber(input);
             if (!isNaN(val)) {
-                this.value = formatNumber(val);
+                // Enforce maximum limit
+                const maxLimit = parseInt(maxRange.max);
+                if (val > maxLimit) {
+                    this.value = maxLimit.toString();
+                    maxRange.value = maxLimit;
+                    updateSlider();
+                    return;
+                }
+                
+                const minVal = parseInt(minRange.value);
+                const constrainedVal = Math.max(parseInt(maxRange.min), Math.min(val, maxLimit));
+                maxRange.value = Math.max(constrainedVal, minVal);
+                updateSlider();
             }
         });
     }
@@ -1111,15 +1270,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     jobListingsContainer.classList.add('fade-out');
                     
                     // After fade out, update content and fade in
-            setTimeout(() => {
+                    setTimeout(() => {
                         jobListingsContainer.innerHTML = data.html;
                         jobListingsContainer.classList.remove('fade-out');
                         jobListingsContainer.classList.add('fade-in');
                         
                         // Remove the fade-in class after animation completes
-                    setTimeout(() => {
+                        setTimeout(() => {
                             jobListingsContainer.classList.remove('fade-in');
-                    }, 300);
+                        }, 300);
                         
                         // Update URL with search parameters (for browser history)
                         const url = new URL(window.location);
@@ -1130,6 +1289,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         
                         window.history.pushState({}, '', url);
+                        
+                        // Initialize load more functionality for search results
+                        if (typeof initLoadMore === 'function') {
+                            initLoadMore();
+                        }
                     }, 200); // Short fade-out duration
                 }, remainingDelay);
             })

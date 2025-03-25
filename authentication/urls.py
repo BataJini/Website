@@ -14,4 +14,5 @@ urlpatterns = [
     path('my-jobs/', views.my_jobs, name='my_jobs'),
     path('manage/users/', views.user_list, name='user_list'),
     path('ajax/search-jobs/', views.search_jobs_ajax, name='search_jobs_ajax'),  # New AJAX endpoint
+    path('ajax/cities/', views.get_cities, name='get_cities'),  # New cities endpoint
 ]

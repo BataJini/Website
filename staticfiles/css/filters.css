@@ -1,13 +1,17 @@
 /* Filter Modal Styles */
 #jobFiltersModal .modal-dialog {
-    max-width: 500px;
+    width: 50% !important;
+    max-width: 50% !important;
+    margin: 1.75rem auto;
+    overflow: hidden !important;
 }
 
 #jobFiltersModal .modal-content {
     border: none;
     border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+    overflow: hidden !important;
+    width: 100%;
 }
 
 #jobFiltersModal .modal-header {
@@ -17,12 +21,17 @@
     background: var(--bs-body-bg);
     z-index: 1030;
     border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.1);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #jobFiltersModal .modal-body {
     padding: 0 1.5rem 1rem;
     max-height: 70vh;
-    overflow-y: auto;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #jobFiltersModal .modal-footer {
@@ -34,6 +43,25 @@
     z-index: 1030;
     justify-content: center;
     border-top: 1px solid rgba(var(--bs-body-color-rgb), 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* STRONGER FIX FOR HORIZONTAL SCROLLBAR */
+#jobFiltersModal,
+#jobFiltersModal .modal-dialog,
+#jobFiltersModal .modal-content,
+#jobFiltersModal .modal-body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+/* These need overflow visible */
+#jobFiltersModal .filter-section,
+#jobFiltersModal .salary-range-container,
+#jobFiltersModal .double-range-slider {
+    max-width: 100% !important;
+    overflow: visible !important;
 }
 
 /* Filter Sections */
@@ -44,10 +72,14 @@
     margin-bottom: 1rem;
     border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.1);
     transition: all 0.2s ease;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .filter-section:last-child {
     border-bottom: none;
+    margin-bottom: 0;
 }
 
 .filter-section-title {
@@ -62,6 +94,7 @@
 .filter-section-title i {
     color: var(--primary-color);
     font-size: 1rem;
+    margin-right: 0.5rem;
 }
 
 .filter-section-content {
@@ -84,6 +117,26 @@
     border-color: var(--primary-color);
 }
 
+/* Button styles to prevent overflow */
+.btn-outline-primary {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Better handling of flex wrap */
+.d-flex.flex-wrap {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.d-flex.flex-wrap .btn {
+    margin-bottom: 5px;
+}
+
 /* Salary Range Slider */
 .salary-range-slider {
     padding: 0.5rem 0;
@@ -97,6 +150,33 @@
 #currentSalary {
     font-weight: 600;
     color: var(--primary-color);
+}
+
+/* Salary Input Styles */
+.salary-inputs {
+    display: flex;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.salary-input-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.input-group {
+    width: 100%;
+    max-width: none;
+}
+
+.input-group .form-control {
+    height: 44px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
 }
 
 /* Work Type Buttons */
@@ -125,34 +205,35 @@
     border: 1px solid rgba(var(--bs-body-color-rgb), 0.2);
 }
 
-/* Clear Filters Button */
-#clearFiltersBtn {
+/* City Autocomplete Styles */
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1050 !important;
+    background: var(--bs-body-bg);
+    border: 1px solid rgba(var(--bs-body-color-rgb), 0.2);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0;
+}
+
+.ui-autocomplete .ui-menu-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
     color: var(--bs-body-color);
-    opacity: 0.7;
-    font-size: 0.85rem;
-    transition: opacity 0.2s ease;
 }
 
-#clearFiltersBtn:hover {
-    opacity: 1;
+.ui-autocomplete .ui-menu-item:hover,
+.ui-autocomplete .ui-menu-item.ui-state-focus {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+    color: var(--primary-color);
 }
 
-/* Apply Filters Button */
-#applyFiltersBtn {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    min-width: 180px;
-}
-
-#applyFiltersBtn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#applyFiltersBtn:active {
-    transform: translateY(0);
+.ui-helper-hidden-accessible {
+    display: none;
 }
 
 /* Dark Mode Styles */
@@ -175,4 +256,141 @@
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.9);
+}
+
+/* Fix potential overflow issues */
+.d-flex.flex-wrap {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.salary-range-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 9px;
+    margin: 0;
+    max-width: 100%;
+    overflow: visible !important;
+    z-index: auto !important;
+}
+
+.double-range-slider {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: visible !important;
+}
+
+/* Make sure buttons don't overflow */
+#jobFiltersModal .btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+}
+
+/* Additional fixes for responsive displays */
+@media (max-width: 768px) {
+    #jobFiltersModal .modal-dialog {
+        width: 90% !important;
+        max-width: 90% !important;
+        margin: 1rem auto !important;
+    }
+    
+    #jobFiltersModal .modal-body {
+        padding: 0 0.75rem 0.75rem !important;
+    }
+    
+    .filter-section {
+        padding: 1rem !important;
+    }
+    
+    #applyFiltersBtn {
+        min-width: 120px !important;
+    }
+    
+    .salary-input-wrapper {
+        gap: 10px;
+    }
+    
+    .input-group .form-control {
+        font-size: 1rem;
+        height: 40px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    #jobFiltersModal .modal-dialog {
+        width: 65% !important;
+        max-width: 65% !important;
+    }
+}
+
+/* Completely disable horizontal scroll */
+body.modal-open {
+    overflow-x: hidden !important;
+}
+
+/* Fix for Safari and iOS */
+.salary-range-container input[type="number"] {
+    width: 100% !important;
+    -moz-appearance: textfield !important;
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+    padding: 8px 12px;
+    border: 1px solid rgba(var(--bs-body-color-rgb), 0.2);
+}
+
+/* Additional fixes for input boxes */
+.salary-range-container .form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
+    border-color: var(--primary-color);
+}
+
+.salary-input-wrapper::before {
+    content: "";
+    display: none;
+}
+
+/* Responsive adjustments for salary inputs */
+@media (max-width: 768px) {
+    .salary-input-wrapper {
+        gap: 10px;
+    }
+    
+    .input-group .form-control {
+        font-size: 1rem;
+        height: 40px;
+    }
+}
+
+/* Clear Filters Button */
+#clearFiltersBtn {
+    color: var(--bs-body-color);
+    opacity: 0.7;
+    font-size: 0.85rem;
+    transition: opacity 0.2s ease;
+    padding: 0;
+    background: none;
+    border: none;
+}
+
+#clearFiltersBtn:hover {
+    opacity: 1;
+    color: var(--bs-body-color);
+}
+
+/* Apply Filters Button */
+#applyFiltersBtn {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 160px;
+}
+
+#applyFiltersBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#applyFiltersBtn:active {
+    transform: translateY(0);
 } 
