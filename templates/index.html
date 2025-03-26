@@ -91,7 +91,10 @@
                 <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="filtersForm">
+                <form id="filtersForm" action="{% url 'authentication:home' %}" method="GET">
+                    <!-- Keep existing search query -->
+                    <input type="hidden" name="q" value="{{ query }}">
+                    
                     <!-- Salary Range Section -->
                     <div class="filter-section mb-4">
                         <h6 class="filter-section-title d-flex align-items-center">
@@ -134,11 +137,18 @@
                         <div class="filter-section-content">
                             <div class="row g-2">
                                 <div class="col-12">
-                                    <input type="text" class="form-control" id="locationInput" placeholder="Enter city or country">
-                                    </div>
-                                    </div>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="locationInput" 
+                                           placeholder="Start typing a city name..."
+                                           autocomplete="off"
+                                           spellcheck="false">
+                                    <!-- Hidden input for selected cities -->
+                                    <input type="hidden" name="location" id="hiddenLocationInput" value="{{ location }}">
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
                     <!-- Experience Level Section -->
                     <div class="filter-section mb-4">
@@ -229,10 +239,8 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="btn btn-primary px-4" id="applyFiltersBtn" data-bs-dismiss="modal">
-                    <i class="bi bi-check2 me-2"></i>Apply Filters
-                </button>
+            <div class="modal-footer">
+                <button type="submit" form="filtersForm" class="btn btn-primary w-100">Apply Filters</button>
             </div>
         </div>
     </div>

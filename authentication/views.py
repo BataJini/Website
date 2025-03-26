@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
-from .models import Job, CustomUser, City  # Add City to imports
+from .models import Job, CustomUser, PolishCity  # Import the Job model, CustomUser model, and PolishCity model
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.admin.views.decorators import staff_member_required
@@ -13,12 +13,6 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 
 logger = logging.getLogger('django')
-
-def get_cities(request):
-    """Ajax view to get filtered cities based on search term"""
-    search = request.GET.get('term', '')
-    cities = City.objects.filter(name__icontains=search).values_list('name', flat=True)[:10]
-    return JsonResponse(list(cities), safe=False)
 
 def home(request):
     # Get search parameters from the request
@@ -479,4 +473,18 @@ def search_jobs_ajax(request):
         'html': html,
         'count': len(jobs_list)
     })
+
+def search_cities(request):
+    query = request.GET.get('q', '')
+    cities = PolishCity.objects.all().order_by('name')
+    
+    if query:
+        cities = cities.filter(name__icontains=query)
+    
+    # Limit to first 30 cities if no query to prevent overwhelming the dropdown
+    if not query:
+        cities = cities[:30]
+    
+    data = [{'id': city.id, 'name': city.name} for city in cities]
+    return JsonResponse(data, safe=False)
 

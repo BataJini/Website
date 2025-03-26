@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Job, City
+from .models import CustomUser, Job
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
@@ -27,12 +27,6 @@ class CustomUserAdmin(UserAdmin):
 
 # Register the CustomUser model with our custom admin class
 admin.site.register(CustomUser, CustomUserAdmin)
-
-@admin.register(City)
-class CityAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
-    ordering = ('name',)
 
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
