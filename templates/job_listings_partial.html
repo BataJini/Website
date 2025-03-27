@@ -1,4 +1,5 @@
 {% load job_tags %}
+{% load i18n %}
 
 <style>
     /* Prevent italicization of time text */
@@ -51,7 +52,7 @@
 {% if jobs|length > 25 %}
     <div class="load-more-container">
         <button id="loadMoreBtn" class="btn btn-load-more" data-current="25" data-total="{{ jobs|length }}">
-            Load More Jobs
+            {% translate "Load More Jobs" %}
         </button>
     </div>
     

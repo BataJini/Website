@@ -796,7 +796,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 visibleSearchInput.value = '';
                 visibleSearchInput.placeholder = '';
             } else {
-                visibleSearchInput.placeholder = "19566 offers";
+                // Get the total jobs from the data attribute
+                const totalJobs = visibleSearchInput.getAttribute('data-total-jobs');
+                if (totalJobs) {
+                    visibleSearchInput.placeholder = `${totalJobs} offers`;
+                }
             }
         }
     }
@@ -1017,7 +1021,11 @@ document.addEventListener('DOMContentLoaded', function() {
         visibleSearchInput.addEventListener('blur', function() {
             const tags = document.querySelectorAll('.search-tag');
             if (tags.length === 0 && !this.value) {
-                this.placeholder = "19566 offers";
+                // Get the total jobs from the data attribute
+                const totalJobs = this.getAttribute('data-total-jobs');
+                if (totalJobs) {
+                    this.placeholder = `${totalJobs} offers`;
+                }
             }
         });
     }
@@ -1086,7 +1094,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     
                     if (visibleSearchInput && searchTagsContainer.children.length === 0) {
-                        visibleSearchInput.placeholder = '19566 offers';
+                        // Get the total jobs from the data attribute
+                        const totalJobs = visibleSearchInput.getAttribute('data-total-jobs');
+                        if (totalJobs) {
+                            visibleSearchInput.placeholder = `${totalJobs} offers`;
+                        }
                     }
                 }
             }

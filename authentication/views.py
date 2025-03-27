@@ -96,18 +96,18 @@ def home(request):
         job.location = ' / '.join(sorted(job.combined_locations))
         jobs_list.append(job)
 
-    # Sort the final list by featured status and posted date
-    jobs_list.sort(key=lambda x: (-x.is_featured, -x.posted_date.timestamp()))
+    # Get total number of unique active jobs (after grouping)
+    total_jobs = len(job_groups)
 
     context = {
+        'jobs': jobs_list,
         'query': query,
         'location': location,
         'remote': remote,
         'fulltime': fulltime,
         'parttime': parttime,
-        'jobs': jobs_list
+        'total_jobs': total_jobs,
     }
-
     return render(request, 'index.html', context)
 
 def job_detail(request, job_id):
@@ -479,12 +479,25 @@ def search_cities(request):
     cities = PolishCity.objects.all().order_by('name')
     
     if query:
-        cities = cities.filter(name__icontains=query)
+        # When searching, check in both English and Polish names
+        cities = cities.filter(
+            Q(name__icontains=query) | Q(name_pl__icontains=query)
+        )
     
-    # Limit to first 30 cities if no query to prevent overwhelming the dropdown
+    # Limit to first 100 cities if no query to prevent overwhelming the dropdown
     if not query:
-        cities = cities[:30]
+        cities = cities[:100]
     
-    data = [{'id': city.id, 'name': city.name} for city in cities]
+    # Get the current language code
+    language_code = request.LANGUAGE_CODE
+    
+    # Return city data with name in appropriate language
+    data = [
+        {
+            'id': city.id, 
+            'name': city.get_display_name(language_code)
+        } 
+        for city in cities
+    ]
     return JsonResponse(data, safe=False)
 

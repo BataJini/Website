@@ -1,7 +1,8 @@
 {% load static %}
 {% load django_bootstrap5 %}
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="{{ LANGUAGE_CODE }}" data-bs-theme="light">
 <head>
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self' https:;
@@ -15,10 +16,10 @@
     ">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="JobHub - Find your dream job today">
-    <meta name="keywords" content="jobs, career, employment, hiring, job search">
+    <meta name="description" content="{% trans 'JobHub - Find your dream job today' %}">
+    <meta name="keywords" content="{% trans 'jobs, career, employment, hiring, job search' %}">
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" />
-    <title>{% block title %}JobHub{% endblock %}</title>
+    <title>{% block title %}{% trans 'JobHub' %}{% endblock %}</title>
     {% bootstrap_css %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -266,18 +267,6 @@
 
         [data-bs-theme="dark"] .dropdown-divider {
             border-color: #2D2D2D !important;
-        }
-
-        [data-bs-theme="dark"] .form-control {
-            background-color: var(--dark-input);
-            border-color: var(--dark-border);
-            color: var(--bs-input-color);
-        }
-
-        [data-bs-theme="dark"] .form-control:focus {
-            background-color: var(--dark-hover);
-            border-color: var(--primary-color);
-            color: var(--bs-input-color);
         }
 
         [data-bs-theme="dark"] .card {
@@ -1214,12 +1203,12 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'authentication:home' %}">
-                            Job offers
+                            {% trans "Job offers" %}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if 'companies' in request.path %}active{% endif %}" href="#">
-                            Companies
+                            {% trans "Companies" %}
                         </a>
                     </li>
                     <li class="nav-item d-flex align-items-center ms-3">
@@ -1232,33 +1221,33 @@
                     {% if request.path != '/login/' and request.path != '/signup/' %}
                     <a href="{% if user.is_authenticated %}{% url 'authentication:post_job' %}{% else %}{% url 'authentication:login' %}?next={% url 'authentication:post_job' %}&type=recruiter{% endif %}" class="btn-sign-in text-decoration-none">
                         <i class="bi bi-plus-circle"></i>
-                        <span>POST A JOB</span>
+                        <span>{% trans "POST A JOB" %}</span>
                     </a>
                     {% endif %}
                     {% if not user.is_authenticated %}
                         <div class="dropdown dropdown-align-right">
                             <button class="btn-sign-in dropdown-toggle" id="authDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle"></i>
-                                <span>LOG IN</span>
+                                <span>{% trans "LOG IN" %}</span>
                                 <i class="bi bi-chevron-down ms-1"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="authDropdown">
-                                <div class="dropdown-header">SIGN IN</div>
+                                <div class="dropdown-header">{% trans "SIGN IN" %}</div>
                                 <a class="dropdown-item" href="{% url 'authentication:login' %}?next={{ request.path }}&type=candidate">
-                                    <i class="bi bi-person"></i>Candidate
+                                    <i class="bi bi-person"></i>{% trans "Candidate" %}
                                 </a>
                                 <a class="dropdown-item" href="{% url 'authentication:login' %}?next={{ request.path }}&type=recruiter">
-                                    <i class="bi bi-building"></i>Recruiter
+                                    <i class="bi bi-building"></i>{% trans "Recruiter" %}
                                 </a>
 
                                 <div class="dropdown-divider"></div>
-                                <div class="dropdown-header">SIGN UP</div>
+                                <div class="dropdown-header">{% trans "SIGN UP" %}</div>
 
                                 <a class="dropdown-item" href="{% url 'authentication:signup' %}?next={{ request.path }}&type=candidate">
-                                    <i class="bi bi-person-plus"></i>Candidate
+                                    <i class="bi bi-person-plus"></i>{% trans "Candidate" %}
                                 </a>
                                 <a class="dropdown-item" href="{% url 'authentication:signup' %}?next={{ request.path }}&type=recruiter">
-                                    <i class="bi bi-building-add"></i>Recruiter
+                                    <i class="bi bi-building-add"></i>{% trans "Recruiter" %}
                                 </a>
                             </div>
                         </div>
@@ -1270,31 +1259,29 @@
                                 <i class="bi bi-chevron-down ms-1"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <div class="dropdown-header">MY ACCOUNT</div>
+                                <div class="dropdown-header">{% trans "MY ACCOUNT" %}</div>
                                 <a class="dropdown-item" href="#">
-                                    <i class="bi bi-person"></i>Profile
+                                    <i class="bi bi-person"></i>{% trans "Profile" %}
                                 </a>
                                 <a class="dropdown-item" href="#">
-                                    <i class="bi bi-briefcase"></i>Applications
+                                    <i class="bi bi-briefcase"></i>{% trans "Applications" %}
                                 </a>
                                 <a class="dropdown-item" href="#">
-                                    <i class="bi bi-bookmark"></i>Saved Jobs
+                                    <i class="bi bi-bookmark"></i>{% trans "Saved Jobs" %}
                                 </a>
 
                                 <div class="dropdown-divider"></div>
 
                                 <a class="dropdown-item" href="{% url 'authentication:logout' %}">
-                                    <i class="bi bi-box-arrow-right"></i>Logout
+                                    <i class="bi bi-box-arrow-right"></i>{% trans "Logout" %}
                                 </a>
                             </div>
                         </div>
                     {% endif %}
 
                     <!-- Language Switcher -->
-                    <div class="language-switcher ms-auto">
-                        <button class="btn-sign-in" id="languageSwitcher">
-                            <img src="{% static 'img/gb-flag.svg' %}" alt="Current language flag" class="flag-icon" id="currentFlag">
-                        </button>
+                    <div class="language-switcher ms-auto d-flex align-items-center">
+                        {% include "language_selector.html" %}
                     </div>
                 </div>
             </div>
@@ -1318,13 +1305,13 @@
     <footer class="py-4 mt-5 border-top">
         <div class="container text-center">
             <div class="mb-3">
-                <a href="#" class="text-decoration-none text-body-secondary">Privacy Policy – Terms & Conditions</a>
+                <a href="#" class="text-decoration-none text-body-secondary">{% trans "Privacy Policy – Terms & Conditions" %}</a>
             </div>
             <a href="{% url 'authentication:home' %}" class="text-decoration-none mb-3 d-block">
                 <span class="h5 text-primary fw-bold">JobHub</span>
             </a>
             <div class="text-body-secondary small">
-                Copyright © 2025 JobHub – All Rights Reserved
+                {% trans "Copyright © 2025 JobHub – All Rights Reserved" %}
             </div>
         </div>
     </footer>
@@ -1339,6 +1326,7 @@
     <script src="{% static 'js/load-more.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/city-search.js' %}"></script>
+    <script src="{% static 'js/language-switcher.js' %}"></script>
     
     {% block extra_js %}{% endblock %}
 </body>

@@ -1,0 +1,74 @@
+{% load i18n %}
+{% load static %}
+
+<form action="{% url 'set_language' %}" method="post" class="language-form">
+  {% csrf_token %}
+  <input name="next" type="hidden" value="{{ request.path }}">
+  {% if LANGUAGE_CODE == 'en' %}
+    <button type="submit" name="language" value="pl" class="btn btn-circle language-btn" onclick="animateButton(this)">
+      <img src="{% static 'img/gb-flag.svg' %}" alt="English" class="flag-icon">
+    </button>
+  {% else %}
+    <button type="submit" name="language" value="en" class="btn btn-circle language-btn" onclick="animateButton(this)">
+      <img src="{% static 'img/pl-flag.svg' %}" alt="Polski" class="flag-icon">
+    </button>
+  {% endif %}
+</form>
+
+<style>
+  .language-form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    margin-right: 10px;
+  }
+  .language-btn {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.85);
+    border: none;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+    position: relative;
+    top: 0;
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+  .language-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .language-btn.animate {
+    transform: rotate(360deg);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .flag-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  [data-bs-theme="dark"] .language-btn {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  [data-bs-theme="dark"] .language-btn:hover {
+    color: white;
+  }
+</style>
+
+<script>
+  function animateButton(button) {
+    button.classList.add('animate');
+    // The form will be submitted after the animation completes
+    setTimeout(function() {
+      // The form will naturally submit, this is just for the animation timing
+    }, 300);
+  }
+</script> 

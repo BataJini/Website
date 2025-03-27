@@ -2,16 +2,17 @@
 {% load static %}
 {% load django_bootstrap5 %}
 {% load job_tags %}
+{% load i18n %}
 
-{% block title %}Jobs - JobHub{% endblock %}
+{% block title %}{% trans "Jobs - JobHub" %}{% endblock %}
 
 {% block content %}
 <div class="hero-section">
     <div class="container h-100">
         <div class="row justify-content-center h-100 align-items-center">
             <div class="col-lg-10 text-center">
-                <h1 class="hero-title">Find Your Dream Tech Job</h1>
-                <h2 class="hero-subtitle">Discover opportunities that match your skills and aspirations</h2>
+                <h1 class="hero-title">{% trans "Find Your Dream Tech Job" %}</h1>
+                <h2 class="hero-subtitle">{% trans "Discover opportunities that match your skills and aspirations" %}</h2>
 
                 <div class="hero-tags" id="heroTags">
                     <!-- Tags will be populated by JavaScript -->
@@ -31,8 +32,8 @@
                             <div class="search-input-wrapper">
                                 <div class="search-tags" id="searchTags"></div>
                                 <input type="hidden" name="q" value="{{ query }}" id="hiddenSearchInput">
-                                <input type="text" class="form-control" id="visibleSearchInput" placeholder="19566 offers" aria-label="Search jobs">
-                                <button type="submit" class="search-button" aria-label="Search">
+                                <input type="text" class="form-control" id="visibleSearchInput" placeholder="{{ total_jobs }} {% trans 'offers' %}" data-total-jobs="{{ total_jobs }}" aria-label="{% trans 'Search jobs' %}">
+                                <button type="submit" class="search-button" aria-label="{% trans 'Search' %}">
                                     <i class="bi bi-search"></i>
                                 </button>
                             </div>
@@ -41,26 +42,26 @@
 
                     <div class="job-categories d-flex justify-content-center flex-wrap gap-2 mb-3">
                         <button class="btn btn-filters" type="button" data-bs-toggle="modal" data-bs-target="#jobFiltersModal">
-                            <i class="bi bi-funnel me-2"></i>Filters
+                            <i class="bi bi-funnel me-2"></i>{% trans "Filters" %}
                         </button>
                         <div class="vr mx-2 d-none d-md-inline-block"></div>
                         <button class="btn btn-category" type="button" data-category="it">
-                            <i class="bi bi-laptop me-2"></i>IT
+                            <i class="bi bi-laptop me-2"></i>{% trans "IT" %}
                         </button>
                         <button class="btn btn-category" type="button" data-category="marketing">
-                            <i class="bi bi-megaphone me-2"></i>Marketing
+                            <i class="bi bi-megaphone me-2"></i>{% trans "Marketing" %}
                         </button>
                         <button class="btn btn-category" type="button" data-category="customer-service">
-                            <i class="bi bi-headset me-2"></i>Customer Service
+                            <i class="bi bi-headset me-2"></i>{% trans "Customer Service" %}
                         </button>
                         <button class="btn btn-category" type="button" data-category="sales">
-                            <i class="bi bi-graph-up me-2"></i>Sales
+                            <i class="bi bi-graph-up me-2"></i>{% trans "Sales" %}
                         </button>
                         <button class="btn btn-category" type="button" data-category="hr">
-                            <i class="bi bi-people me-2"></i>HR
+                            <i class="bi bi-people me-2"></i>{% trans "HR" %}
                         </button>
                         <button class="btn btn-category" type="button" data-category="engineering">
-                            <i class="bi bi-gear me-2"></i>Engineering
+                            <i class="bi bi-gear me-2"></i>{% trans "Engineering" %}
                         </button>
                     </div>
                 </div>
@@ -83,10 +84,10 @@
         <div class="modal-content">
             <div class="modal-header border-0">
                 <h5 class="modal-title" id="jobFiltersModalLabel">
-                    FILTERS
+                    {% trans "FILTERS" %}
                 </h5>
                 <button type="button" class="btn btn-link text-decoration-none p-0" id="clearFiltersBtn">
-                    <i class="bi bi-x-circle me-1"></i>Clear All
+                    <i class="bi bi-x-circle me-1"></i>{% trans "Clear All" %}
                 </button>
                 <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -98,7 +99,7 @@
                     <!-- Salary Range Section -->
                     <div class="filter-section mb-4">
                         <h6 class="filter-section-title d-flex align-items-center">
-                            <i class="bi bi-currency-dollar me-2"></i>Salary Range
+                            <i class="bi bi-currency-dollar me-2"></i>{% trans "Salary Range" %}
                         </h6>
                         <div class="filter-section-content">
                             <div class="salary-range-container text-center">
@@ -132,7 +133,7 @@
                     <!-- Location Section -->
                     <div class="filter-section mb-4">
                         <h6 class="filter-section-title d-flex align-items-center">
-                            <i class="bi bi-geo-alt me-2"></i>Location
+                            <i class="bi bi-geo-alt me-2"></i>{% trans "Location" %}
                         </h6>
                         <div class="filter-section-content">
                             <div class="row g-2">
@@ -140,7 +141,7 @@
                                     <input type="text" 
                                            class="form-control" 
                                            id="locationInput" 
-                                           placeholder="Start typing a city name..."
+                                           placeholder="{% trans 'Start typing a city name...' %}"
                                            autocomplete="off"
                                            spellcheck="false">
                                     <!-- Hidden input for selected cities -->
@@ -153,21 +154,21 @@
                     <!-- Experience Level Section -->
                     <div class="filter-section mb-4">
                         <h6 class="filter-section-title d-flex align-items-center">
-                            <i class="bi bi-bar-chart me-2"></i>Experience
+                            <i class="bi bi-bar-chart me-2"></i>{% trans "Experience" %}
                         </h6>
                         <div class="filter-section-content">
                             <div class="experience-buttons d-flex flex-wrap gap-2">
                                 <input type="checkbox" class="btn-check filter-experience" id="expJunior" value="Junior">
-                                <label class="btn btn-outline-primary btn-sm" for="expJunior">Junior</label>
+                                <label class="btn btn-outline-primary btn-sm" for="expJunior">{% trans "Junior" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-experience" id="expMid" value="Mid">
-                                <label class="btn btn-outline-primary btn-sm" for="expMid">Mid</label>
+                                <label class="btn btn-outline-primary btn-sm" for="expMid">{% trans "Mid" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-experience" id="expSenior" value="Senior">
-                                <label class="btn btn-outline-primary btn-sm" for="expSenior">Senior</label>
+                                <label class="btn btn-outline-primary btn-sm" for="expSenior">{% trans "Senior" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-experience" id="expCLevel" value="C-level">
-                                <label class="btn btn-outline-primary btn-sm" for="expCLevel">C-level</label>
+                                <label class="btn btn-outline-primary btn-sm" for="expCLevel">{% trans "C-level" %}</label>
                             </div>
                         </div>
                     </div>
@@ -175,18 +176,18 @@
                     <!-- Workplace Section -->
                     <div class="filter-section mb-4">
                         <h6 class="filter-section-title d-flex align-items-center">
-                            <i class="bi bi-building me-2"></i>Workplace
+                            <i class="bi bi-building me-2"></i>{% trans "Workplace" %}
                         </h6>
                         <div class="filter-section-content">
                             <div class="workplace-buttons d-flex flex-wrap gap-2">
                                 <input type="checkbox" class="btn-check filter-workplace" id="workRemote" value="Remote">
-                                <label class="btn btn-outline-primary btn-sm" for="workRemote">Remote</label>
+                                <label class="btn btn-outline-primary btn-sm" for="workRemote">{% trans "Remote" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-workplace" id="workHybrid" value="Hybrid">
-                                <label class="btn btn-outline-primary btn-sm" for="workHybrid">Hybrid</label>
+                                <label class="btn btn-outline-primary btn-sm" for="workHybrid">{% trans "Hybrid" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-workplace" id="workOffice" value="Office">
-                                <label class="btn btn-outline-primary btn-sm" for="workOffice">Office</label>
+                                <label class="btn btn-outline-primary btn-sm" for="workOffice">{% trans "Office" %}</label>
                                     </div>
                         </div>
                     </div>
@@ -194,24 +195,24 @@
                     <!-- Employment Type Section -->
                     <div class="filter-section mb-4">
                         <h6 class="filter-section-title d-flex align-items-center">
-                            <i class="bi bi-file-earmark-text me-2"></i>Employment type
+                            <i class="bi bi-file-earmark-text me-2"></i>{% trans "Employment type" %}
                         </h6>
                         <div class="filter-section-content">
                             <div class="employment-buttons d-flex flex-wrap gap-2">
                                 <input type="checkbox" class="btn-check filter-employment" id="empB2B" value="B2B">
-                                <label class="btn btn-outline-primary btn-sm" for="empB2B">B2B</label>
+                                <label class="btn btn-outline-primary btn-sm" for="empB2B">{% trans "B2B" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-employment" id="empPermanent" value="Permanent">
-                                <label class="btn btn-outline-primary btn-sm" for="empPermanent">Permanent</label>
+                                <label class="btn btn-outline-primary btn-sm" for="empPermanent">{% trans "Permanent" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-employment" id="empInternship" value="Internship">
-                                <label class="btn btn-outline-primary btn-sm" for="empInternship">Internship</label>
+                                <label class="btn btn-outline-primary btn-sm" for="empInternship">{% trans "Internship" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-employment" id="empMandate" value="Mandate contract">
-                                <label class="btn btn-outline-primary btn-sm" for="empMandate">Mandate contract</label>
+                                <label class="btn btn-outline-primary btn-sm" for="empMandate">{% trans "Mandate contract" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-employment" id="empSpecificTask" value="Specific-task contract">
-                                <label class="btn btn-outline-primary btn-sm" for="empSpecificTask">Specific-task contract</label>
+                                <label class="btn btn-outline-primary btn-sm" for="empSpecificTask">{% trans "Specific-task contract" %}</label>
                             </div>
                         </div>
                     </div>
@@ -219,28 +220,28 @@
                     <!-- Work Type Section -->
                     <div class="filter-section mb-4">
                         <h6 class="filter-section-title d-flex align-items-center">
-                            <i class="bi bi-clock me-2"></i>Type of work
+                            <i class="bi bi-clock me-2"></i>{% trans "Type of work" %}
                         </h6>
                         <div class="filter-section-content">
                             <div class="work-type-buttons d-flex flex-wrap gap-2">
                                 <input type="checkbox" class="btn-check filter-work-type" id="workFullTime" value="Full-time">
-                                <label class="btn btn-outline-primary btn-sm" for="workFullTime">Full-time</label>
+                                <label class="btn btn-outline-primary btn-sm" for="workFullTime">{% trans "Full-time" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-work-type" id="workPartTime" value="Part-time">
-                                <label class="btn btn-outline-primary btn-sm" for="workPartTime">Part-time</label>
+                                <label class="btn btn-outline-primary btn-sm" for="workPartTime">{% trans "Part-time" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-work-type" id="workInternship" value="Practice / Internship">
-                                <label class="btn btn-outline-primary btn-sm" for="workInternship">Practice / Internship</label>
+                                <label class="btn btn-outline-primary btn-sm" for="workInternship">{% trans "Practice / Internship" %}</label>
 
                                 <input type="checkbox" class="btn-check filter-work-type" id="workFreelance" value="Freelance">
-                                <label class="btn btn-outline-primary btn-sm" for="workFreelance">Freelance</label>
+                                <label class="btn btn-outline-primary btn-sm" for="workFreelance">{% trans "Freelance" %}</label>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" form="filtersForm" class="btn btn-primary w-100">Apply Filters</button>
+                <button type="submit" form="filtersForm" class="btn btn-primary w-100">{% trans "Apply Filters" %}</button>
             </div>
         </div>
     </div>

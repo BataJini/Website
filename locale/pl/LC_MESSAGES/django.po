@@ -1,0 +1,320 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# JobHub Team <info@jobhub.com>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: JobHub 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-26 20:25+0000\n"
+"PO-Revision-Date: 2025-03-26 20:00+0000\n"
+"Last-Translator: JobHub Team <info@jobhub.com>\n"
+"Language-Team: Polish <pl@li.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
+"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
+"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: jobhub/settings.py:122
+msgid "English"
+msgstr "Angielski"
+
+#: jobhub/settings.py:123
+msgid "Polish"
+msgstr "Polski"
+
+#: templates/base.html:19
+msgid "JobHub - Find your dream job today"
+msgstr "JobHub - Znajdź wymarzoną pracę już dziś"
+
+#: templates/base.html:20
+msgid "jobs, career, employment, hiring, job search"
+msgstr "praca, kariera, zatrudnienie, rekrutacja, szukanie pracy"
+
+#: templates/base.html:22
+msgid "JobHub"
+msgstr "JobHub"
+
+#: templates/base.html:1206
+msgid "Job offers"
+msgstr "Oferty pracy"
+
+#: templates/base.html:1211
+msgid "Companies"
+msgstr "Firmy"
+
+#: templates/base.html:1224
+msgid "POST A JOB"
+msgstr "DODAJ OFERTĘ"
+
+#: templates/base.html:1231
+msgid "LOG IN"
+msgstr "ZALOGUJ SIĘ"
+
+#: templates/base.html:1235
+msgid "SIGN IN"
+msgstr "LOGOWANIE"
+
+#: templates/base.html:1237 templates/base.html:1247
+msgid "Candidate"
+msgstr "Kandydat"
+
+#: templates/base.html:1240 templates/base.html:1250
+msgid "Recruiter"
+msgstr "Rekruter"
+
+#: templates/base.html:1244
+msgid "SIGN UP"
+msgstr "REJESTRACJA"
+
+#: templates/base.html:1262
+msgid "MY ACCOUNT"
+msgstr "MOJE KONTO"
+
+#: templates/base.html:1264
+msgid "Profile"
+msgstr "Profil"
+
+#: templates/base.html:1267
+msgid "Applications"
+msgstr "Aplikacje"
+
+#: templates/base.html:1270
+msgid "Saved Jobs"
+msgstr "Zapisane oferty"
+
+#: templates/base.html:1276
+msgid "Logout"
+msgstr "Wyloguj"
+
+#: templates/base.html:1308
+msgid "Privacy Policy – Terms & Conditions"
+msgstr "Polityka prywatności – Warunki korzystania"
+
+#: templates/base.html:1314
+msgid "Copyright © 2025 JobHub – All Rights Reserved"
+msgstr "Copyright © 2025 JobHub – Wszelkie prawa zastrzeżone"
+
+#: templates/index.html:7
+msgid "Jobs - JobHub"
+msgstr "Oferty - JobHub"
+
+#: templates/index.html:14
+msgid "Find Your Dream Tech Job"
+msgstr "Znajdź wymarzoną pracę w IT"
+
+#: templates/index.html:15
+msgid "Discover opportunities that match your skills and aspirations"
+msgstr "Odkryj możliwości dopasowane do Twoich umiejętności i aspiracji"
+
+#: templates/index.html:35
+msgid "offers"
+msgstr "ofert"
+
+#: templates/index.html:35
+msgid "Search jobs"
+msgstr "Szukaj ofert"
+
+#: templates/index.html:36
+msgid "Search"
+msgstr "Szukaj"
+
+#: templates/index.html:45
+msgid "Filters"
+msgstr "Filtry"
+
+#: templates/index.html:49
+msgid "IT"
+msgstr "IT"
+
+#: templates/index.html:52
+msgid "Marketing"
+msgstr "Marketing"
+
+#: templates/index.html:55
+msgid "Customer Service"
+msgstr "Obsługa klienta"
+
+#: templates/index.html:58
+msgid "Sales"
+msgstr "Sprzedaż"
+
+#: templates/index.html:61
+msgid "HR"
+msgstr "HR"
+
+#: templates/index.html:64
+msgid "Engineering"
+msgstr "Inżynieria"
+
+#: templates/index.html:87
+msgid "FILTERS"
+msgstr "FILTRY"
+
+#: templates/index.html:90
+msgid "Clear All"
+msgstr "Wyczyść wszystko"
+
+#: templates/index.html:102
+msgid "Salary Range"
+msgstr "Wynagrodzenie"
+
+#: templates/index.html:136
+msgid "Location"
+msgstr "Lokalizacja"
+
+#: templates/index.html:144
+msgid "Start typing a city name..."
+msgstr "Zacznij wpisywać nazwę miasta..."
+
+#: templates/index.html:157
+msgid "Experience"
+msgstr "Doświadczenie"
+
+#: templates/index.html:162
+msgid "Junior"
+msgstr "Junior"
+
+#: templates/index.html:165
+msgid "Mid"
+msgstr "Mid"
+
+#: templates/index.html:168
+msgid "Senior"
+msgstr "Senior"
+
+#: templates/index.html:171
+msgid "C-level"
+msgstr "C-level"
+
+#: templates/index.html:179
+msgid "Workplace"
+msgstr "Miejsce pracy"
+
+#: templates/index.html:184
+msgid "Remote"
+msgstr "Zdalna"
+
+#: templates/index.html:187
+msgid "Hybrid"
+msgstr "Hybrydowa"
+
+#: templates/index.html:190
+msgid "Office"
+msgstr "Biuro"
+
+#: templates/index.html:198
+msgid "Employment Type"
+msgstr "Rodzaj umowy"
+
+#: templates/index.html:203
+msgid "Full-time"
+msgstr "Pełny etat"
+
+#: templates/index.html:206
+msgid "Part-time"
+msgstr "Część etatu"
+
+#: templates/index.html:209
+msgid "Contract"
+msgstr "Kontrakt"
+
+#: templates/index.html:212
+msgid "Internship"
+msgstr "Staż"
+
+#: templates/index.html:220
+msgid "Apply Filters"
+msgstr "Zastosuj filtry"
+
+#: templates/index.html:230
+msgid "Sort by"
+msgstr "Sortuj według"
+
+#: templates/index.html:233
+msgid "Most recent"
+msgstr "Najnowsze"
+
+#: templates/index.html:236
+msgid "Highest salary"
+msgstr "Najwyższe wynagrodzenie"
+
+#: templates/index.html:239
+msgid "Lowest salary"
+msgstr "Najniższe wynagrodzenie"
+
+#: templates/index.html:242
+msgid "Company name"
+msgstr "Nazwa firmy"
+
+#: templates/index.html:245
+msgid "Job title"
+msgstr "Tytuł stanowiska"
+
+#: templates/index.html:255
+msgid "No jobs found matching your criteria"
+msgstr "Nie znaleziono ofert spełniających kryteria"
+
+#: templates/index.html:256
+msgid "Try adjusting your filters or search query"
+msgstr "Spróbuj dostosować filtry lub zapytanie wyszukiwania"
+
+#: templates/index.html:270
+msgid "Posted"
+msgstr "Opublikowano"
+
+#: templates/index.html:273
+msgid "ago"
+msgstr "temu"
+
+#: templates/index.html:280
+msgid "Apply Now"
+msgstr "Aplikuj teraz"
+
+#: templates/index.html:283
+msgid "Save Job"
+msgstr "Zapisz ofertę"
+
+#: templates/index.html:286
+msgid "Share"
+msgstr "Udostępnij"
+
+#: templates/index.html:300
+msgid "Previous"
+msgstr "Poprzednia"
+
+#: templates/index.html:315
+msgid "Next"
+msgstr "Następna"
+
+#: authentication/views.py:443
+msgid "The path component of the URL %(url)s"
+msgstr "Komponent ścieżki URL %(url)s"
+
+#: authentication/views.py:1387
+msgid "The path component of the URL %(url)s did not have the correct format."
+msgstr "Komponent ścieżki URL %(url)s nie ma prawidłowego formatu."
+
+#: authentication/views.py:1415
+msgid "For more information, see the following documentation:"
+msgstr "Aby uzyskać więcej informacji, zobacz następującą dokumentację:"
+
+#: authentication/views.py:1433
+msgid "https://docs.djangoproject.com/en/%(version)s/ref/settings/#std-setting-%(setting)s"
+msgstr "https://docs.djangoproject.com/en/%(version)s/ref/settings/#std-setting-%(setting)s"
+
+#: authentication/views.py:1439
+msgid "https://docs.djangoproject.com/en/%(version)s/ref/django-admin/#django-admin-%(command)s"
+msgstr "https://docs.djangoproject.com/en/%(version)s/ref/django-admin/#django-admin-%(command)s"
+
+#: templates/job_listings_partial.html:54
+msgid "Load More Jobs"
+msgstr "Załaduj więcej ofert"
+
+#: templates/index.html:reset_tags_btn
+msgid "Reset Tags"
+msgstr "Wyczyść tagi"

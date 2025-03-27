@@ -56,19 +56,25 @@ class JobAdmin(admin.ModelAdmin):
         from django.urls import path
         urls = super().get_urls()
         custom_urls = [
-            path('archived/', self.admin_site.admin_view(self.archived_jobs_view), name='authentication_job_archived'),
+            path('archived/', self.admin_site.admin_view(self.archived_jobs_view), name='job-archived'),
         ]
         return custom_urls + urls
     
     def archived_jobs_view(self, request):
-        self.is_archived = True
+        self.list_display = ('title', 'company', 'location', 'salary', 'posted_date', 'is_remote', 'is_featured', 'is_archived')
+        self.list_filter = ('is_remote', 'is_featured', 'is_archived', 'type', 'posted_date')
+        self.list_editable = ('is_featured', 'is_archived')
+        self.search_fields = ('title', 'company', 'description', 'location')
+        self.date_hierarchy = 'posted_date'
         return self.changelist_view(request)
     
     def changelist_view(self, request, extra_context=None):
-        extra_context = extra_context or {}
-        extra_context['show_archived'] = getattr(self, 'is_archived', False)
-        extra_context['archived_count'] = Job.objects.filter(is_archived=True).count()
+        # Get the count of active jobs
+        active_jobs_count = Job.objects.filter(is_archived=False).count()
+        if extra_context is None:
+            extra_context = {}
+        extra_context['active_jobs_count'] = active_jobs_count
         return super().changelist_view(request, extra_context=extra_context)
     
     def view_on_site(self, obj):
-        return None  # Disable the "View on site" link since we don't have a public view
+        return None  # Disable the "View on site" link

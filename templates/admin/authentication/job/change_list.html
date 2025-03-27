@@ -2,18 +2,18 @@
 {% load i18n admin_urls %}
 
 {% block object-tools-items %}
-    {% if not show_archived %}
-        <li>
-            <a href="{% url 'admin:authentication_job_archived' %}" class="viewlink">
-                View Archived Jobs ({{ archived_count }})
-            </a>
-        </li>
-    {% else %}
-        <li>
-            <a href="{% url 'admin:authentication_job_changelist' %}" class="viewlink">
-                View Active Jobs
-            </a>
-        </li>
-    {% endif %}
+    <li>
+        <a href="{% url 'admin:authentication_job_archived' %}" class="viewlink">
+            View Archived Jobs
+        </a>
+    </li>
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <div class="module">
+        <h2>Active Jobs Count</h2>
+        <p>Total number of active jobs: {{ active_jobs_count }}</p>
+    </div>
     {{ block.super }}
 {% endblock %} 

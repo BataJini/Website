@@ -225,7 +225,10 @@
     box-shadow: 0 8px 50px rgba(0, 0, 0, 0.5);
 }
 
-
+/* Ensure form controls have rounded corners in dark mode */
+[data-bs-theme="dark"] .search-container .form-control {
+    border-radius: var(--border-radius-md) !important;
+}
 
 /* Ensure search tags have rounded corners in dark mode */
 [data-bs-theme="dark"] .search-tag {
