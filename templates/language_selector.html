@@ -1,18 +1,32 @@
 {% load i18n %}
 {% load static %}
 
-<form action="{% url 'set_language' %}" method="post" class="language-form">
+<form action="{% url 'set_language' %}" method="post" class="language-form" id="language-form">
   {% csrf_token %}
-  <input name="next" type="hidden" value="{{ request.path }}">
-  {% if LANGUAGE_CODE == 'en' %}
-    <button type="submit" name="language" value="pl" class="btn btn-circle language-btn" onclick="animateButton(this)">
-      <img src="{% static 'img/gb-flag.svg' %}" alt="English" class="flag-icon">
+  <input name="next" type="hidden" value="{{ redirect_to|default:request.path }}">
+  {% get_current_language as LANGUAGE_CODE %}
+  
+  <div class="dropdown">
+    <button class="btn-sign-in dropdown-toggle d-flex align-items-center gap-2" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+      {% if LANGUAGE_CODE == 'en' %}
+        <img src="{% static 'img/gb-flag.svg' %}" alt="English" class="flag-icon">
+        <span class="lang-code">EN</span>
+      {% else %}
+        <img src="{% static 'img/pl-flag.svg' %}" alt="Polski" class="flag-icon">
+        <span class="lang-code">PL</span>
+      {% endif %}
     </button>
-  {% else %}
-    <button type="submit" name="language" value="en" class="btn btn-circle language-btn" onclick="animateButton(this)">
-      <img src="{% static 'img/pl-flag.svg' %}" alt="Polski" class="flag-icon">
-    </button>
-  {% endif %}
+    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+      <button type="submit" name="language" value="en" class="dropdown-item d-flex align-items-center gap-2">
+        <img src="{% static 'img/gb-flag.svg' %}" alt="English" class="flag-icon">
+        <span>English</span>
+      </button>
+      <button type="submit" name="language" value="pl" class="dropdown-item d-flex align-items-center gap-2">
+        <img src="{% static 'img/pl-flag.svg' %}" alt="Polski" class="flag-icon">
+        <span>Polski</span>
+      </button>
+    </div>
+  </div>
 </form>
 
 <style>
@@ -22,53 +36,60 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    margin-right: 10px;
   }
-  .language-btn {
-    background: transparent;
-    color: rgba(255, 255, 255, 0.85);
-    border: none;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border-radius: 50%;
+  
+  .language-form .btn-sign-in {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    margin: 0;
-    position: relative;
-    top: 0;
-    transition: transform 0.3s ease, background 0.3s ease;
+    padding: 0 10px;
+    min-width: 80px;
+    height: 42px;
+    border-radius: 21px;
+    background: transparent;
+    border: none;
+    transition: all 0.2s ease;
+    color: #fff;
   }
-  .language-btn:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.1);
+  
+  .language-form .btn-sign-in:hover {
+    background-color: rgba(255, 255, 255, 0.1);
   }
-  .language-btn.animate {
-    transform: rotate(360deg);
-    background: rgba(255, 255, 255, 0.2);
-  }
-  .flag-icon {
-    width: 22px;
-    height: 22px;
+  
+  .language-form .flag-icon {
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     object-fit: cover;
   }
-  [data-bs-theme="dark"] .language-btn {
-    color: rgba(255, 255, 255, 0.85);
-  }
-  [data-bs-theme="dark"] .language-btn:hover {
-    color: white;
-  }
-</style>
 
-<script>
-  function animateButton(button) {
-    button.classList.add('animate');
-    // The form will be submitted after the animation completes
-    setTimeout(function() {
-      // The form will naturally submit, this is just for the animation timing
-    }, 300);
+  .language-form .lang-code {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
   }
-</script> 
+  
+  .language-form .dropdown-menu {
+    min-width: 150px;
+    padding: 0.5rem;
+  }
+  
+  .language-form .dropdown-item {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+  }
+  
+  .language-form .dropdown-item:hover {
+    background-color: rgba(38, 132, 255, 0.08);
+  }
+  
+  .language-form .dropdown-item .flag-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .language-form .dropdown-item span {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+</style> 

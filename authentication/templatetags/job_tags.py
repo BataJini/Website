@@ -23,20 +23,47 @@ def parse_requirements(requirements_json):
 @register.filter
 def format_location(location_str):
     """
-    Format location string to use commas between locations instead of slashes.
-    If there are more than 2 locations, show first 2 followed by '+ X more'
+    Format location string to show only first location followed by '+ X more'.
+    If Remote is one of the locations, it will always be shown first.
+    Also handles duplicate Remote locations and multiple separators.
     """
     if not location_str:
         return ""
     
-    locations = location_str.split(' / ')
+    # First split by comma
+    comma_split = [loc.strip() for loc in location_str.split(',')]
     
-    if len(locations) <= 2:
-        return ", ".join(locations)
+    # Then split by forward slash and flatten the list
+    locations = []
+    for loc in comma_split:
+        locations.extend([l.strip() for l in loc.split('/')])
+    
+    # Remove duplicates while preserving order, but prioritize Remote
+    seen = set()
+    unique_locations = []
+    has_remote = False
+    
+    for loc in locations:
+        # Skip empty strings
+        if not loc:
+            continue
+        # Normalize "Remote" variations
+        normalized_loc = loc.lower()
+        if normalized_loc == "remote":
+            if not has_remote:
+                has_remote = True
+                unique_locations.insert(0, "Remote")
+            continue
+        if loc not in seen:
+            seen.add(loc)
+            unique_locations.append(loc)
+    
+    if len(unique_locations) <= 1:
+        return unique_locations[0] if unique_locations else ""
     else:
-        first_two = locations[:2]
-        remaining = len(locations) - 2
-        return f"{', '.join(first_two)} + {remaining} more"
+        first = unique_locations[0]
+        remaining = len(unique_locations) - 1
+        return f"{first} +{remaining}"
 
 @register.filter
 def remove_minutes(timesince_str):

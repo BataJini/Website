@@ -56,7 +56,7 @@ class JobAdmin(admin.ModelAdmin):
         from django.urls import path
         urls = super().get_urls()
         custom_urls = [
-            path('archived/', self.admin_site.admin_view(self.archived_jobs_view), name='job-archived'),
+            path('archived/', self.admin_site.admin_view(self.archived_jobs_view), name='authentication_job_archived'),
         ]
         return custom_urls + urls
     

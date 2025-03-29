@@ -1,45 +1,39 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const languageSwitcher = document.getElementById('languageSwitcher');
-    const currentFlag = document.getElementById('currentFlag');
+    const languageForm = document.getElementById('language-form');
     
-    // Define available languages and their flags
-    const languages = {
-        'en': {
-            flag: '/static/img/gb-flag.svg',
-            name: 'English'
-        },
-        'pl': {
-            flag: '/static/img/pl-flag.svg',
-            name: 'Polski'
-        }
-    };
-
-    // Get current language from localStorage or default to 'en'
-    let currentLang = localStorage.getItem('language') || 'en';
-
-    // Update flag based on current language
-    function updateFlag(lang) {
-        if (languages[lang]) {
-            currentFlag.src = languages[lang].flag;
-            currentFlag.alt = `${languages[lang].name} flag`;
-        }
+    if (languageForm) {
+        // Handle dropdown item clicks
+        const dropdownItems = languageForm.querySelectorAll('.dropdown-item');
+        
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(languageForm);
+                formData.set('language', this.value); // Set the selected language
+                
+                fetch(languageForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Get the current path and strip any language prefix
+                        const path = window.location.pathname;
+                        const newLang = this.value;
+                        
+                        // Force reload to the new language URL
+                        const newPath = path.replace(/^\/(en|pl)/, '');
+                        window.location.href = `/${newLang}${newPath}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
     }
-
-    // Initialize flag
-    updateFlag(currentLang);
-
-    // Toggle language when button is clicked
-    languageSwitcher.addEventListener('click', function() {
-        // Toggle between 'en' and 'pl'
-        currentLang = currentLang === 'en' ? 'pl' : 'en';
-        
-        // Update localStorage
-        localStorage.setItem('language', currentLang);
-        
-        // Update flag
-        updateFlag(currentLang);
-
-        // Reload the page to apply the new language
-        window.location.reload();
-    });
 }); 

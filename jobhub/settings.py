@@ -119,11 +119,11 @@ USE_TZ = True
 
 # Available languages
 LANGUAGES = [
-    ('en', _('English')),
-    ('pl', _('Polish')),
+    ('en', 'English'),
+    ('pl', 'Polish'),
 ]
 
-# Path to store translation files
+# Location of translation files
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]

@@ -1,124 +1,115 @@
 {
-    "id": "mid-python-engineer-tooploox-remote",
+    "id": "architekt-rozwiazan-ict-ot-crestt-remote",
     "apply": {
-        "email": "",
-        "option": "url",
-        "leadCollection": true,
+        "option": "email",
+        "leadCollection": false,
         "referenceNumber": "",
-        "externalPortalLinks": [],
-        "leadCollectionInfoClause": "Administratorem Twoich danych osobowych jest Tooploox, z siedzib\u0105 pod adresem T\u0119czowa 7, Wroc\u0142aw. W sprawie swoich danych mo\u017cesz si\u0119 z nami skontaktowa\u0107 pod adresem e-mail: paulina.orzechowska@tooploox.com. Twoje dane przetwarzane s\u0105 dla potrzeb nawi\u0105zania kontaktu w ramach prowadzonego procesu rekrutacyjnego. Twoje dane otrzymali\u015bmy od No Fluff Jobs, poniewa\u017c wyrazi\u0142e\u015b ch\u0119\u0107 nawi\u0105zania z Tob\u0105 kontaktu poprzez Formularz Kontaktowy. Przetwarzanie Twoich danych jest niezb\u0119dne do podj\u0119cia kontaktu zgodnie z Twoim zg\u0142oszeniem przez Formularz Kontaktowy (art. 6 ust. 1a Rozporz\u0105dzenia UE 2016/679 - RODO). Twoje dane osobowe zostan\u0105 usuni\u0119te po zako\u0144czeniu obecnego procesu rekrutacyjnego, chyba \u017ce wyrazisz odr\u0119bne zgody. Przys\u0142uguje Ci prawo dost\u0119pu, poprawiania, modyfikowania, uaktualniania, sprostowania, \u017c\u0105dania przeniesienia lub usuni\u0119cia danych, cofni\u0119cia zgody lub wniesienia sprzeciwu."
+        "leadCollectionInfoClause": ""
     },
     "specs": {
         "details": {
-            "custom": [],
-            "flexibleHours": true
+            "custom": []
         },
         "help4Ua": false,
         "dailyTasks": [
-            "Design and implement back-end systems and APIs using state-of-the-art technologies and practices.",
-            "Communicate with US-based clients on a daily basis.",
-            "Develop a solid codebase covered with automated sets of tests.",
-            "Learn new skills and technologies as you go.",
-            "Finally, your work will have a big impact on product development and the direction in which it moves."
+            "Projektowanie architektury ICT/OT i us\u0142ug cybersecurity.\u00a0",
+            "Tworzenie wymaga\u0144 technicznych i technologicznych dla projekt\u00f3w inwestycyjnych.\u00a0",
+            "Udzia\u0142 w opracowywaniu projekt\u00f3w technicznych i ich realizacji.\u00a0",
+            "Nadz\u00f3r nad zgodno\u015bci\u0105 wdro\u017ce\u0144 z normami i procedurami bezpiecze\u0144stwa.\u00a0",
+            "Wsp\u00f3\u0142prac\u0119 z zespo\u0142ami projektowymi, partnerami oraz dostawcami technologii.\u00a0",
+            "Utrzymanie najwy\u017cszych standard\u00f3w bezpiecze\u0144stwa ICT/OT.\u00a0"
         ],
         "referral": {
-            "allowed": false
+            "allowed": true
         }
     },
-    "title": "Mid Python Engineer ",
+    "title": "Architekt Rozwi\u0105za\u0144 ICT/OT",
     "basics": {
-        "category": "backend",
+        "category": "architecture",
         "seniority": [
-            "Mid"
+            "Senior"
         ],
-        "technology": "Python"
+        "technology": "UML"
     },
     "company": {
-        "url": "https://www.tooploox.com/",
+        "url": "https://crestt.pl/",
         "logo": {
-            "original": "companies/logos/original/tpx_logo_sign_3_20210126_150641.png",
-            "jobs_details": "companies/logos/jobs_details/tpx_logo_sign_3_20210126_150641.png",
-            "jobs_listing": "companies/logos/jobs_listing/tpx_logo_sign_3_20210126_150641.png",
-            "jobs_details_2x": "companies/logos/jobs_details_2x/tpx_logo_sign_3_20210126_150641.png",
-            "jobs_listing_2x": "companies/logos/jobs_listing_2x/tpx_logo_sign_3_20210126_150641.png",
-            "companies_details": "companies/logos/companies_details/tpx_logo_sign_3_20210126_150641.png",
-            "companies_listing": "companies/logos/companies_listing/tpx_logo_sign_3_20210126_150641.png",
-            "companies_details_2x": "companies/logos/companies_details_2x/tpx_logo_sign_3_20210126_150641.png",
-            "companies_listing_2x": "companies/logos/companies_listing_2x/tpx_logo_sign_3_20210126_150641.png"
+            "original": "companies/logos/original/obraz1_20230217_111916.png",
+            "jobs_details": "companies/logos/jobs_details/obraz1_20230217_111916.png",
+            "jobs_listing": "companies/logos/jobs_listing/obraz1_20230217_111916.png",
+            "jobs_details_2x": "companies/logos/jobs_details_2x/obraz1_20230217_111916.png",
+            "jobs_listing_2x": "companies/logos/jobs_listing_2x/obraz1_20230217_111916.png",
+            "companies_details": "companies/logos/companies_details/obraz1_20230217_111916.png",
+            "companies_listing": "companies/logos/companies_listing/obraz1_20230217_111916.png",
+            "jobs_details_webp": "companies/logos/jobs_details/obraz1_20230217_111916.webp",
+            "jobs_listing_webp": "companies/logos/jobs_listing/obraz1_20230217_111916.webp",
+            "companies_details_2x": "companies/logos/companies_details_2x/obraz1_20230217_111916.png",
+            "companies_listing_2x": "companies/logos/companies_listing_2x/obraz1_20230217_111916.png",
+            "jobs_details_2x_webp": "companies/logos/jobs_details_2x/obraz1_20230217_111916.webp",
+            "jobs_listing_2x_webp": "companies/logos/jobs_listing_2x/obraz1_20230217_111916.webp",
+            "original_pixel_image": "companies/logos/original_pixel_image/obraz1_20230217_111916.png",
+            "companies_details_webp": "companies/logos/companies_details/obraz1_20230217_111916.webp",
+            "companies_listing_webp": "companies/logos/companies_listing/obraz1_20230217_111916.webp",
+            "companies_details_2x_webp": "companies/logos/companies_details_2x/obraz1_20230217_111916.webp",
+            "companies_listing_2x_webp": "companies/logos/companies_listing_2x/obraz1_20230217_111916.webp"
         },
-        "name": "Tooploox",
-        "size": "170",
-        "video": "https://youtu.be/6tF_7dVCTuE?si=ADgt_AWd753OaW3k"
+        "name": "Crestt",
+        "size": "200",
+        "video": ""
     },
     "details": {
         "quote": "",
         "position": "",
-        "description": "<p>We are Tooploox, an AI software development company offering custom AI solutions and services. We help innovative companies and startups design and build digital products with generative AI, mobile, and web technologies.</p>\n<p>Our team, consisting of nearly 200 experts including our R&amp;D team of over 40 engineers, many with PhDs, has pioneered AI solutions across industries like healthcare, fashion, and e-commerce. We\u2019ve published over 15 research papers in top conferences like NeurIPS and ICML.</p>\n<p>Feel invited!</p>",
+        "description": "<p>Cze\u015b\u0107!</p>\n<p>Poszukujemy do\u015bwiadczonego <strong>Architekta Rozwi\u0105za\u0144 ICT/OT</strong>, kt\u00f3ry b\u0119dzie kluczowym wsparciem w realizacji strategicznych projekt\u00f3w technologicznych. B\u0119dziesz odpowiada\u0107 za tworzenie koncepcji technicznych, nadzorowanie wdro\u017ce\u0144 oraz utrzymanie zgodno\u015bci rozwi\u0105za\u0144 z regulacjami (w tym NIS2, KSC) oraz standardami bezpiecze\u0144stwa.</p>\n<p><strong>Lokalizacja:\u00a0</strong>G\u0142\u00f3wnie zdalna + otwarto\u015b\u0107 na udzia\u0142 w kluczowych spotkaniach stacjonarnych u klienta (max kilka razy na kwarta\u0142) w Warszawie.</p>\n<p><strong>Wide\u0142ki:\u00a0</strong>175 \u2013 245 PLN netto plus VAT/h\u00a0</p>\n<p><strong>Tw\u00f3j Zesp\u00f3\u0142:</strong></p>\n<p>Do\u0142\u0105czysz do Departamentu Architektury i Rozwi\u0105za\u0144, kt\u00f3ry pe\u0142ni kluczow\u0105 rol\u0119 w projektach strategicznych. Pracujemy w interdyscyplinarnych zespo\u0142ach, zapewniaj\u0105c pe\u0142ne wsparcie w zakresie wdra\u017cania i nadzoru architektonicznego.</p>\n<p><strong>Oferujemy:</strong></p>\n<ul>\n<li>Udzia\u0142 w projektach o strategicznym znaczeniu.</li>\n<li>Mo\u017cliwo\u015b\u0107 realnego wp\u0142ywu na kluczowe inwestycje technologiczne.</li>\n<li>Wsp\u00f3\u0142prac\u0119 z ekspertami w \u015brodowisku o wysokim poziomie profesjonalizmu.</li>\n<li>Rozw\u00f3j kompetencji w obszarze ICT/OT i cybersecurity.</li>\n</ul>\n<p>Zapraszamy do aplikowania!</p>",
         "quoteAuthor": ""
     },
     "benefits": {
         "benefits": [
-            "Sport subscription",
-            "Training budget",
-            "Private healthcare"
+            "Remote work"
         ],
         "equipment": {
             "computer": "",
             "monitors": "",
             "operatingSystems": {
                 "lin": false,
-                "mac": true,
+                "mac": false,
                 "win": false
             }
         },
-        "officePerks": [
-            "Free coffee",
-            "Gym",
-            "Bike parking",
-            "Playroom",
-            "Shower",
-            "Free snacks",
-            "Free beverages",
-            "In-house trainings",
-            "Modern office",
-            "Startup atmosphere",
-            "No dress code"
-        ]
+        "officePerks": []
     },
-    "consents": {},
+    "consents": {
+        "infoClause": "The Controller of your personal data is Crestt sp. z o.o., with registered office at Rejtana 17, Warszawa. Your data is processed for the purpose of the current recruitment process. Providing data is voluntary but necessary for this purpose. Processing your data is lawful because it is necessary in order to take steps at the request of the data subject prior to entering into a contract (article 6 point 1b of Regulation EU 2016/679 - GDPR). Your personal data will be deleted when the current recruitment process is finished, unless a separate consent is provided below. You have the right to access, correct, modify, update, rectify, request for the transfer or deletion of data, withdrawal of consent or objection.",
+        "personalDataRequestLink": "izabella.kosmider@crestt.pl"
+    },
     "location": {
         "places": [
             {
                 "city": "Remote",
-                "url": "mid-python-engineer-tooploox-remote"
+                "url": "architekt-rozwiazan-ict-ot-crestt-remote"
             },
             {
                 "country": {
                     "code": "POL",
                     "name": "Poland"
                 },
-                "city": "Warsaw",
-                "street": "Foksal 18",
-                "postalCode": "00-372",
+                "city": "Warszawa",
+                "street": "Wola",
+                "postalCode": "",
                 "geoLocation": {
-                    "latitude": 52.2336441,
-                    "longitude": 21.0198752
+                    "latitude": 52.2333751,
+                    "longitude": 20.9571835
                 },
-                "url": "mid-python-engineer-tooploox-warsaw"
+                "url": "architekt-rozwiazan-ict-ot-crestt-warszawa"
             },
             {
                 "country": {
                     "code": "POL",
                     "name": "Poland"
                 },
-                "city": "Wroclaw",
-                "street": "T\u0119czowa 7",
-                "postalCode": "53-601",
-                "geoLocation": {
-                    "latitude": 51.1069033,
-                    "longitude": 17.0179455
-                },
-                "url": "mid-python-engineer-tooploox-wroclaw"
+                "province": "lower-silesian",
+                "url": "architekt-rozwiazan-ict-ot-crestt-lower-silesian",
+                "provinceOnly": true
             },
             {
                 "country": {
@@ -126,7 +117,7 @@
                     "name": "Poland"
                 },
                 "province": "kuyavian-pomeranian",
-                "url": "mid-python-engineer-tooploox-kuyavian-pomeranian",
+                "url": "architekt-rozwiazan-ict-ot-crestt-kuyavian-pomeranian",
                 "provinceOnly": true
             },
             {
@@ -135,7 +126,7 @@
                     "name": "Poland"
                 },
                 "province": "lodz",
-                "url": "mid-python-engineer-tooploox-lodz",
+                "url": "architekt-rozwiazan-ict-ot-crestt-lodz",
                 "provinceOnly": true
             },
             {
@@ -144,7 +135,7 @@
                     "name": "Poland"
                 },
                 "province": "lublin",
-                "url": "mid-python-engineer-tooploox-lublin",
+                "url": "architekt-rozwiazan-ict-ot-crestt-lublin",
                 "provinceOnly": true
             },
             {
@@ -153,7 +144,7 @@
                     "name": "Poland"
                 },
                 "province": "lubusz",
-                "url": "mid-python-engineer-tooploox-lubusz",
+                "url": "architekt-rozwiazan-ict-ot-crestt-lubusz",
                 "provinceOnly": true
             },
             {
@@ -162,7 +153,7 @@
                     "name": "Poland"
                 },
                 "province": "lesser-poland",
-                "url": "mid-python-engineer-tooploox-lesser-poland",
+                "url": "architekt-rozwiazan-ict-ot-crestt-lesser-poland",
                 "provinceOnly": true
             },
             {
@@ -171,7 +162,7 @@
                     "name": "Poland"
                 },
                 "province": "opole",
-                "url": "mid-python-engineer-tooploox-opole",
+                "url": "architekt-rozwiazan-ict-ot-crestt-opole",
                 "provinceOnly": true
             },
             {
@@ -180,7 +171,7 @@
                     "name": "Poland"
                 },
                 "province": "subcarpathian",
-                "url": "mid-python-engineer-tooploox-subcarpathian",
+                "url": "architekt-rozwiazan-ict-ot-crestt-subcarpathian",
                 "provinceOnly": true
             },
             {
@@ -189,7 +180,7 @@
                     "name": "Poland"
                 },
                 "province": "podlaskie",
-                "url": "mid-python-engineer-tooploox-podlaskie",
+                "url": "architekt-rozwiazan-ict-ot-crestt-podlaskie",
                 "provinceOnly": true
             },
             {
@@ -198,7 +189,7 @@
                     "name": "Poland"
                 },
                 "province": "pomeranian",
-                "url": "mid-python-engineer-tooploox-pomeranian",
+                "url": "architekt-rozwiazan-ict-ot-crestt-pomeranian",
                 "provinceOnly": true
             },
             {
@@ -207,7 +198,7 @@
                     "name": "Poland"
                 },
                 "province": "silesian",
-                "url": "mid-python-engineer-tooploox-silesian",
+                "url": "architekt-rozwiazan-ict-ot-crestt-silesian",
                 "provinceOnly": true
             },
             {
@@ -216,7 +207,7 @@
                     "name": "Poland"
                 },
                 "province": "holy-cross",
-                "url": "mid-python-engineer-tooploox-holy-cross",
+                "url": "architekt-rozwiazan-ict-ot-crestt-holy-cross",
                 "provinceOnly": true
             },
             {
@@ -225,7 +216,7 @@
                     "name": "Poland"
                 },
                 "province": "warmian-masurian",
-                "url": "mid-python-engineer-tooploox-warmian-masurian",
+                "url": "architekt-rozwiazan-ict-ot-crestt-warmian-masurian",
                 "provinceOnly": true
             },
             {
@@ -234,7 +225,7 @@
                     "name": "Poland"
                 },
                 "province": "greater-poland",
-                "url": "mid-python-engineer-tooploox-greater-poland",
+                "url": "architekt-rozwiazan-ict-ot-crestt-greater-poland",
                 "provinceOnly": true
             },
             {
@@ -243,7 +234,7 @@
                     "name": "Poland"
                 },
                 "province": "west-pomeranian",
-                "url": "mid-python-engineer-tooploox-west-pomeranian",
+                "url": "architekt-rozwiazan-ict-ot-crestt-west-pomeranian",
                 "provinceOnly": true
             }
         ],
@@ -263,19 +254,11 @@
         "originalSalary": {
             "currency": "PLN",
             "types": {
-                "permanent": {
-                    "period": "Month",
-                    "range": [
-                        12000.0,
-                        16000.0
-                    ],
-                    "paidHoliday": true
-                },
                 "b2b": {
                     "period": "Month",
                     "range": [
-                        13000.0,
-                        18000.0
+                        29400.0,
+                        41160.0
                     ],
                     "paidHoliday": false
                 }
@@ -290,105 +273,95 @@
                 "code": "en"
             }
         ],
-        "onlineInterviewAvailable": true
+        "onlineInterviewAvailable": false
     },
     "requirements": {
         "musts": [
             {
-                "value": "Python",
+                "value": "Cybersecurity",
                 "type": "main"
             },
             {
-                "value": "Git",
+                "value": "PKI",
                 "type": "main"
             },
             {
-                "value": "API",
+                "value": "IAM",
+                "type": "main"
+            },
+            {
+                "value": "SCADA",
+                "type": "main"
+            },
+            {
+                "value": "UML",
+                "type": "main"
+            },
+            {
+                "value": "Archimate",
                 "type": "main"
             }
         ],
-        "nices": [
-            {
-                "value": "React",
-                "type": "main"
-            },
-            {
-                "value": "CI/CD",
-                "type": "main"
-            },
-            {
-                "value": "Django",
-                "type": "main"
-            },
-            {
-                "value": "NoSQL",
-                "type": "main"
-            },
-            {
-                "value": "SQL",
-                "type": "main"
-            },
-            {
-                "value": "GraphQL",
-                "type": "main"
-            }
-        ],
-        "description": "<ul>\n<li>Experience in implementing real back-end APIs for a single page application or mobile application.</li>\n<li>Team-oriented approach and knowledge of the Agile process.</li>\n<li>Experience in the use of GIT.</li>\n<li>Ability to write testable code.</li>\n<li>Fluency in English and Polish (you will attend meetings with English speaking clients).</li>\n<li>Familiarity with frontend development.</li>\n</ul>\n<p></p>\n<h3>It would be great if you also have:</h3>\n<ul>\n<li>Familiarity with Django.</li>\n<li>Proven experience in FinTech or Payroll industries.</li>\n<li>Experience in Frontend development.</li>\n<li>Familiarity with automation work (CI/CD) and infrastructure management (e.g. AWS, GCP, Kubernetes).</li>\n<li>Experience with NoSQL/SQL databases.</li>\n<li>Familiarity with asynchronous Python, GraphQL or message queues.</li>\n</ul>",
+        "nices": [],
+        "description": "<p><strong>Wymagania:</strong></p>\n<ul>\n<li>Minimum 5 lat do\u015bwiadczenia jako Architekt Rozwi\u0105za\u0144 w obszarze ICT/OT.\u00a0</li>\n<li>G\u0142\u0119bokie zrozumienie architektury system\u00f3w oraz dobrych praktyk architektonicznych.\u00a0</li>\n<li>Do\u015bwiadczenie w projektowaniu infrastruktury serwerowej, sieciowej i us\u0142ug ICT.\u00a0</li>\n<li>Znajomo\u015b\u0107 us\u0142ug cybersecurity (SIEM, PKI, IAM, SOAR) oraz architektury SCADA.\u00a0</li>\n<li>Umiej\u0119tno\u015b\u0107 wyboru technologii zgodnie z potrzebami biznesowymi.\u00a0</li>\n<li>Bieg\u0142o\u015b\u0107 w dokumentowaniu architektury (UML, Archimate, CASE).\u00a0</li>\n<li>Znajomo\u015b\u0107 norm bezpiecze\u0144stwa (IEC62443, ISO27001).\u00a0</li>\n<li>Samodzielno\u015b\u0107 i umiej\u0119tno\u015b\u0107 pracy w zespole.\u00a0</li>\n</ul>\n",
         "languages": [
             {
                 "type": "MUST",
-                "code": "pl",
-                "level": "C1"
+                "code": "en"
             },
             {
                 "type": "MUST",
-                "code": "en",
-                "level": "B2"
+                "code": "pl"
             }
         ]
     },
-    "posted": 1742247758990,
+    "predictionStatuses": {
+        "dailyTasks": true,
+        "description": true,
+        "requirements": true
+    },
+    "posted": 1743172992156,
     "postedOrRenewedDaysAgo": 0,
-    "expiresAt": "2025-04-16T23:59:59",
+    "expiresAt": "2025-04-27T23:59:59",
     "status": "PUBLISHED",
-    "postingUrl": "mid-python-engineer-tooploox-remote",
+    "postingUrl": "architekt-rozwiazan-ict-ot-crestt-remote",
     "metadata": {
         "sectionLanguages": {
-            "description": "en",
-            "daily-tasks": "en",
-            "requirements.description": "en"
+            "requirements.description": "pl",
+            "daily-tasks": "pl",
+            "description": "pl"
         }
     },
     "regions": [
         "pl"
     ],
-    "reference": "PAG077LL",
+    "reference": "TABZFIIO",
     "meta": {
         "videosInCompanyProfileVisible": true
     },
-    "companyUrl": "/company/tooploox-7br9popl",
+    "companyUrl": "/company/crestt-j0u3yuzn",
     "seo": {
-        "title": "Mid Python Engineer  @ Tooploox",
-        "description": "Mid Python Engineer  @ Tooploox Fully remote job PLN per month: 13.0k-18.0k (B2B), 12.0k-16.0k (UoP)"
+        "title": "Architekt Rozwi\u0105za\u0144 ICT/OT @ Crestt",
+        "description": "Architekt Rozwi\u0105za\u0144 ICT/OT @ Crestt Fully remote job 29.4k-41.1k (B2B) PLN / month"
     },
     "analytics": {
         "lastBump": 0,
         "lastBumpType": "SYSTEM",
-        "previousBumpCount": 3,
-        "nextBump": 4,
-        "nextBumpType": "ADDITIONAL",
-        "nextBumpCount": 4,
-        "emissionDay": 5,
+        "previousBumpCount": 0,
+        "nextBump": 1,
+        "nextBumpType": "SYSTEM",
+        "nextBumpCount": 6,
+        "emissionDay": 0,
         "productType": "EXPERT",
-        "emissionBumps": 7,
+        "emissionBumps": 6,
         "emissionLength": 30,
-        "emission": "CKMYNL",
+        "emission": "GDGNNI",
         "addons": {
-            "bump": true,
-            "publication": false,
+            "bump": false,
+            "publication": true,
             "offerOfTheDay": false,
             "topInSearch": false,
-            "highlighted": true
+            "highlighted": false
         },
         "topInSearchConfig": {
             "pairs": []

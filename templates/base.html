@@ -359,6 +359,21 @@
             -webkit-backdrop-filter: none;
         }
 
+        .navbar .container {
+            padding-left: 0;  /* Remove left padding */
+        }
+
+        /* Move logo and menu items to the left */
+        .navbar-brand {
+            margin-left: -25px;  /* Increased negative margin */
+            margin-right: 2rem;  /* Add space after the logo */
+            padding-left: 0;
+        }
+
+        .navbar-nav {
+            margin-left: -20px;  /* Increased negative margin */
+        }
+
         .nav-link:hover {
             color: white;
             background: transparent;
@@ -372,11 +387,13 @@
         /* Move right-side buttons closer to the edge */
         .navbar-collapse .d-flex.align-items-center.gap-3 {
             margin-right: -35px;
+            gap: 0.5rem !important;  /* Reduce gap between elements */
         }
 
         /* Ensure language switcher is properly positioned */
         .language-switcher {
-            margin-right: -10px;
+            margin-right: 0;  /* Remove right margin */
+            margin-left: -10px;  /* Add negative left margin */
         }
 
         .dropdown-menu {
@@ -924,16 +941,18 @@
             background-color: transparent !important;
             color: var(--bs-body-color);
             border: none !important;
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             overflow: hidden;
             box-shadow: none !important;
             cursor: pointer;
             transition: transform 0.2s ease;
+            margin-left: -5px;  /* Add negative left margin to the button itself */
         }
 
         .language-switcher .btn-sign-in:hover {
             transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.1) !important;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
         }
 
@@ -942,8 +961,8 @@
         }
 
         .language-switcher .flag-icon {
-            width: 30px;
-            height: 30px;
+            width: 24px;  /* Slightly increased flag size */
+            height: 24px; /* Slightly increased flag size */
             border-radius: 50%;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             object-fit: cover;
