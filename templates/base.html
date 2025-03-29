@@ -15,20 +15,40 @@
         object-src 'none';
     ">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="description" content="{% trans 'JobHub - Find your dream job today' %}">
     <meta name="keywords" content="{% trans 'jobs, career, employment, hiring, job search' %}">
+    <meta name="theme-color" content="#0A1932">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" />
     <title>{% block title %}{% trans 'JobHub' %}{% endblock %}</title>
-    {% bootstrap_css %}
+    
+    <!-- Preload critical resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    
+    <!-- Critical CSS first -->
+    {% bootstrap_css %}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/hero.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/salary-slider.css' %}?v=1.0" />
-    <link rel="stylesheet" href="{% static 'css/filters.css' %}" />
+    
+    <!-- Defer non-critical CSS for mobile -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'css/hero.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'css/salary-slider.css' %}?v=1.0" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'css/filters.css' %}" media="print" onload="this.media='all'">
+    
+    <!-- Fallback for browsers that don't support onload -->
+    <noscript>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/hero.css' %}">
+        <link rel="stylesheet" href="{% static 'css/salary-slider.css' %}?v=1.0">
+        <link rel="stylesheet" href="{% static 'css/filters.css' %}">
+    </noscript>
+    
     {% block extra_css %}{% endblock %}
     <style>
         /* Reset and base styles */
@@ -48,6 +68,51 @@
             flex-direction: column;
             background-color: var(--bs-body-bg);
             color: var(--bs-body-color);
+        }
+        
+        /* iOS safe area handling */
+        @supports (padding: max(0px)) {
+            body {
+                --safe-area-inset-top: env(safe-area-inset-top, 0px);
+                --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+                --navbar-background: linear-gradient(135deg, rgba(10, 25, 50, 1) 0%, rgba(20, 40, 80, 1) 100%);
+            }
+            
+            /* Status bar background (top notch area) */
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: var(--safe-area-inset-top);
+                background: rgba(10, 25, 50, 1);
+                z-index: 2001;
+            }
+            
+            /* Bottom safe area background */
+            body::after {
+                content: '';
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: var(--safe-area-inset-bottom);
+                background: rgba(10, 25, 50, 1);
+                z-index: 2001;
+            }
+            
+            /* Adjust navbar to account for notch */
+            .navbar {
+                padding-top: calc(0.3rem + var(--safe-area-inset-top)) !important;
+            }
+            
+            /* Adjust mobile menu to account for bottom safe area */
+            @media (max-width: 768px) {
+                .navbar-collapse {
+                    padding-bottom: calc(1rem + var(--safe-area-inset-bottom)) !important;
+                }
+            }
         }
 
         /* Navbar styles */
@@ -143,7 +208,7 @@
         }
 
         .nav-link {
-            font-weight: 500;
+            font-weight: 400 !important;
             color: rgba(255, 255, 255, 0.85);
             padding: 0.5rem 0;
             margin: 0 1rem;
@@ -429,57 +494,39 @@
             visibility: visible !important;
             position: absolute !important;
             z-index: 1000 !important;
-            animation: dropdown-animation 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation: none !important;
+            transform: none !important;
         }
 
-        /* Enhanced dropdown animation */
-        @keyframes dropdown-animation {
-            0% {
-                opacity: 0;
-                transform: translateY(-15px) scale(0.95); /* Start from higher up */
-            }
-            70% {
-                transform: translateY(2px) scale(1.01);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* Ensure dropdown toggle has pointer cursor */
-        [data-bs-toggle="dropdown"] {
-            cursor: pointer !important;
-        }
-
-        /* Modern dropdown styles based on JustJoin.it and NoFluffJobs */
+        /* Dropdown menu styling - updated with less rounded corners */
         .dropdown-menu {
             display: none;
-            border: none !important;
-            border-radius: 12px !important;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15) !important;
-            padding: 0.75rem 0 !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            border-radius: 4px !important; /* Reduced border radius */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+            padding: 0 !important;
             min-width: 220px !important;
             margin-top: 0.5rem !important;
             background-color: white !important;
             overflow: hidden !important;
-            transition: opacity 0.2s, transform 0.2s !important;
         }
 
         [data-bs-theme="dark"] .dropdown-menu {
             background-color: #1E1E1E !important;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3) !important;
+            border-color: #2D2D2D !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
         }
 
         .dropdown-item {
-            padding: 0.75rem 1.25rem !important;
+            padding: 8px 16px !important;
             font-weight: 500 !important;
-            font-size: 0.95rem !important;
+            font-size: 0.9rem !important;
             color: #333 !important;
             display: flex !important;
             align-items: center !important;
-            border-radius: 0 !important;
-            transition: background-color 0.15s ease !important;
+            gap: 0.5rem !important;
+            border-radius: 0 !important; /* Remove border radius from items */
+            border-left: 2px solid transparent !important;
         }
 
         [data-bs-theme="dark"] .dropdown-item {
@@ -489,116 +536,48 @@
         .dropdown-item:hover {
             background-color: #f5f8ff !important;
             color: var(--primary-color) !important;
+            border-left-color: var(--primary-color) !important;
         }
 
         [data-bs-theme="dark"] .dropdown-item:hover {
             background-color: #2A2A2A !important;
         }
 
-        .dropdown-item i {
-            margin-right: 0.75rem !important;
-            font-size: 1.1rem !important;
-            color: #6c757d !important;
-        }
-
-        .dropdown-item:hover i {
-            color: var(--primary-color) !important;
-
-        }
-
-        .dropdown-divider {
-            margin: 0.5rem 0 !important;
-            border-color: #eaeaea !important;
-        }
-
-        [data-bs-theme="dark"] .dropdown-divider {
-            border-color: #2D2D2D !important;
-        }
-
-        /* Sign In button styling - match JustJoin.it and NoFluffJobs */
-        .btn-sign-in, .dropdown-toggle.btn-primary {
-            background-color: transparent !important;
-            color: white !important;
-            border: none !important;
-            border-radius: 50px !important; /* Rounded button like in examples */
-            padding: 0.5rem 1rem !important;
-            font-weight: 600 !important;
-            font-size: 0.9rem !important;
-            display: flex !important;
-            align-items: center !important;
-            gap: 0.5rem !important;
-            transition: all 0.2s ease !important;
-            box-shadow: none !important;
-        }
-
-        .btn-sign-in:hover, .dropdown-toggle.btn-primary:hover {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-
-        /* Dropdown menu styling - updated with more rounded corners */
-        .dropdown-menu {
-            display: none;
-            border: 1px solid #eaeaea !important;
-            border-radius: 16px !important; /* More rounded corners */
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
-            padding: 8px 0 !important; /* Add padding to prevent content touching the rounded corners */
-            min-width: 200px !important;
-            margin-top: 8px !important;
-            background-color: white !important;
-            overflow: hidden !important;
-        }
-
-        [data-bs-theme="dark"] .dropdown-menu {
-            background-color: #1E1E1E !important;
-            border-color: #2D2D2D !important;
-        }
-
-        /* Dropdown item styling - exact match */
-        .dropdown-item {
-            padding: 10px 16px !important;
-            font-size: 14px !important;
-            color: #333 !important;
-            border-left: 3px solid transparent !important;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f8f9fa !important;
-            color: #2684FF !important;
-            border-left-color: #2684FF !important;
-        }
-
-        /* Dropdown header styling - with rounded corners */
         .dropdown-header {
-            font-size: 0.7rem !important;
-            font-weight: 700 !important;
+            font-size: 0.75rem !important;
+            font-weight: 600 !important;
             color: #6c757d !important;
-            padding: 10px 16px !important;
+            padding: 8px 16px !important;
             text-transform: uppercase !important;
             letter-spacing: 0.5px !important;
             background-color: #f8f9fa !important;
-            border-bottom: 1px solid #eaeaea !important;
-            margin-bottom: 0.25rem !important;
-            border-top-left-radius: 12px !important; /* Match dropdown menu radius */
-            border-top-right-radius: 12px !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+            border-radius: 0 !important; /* Remove border radius from header */
         }
 
         [data-bs-theme="dark"] .dropdown-header {
-            color: #9BA1A6 !important;
             background-color: #2A2A2A !important;
             border-color: #2D2D2D !important;
+            color: #9BA1A6 !important;
         }
 
-        /* Dropdown divider - exact match */
         .dropdown-divider {
             margin: 0 !important;
-            border-color: #eaeaea !important;
-            opacity: 1 !important;
+            border-color: rgba(0, 0, 0, 0.1) !important;
         }
 
         [data-bs-theme="dark"] .dropdown-divider {
             border-color: #2D2D2D !important;
+        }
+
+        /* Remove any remaining rounded corners */
+        .dropdown-menu.show {
+            border-radius: 4px !important;
+        }
+
+        .dropdown-item:first-child,
+        .dropdown-item:last-child {
+            border-radius: 0 !important;
         }
 
         /* Dropdown item icon styling - exact match */
@@ -615,29 +594,52 @@
         }
 
         /* NoFluffJobs style button */
-        .btn-sign-in {
+        .btn-sign-in, .dropdown-toggle.btn-primary {
             background-color: transparent !important;
             color: white !important;
             border: none !important;
             border-radius: 50px !important;
             padding: 0.5rem 1rem !important;
-            font-weight: 600 !important;
+            font-weight: 400 !important;
             font-size: 0.9rem !important;
             display: flex !important;
             align-items: center !important;
             gap: 0.5rem !important;
             transition: all 0.2s ease !important;
             box-shadow: none !important;
-            height: 36px !important;
         }
 
-        .btn-sign-in i.bi-person-circle {
-            font-size: 1.1rem !important;
+        /* Special style for POST A JOB button and LOG IN button */
+        a.btn-sign-in, .dropdown-toggle.btn-sign-in {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 0.35rem 1.2rem !important;
         }
 
-        .btn-sign-in i.bi-chevron-down {
-            opacity: 0.7 !important;
-            font-size: 0.7rem !important;
+        /* Specific style for POST A JOB button */
+        a.btn-sign-in {
+            background-color: transparent !important;
+        }
+
+        /* Specific style for LOG IN button */
+        .dropdown-toggle.btn-sign-in {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* Special hover effect for POST A JOB and LOG IN buttons */
+        a.btn-sign-in:hover, .dropdown-toggle.btn-sign-in:hover {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            background-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* Dark mode adjustments */
+        [data-bs-theme="dark"] .dropdown-toggle.btn-sign-in {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-toggle.btn-sign-in:hover {
+            background-color: rgba(255, 255, 255, 0.12) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
         }
 
         /* Dropdown menu positioning fix - align left sides */
@@ -659,16 +661,6 @@
             left: auto !important;
             transform-origin: top right !important;
             margin-top: 12px !important; /* Increased margin to prevent covering the button */
-        }
-
-        /* Ensure consistent animation for all dropdowns */
-        .dropdown-menu.show {
-            display: block !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            position: absolute !important;
-            z-index: 1000 !important;
-            animation: dropdown-animation 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
         /* Apply ripple effect to all buttons with dropdowns */
@@ -702,7 +694,7 @@
         .nav-link.active {
             color: white !important;
             border-bottom: 2px solid white;
-            font-weight: 600;
+            font-weight: 500 !important;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
         }
 
@@ -952,8 +944,8 @@
 
         .language-switcher .btn-sign-in:hover {
             transform: scale(1.1);
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+            background-color: transparent !important; /* Remove background on hover */
+            box-shadow: none !important; /* Remove box shadow */
         }
 
         .language-switcher .btn-sign-in:active {
@@ -1210,15 +1202,439 @@
             box-shadow: none !important;
         }
     </style>
+    <!-- Mobile optimization CSS -->
+    <style>
+        /* Base mobile optimizations */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Improved touch targets */
+        @media (max-width: 768px) {
+            .btn, .nav-link, .dropdown-item, button, 
+            [role="button"], .form-control, input, select {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 10px 15px;
+                touch-action: manipulation;
+            }
+            
+            .navbar {
+                padding: 0.3rem 0.5rem;
+            }
+            
+            .navbar-brand {
+                font-size: 1.3rem;
+                margin-left: 0;
+            }
+            
+            .nav-link {
+                margin: 0 0.25rem;
+                padding: 0.5rem 0.75rem;
+            }
+            
+            main {
+                padding: 0.5rem;
+                margin-top: 56px;
+            }
+            
+            /* Mobile theme toggle and language switcher positioning */
+            .navbar-collapse .position-absolute.top-0.end-0 {
+                z-index: 11 !important;
+                transform: scale(0.9) !important;
+                transition: all 0.2s ease !important;
+            }
+            
+            .navbar-collapse .position-absolute.top-0.end-0:hover {
+                transform: scale(1) !important;
+            }
+            
+            /* Mobile theme toggle styling */
+            .navbar-collapse .theme-toggle-btn {
+                opacity: 0.85 !important;
+                color: white !important;
+                transition: all 0.2s ease !important;
+            }
+            
+            .navbar-collapse .theme-toggle-btn:hover {
+                opacity: 1 !important;
+                transform: scale(1.1) !important;
+            }
+            
+            .navbar-collapse .theme-toggle-btn:active {
+                transform: scale(0.9) !important;
+                opacity: 0.7 !important;
+            }
+            
+            /* Mobile theme toggle icon display in dark mode */
+            .navbar-collapse .theme-toggle-btn i.bi-moon-stars {
+                display: inline-block !important;
+            }
+            
+            .navbar-collapse .theme-toggle-btn i.bi-sun {
+                display: none !important;
+            }
+            
+            /* Use JavaScript to properly toggle these based on theme */
+            [data-bs-theme="dark"] .navbar-collapse .theme-toggle-btn i.bi-moon-stars,
+            [data-bs-theme="light"] .navbar-collapse .theme-toggle-btn i.bi-sun {
+                display: none !important;
+            }
+            
+            [data-bs-theme="dark"] .navbar-collapse .theme-toggle-btn i.bi-sun,
+            [data-bs-theme="light"] .navbar-collapse .theme-toggle-btn i.bi-moon-stars {
+                display: inline-block !important;
+            }
+            
+            /* Ensure the sun icon is always yellow in dark mode */
+            [data-bs-theme="dark"] .navbar-collapse .theme-toggle-btn i.bi-sun {
+                color: #ffd43b !important;
+            }
+            
+            /* Mobile language switcher positioning */
+            .navbar-collapse .language-switcher-mobile.position-absolute {
+                z-index: 11 !important;
+                transform: scale(0.9) !important;
+                transition: all 0.2s ease !important;
+            }
+            
+            .navbar-collapse .language-switcher-mobile.position-absolute:hover {
+                transform: scale(1) !important;
+            }
+            
+            /* MOBILE NAVBAR: Full-screen bottom drawer */
+            .navbar .container {
+                position: static !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            
+            .navbar-collapse {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                top: auto !important;
+                width: 100vw !important;
+                height: auto !important; /* Change from fixed to auto height */
+                max-height: 85vh !important;
+                min-height: 0 !important; /* Allow menu to be as small as needed */
+                margin: 0 !important;
+                padding: 1.25rem 0.5rem 0.75rem !important; /* Increased top padding */
+                transform: translateY(100%) !important;
+                transition: all 0.3s ease !important;
+                background: linear-gradient(135deg, rgba(5, 15, 30, 0.98) 0%, rgba(10, 25, 45, 0.98) 100%) !important;
+                z-index: 2000 !important;
+                overflow-y: auto !important;
+                border-top-left-radius: 16px !important;
+                border-top-right-radius: 16px !important;
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25) !important;
+                display: flex !important;
+                flex-direction: column !important;
+                box-sizing: border-box !important;
+                /* Explicitly remove any constraints */
+                min-width: 100% !important;
+                max-width: 100vw !important;
+                left: 0 !important;
+                border-left: 0 !important;
+                border-right: 0 !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                position: relative !important; /* For close button positioning */
+                /* Always use dark mode styles regardless of theme */
+                color: #E9ECEF !important;
+                border-color: rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            /* Updated mobile menu text colors to match dark mode */
+            .navbar-collapse .nav-link {
+                color: rgba(255, 255, 255, 0.85) !important;
+            }
+            
+            .navbar-collapse .nav-link:hover, 
+            .navbar-collapse .nav-link.active {
+                color: white !important;
+            }
+            
+            /* Mobile auth menu always in dark mode */
+            .mobile-auth-header {
+                color: #9BA1A6 !important;
+            }
+            
+            .mobile-auth-list li {
+                border-color: rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            .mobile-auth-list li a {
+                background: rgba(255, 255, 255, 0.05) !important;
+                color: #E9ECEF !important;
+            }
+            
+            .mobile-auth-list li a:hover,
+            .mobile-auth-list li a:active {
+                background: rgba(var(--bs-primary-rgb), 0.2) !important;
+                color: var(--bs-primary) !important;
+            }
+            
+            /* Ensure dropdowns in mobile menu are also using dark mode */
+            .navbar-collapse .dropdown-menu {
+                background-color: #2A2A2A !important;
+                border-color: rgba(255, 255, 255, 0.1) !important;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+            }
+            
+            .navbar-collapse .dropdown-item {
+                color: #E9ECEF !important;
+            }
+            
+            .navbar-collapse .dropdown-item:hover {
+                background-color: #333333 !important;
+                color: var(--primary-color) !important;
+            }
+            
+            .navbar-collapse .dropdown-divider {
+                border-color: rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            .navbar-collapse .dropdown-header {
+                background-color: #2A2A2A !important;
+                border-color: #2D2D2D !important;
+                color: #9BA1A6 !important;
+            }
+            
+            /* Close button instead of drag handle */
+            .mobile-menu-close {
+                position: absolute !important;
+                top: 0.5rem !important; /* Moved up from 0.75rem */
+                left: 0.75rem !important;
+                width: 36px !important;
+                height: 36px !important;
+                border-radius: 50% !important;
+                background-color: transparent !important; /* Removed background */
+                border: none !important;
+                color: white !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 1.5rem !important; /* Increased font size slightly */
+                cursor: pointer !important;
+                transition: all 0.2s ease !important;
+                z-index: 10 !important;
+                padding: 0 !important;
+                opacity: 0.85 !important; /* Added slight transparency */
+            }
+            
+            .mobile-menu-close:hover {
+                background-color: transparent !important; /* Removed hover background */
+                opacity: 1 !important; /* Full opacity on hover */
+                transform: scale(1.1) !important; /* Slight scale effect on hover */
+            }
+            
+            .mobile-menu-close:active {
+                transform: scale(0.9) !important; /* Increased click effect */
+                opacity: 0.7 !important; /* More transparency when clicked */
+            }
+            
+            /* Remove the original drag handle styles */
+            .navbar-collapse:before {
+                display: none !important;
+            }
+            
+            /* Add padding to the navbar-nav to prevent content from being covered by the X button */
+            .navbar-nav {
+                width: 100% !important;
+                padding: 2.5rem 0 0.5rem !important; /* Increased top padding to make room for the X button */
+                margin-left: 0 !important;
+                margin-bottom: 0 !important; /* Ensure no bottom margin */
+            }
+            
+            .navbar-nav .nav-item {
+                width: 100% !important;
+                margin: 0.15rem 0 !important; /* Reduced margin */
+            }
+            
+            .navbar-nav .nav-link {
+                width: 100% !important;
+                padding: 0.6rem 1rem !important; /* Reduced padding */
+                margin: 0 !important;
+                border-radius: 8px !important;
+                border-bottom: none !important;
+            }
+            
+            .navbar-nav .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.1) !important;
+                border-left: 3px solid white !important;
+                padding-left: calc(1rem - 3px) !important;
+            }
+            
+            .navbar-nav .nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+            }
+            
+            .navbar-nav .nav-link:after {
+                display: none !important;
+            }
+            
+            .navbar-collapse.show {
+                height: auto !important; /* Auto height instead of fixed */
+                transform: translateY(0) !important;
+            }
+            
+            /* Align auth buttons in bottom menu */
+            .navbar-collapse .d-flex.align-items-center.gap-3 {
+                width: 100% !important;
+                margin: 0.5rem 0 !important; /* Reduced margin */
+                justify-content: space-around !important;
+                margin-right: 0 !important;
+            }
+            
+            /* Improve dropdown items for touch */
+            .dropdown-item {
+                padding: 12px 16px !important;
+            }
+            
+            /* Optimize form controls for mobile */
+            .form-control {
+                font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+            
+            /* Fix for theme toggle button */
+            .theme-toggle-btn {
+                padding: 10px;
+            }
+            
+            /* Adjust language switcher */
+            .language-switcher .btn-sign-in {
+                width: 38px;
+                height: 38px;
+            }
+            
+            /* Card optimizations */
+            .card {
+                margin-bottom: 1rem;
+            }
+            
+            /* Remove hover animations on mobile */
+            .card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            
+            /* Optimize alerts for mobile */
+            .messages {
+                max-width: 90%;
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            /* Improve footer spacing */
+            footer {
+                padding: 0.75rem;
+            }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 576px) {
+            body {
+                font-size: 14px;
+            }
+            
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            /* Further compact navbar elements */
+            .navbar-brand {
+                font-size: 1.2rem;
+                margin-right: 0.5rem;
+            }
+            
+            /* Make buttons larger on very small screens */
+            .navbar-toggler {
+                padding: 0.5rem;
+                margin-right: -0.5rem;
+            }
+            
+            /* Optimize auth buttons text */
+            .btn-sign-in span {
+                display: none;
+            }
+            
+            .btn-sign-in i {
+                margin-right: 0 !important;
+            }
+            
+            .dropdown-toggle.btn-sign-in {
+                padding: 0.35rem 0.75rem !important;
+            }
+            
+            /* Adjust tags display for smaller screens */
+            .job-listing-tags .badge {
+                margin: 0.15rem !important;
+                padding: 4px 10px !important;
+                font-size: 12px !important;
+            }
+            
+            /* Further optimize slide-up menu */
+            .navbar-collapse {
+                padding: 1.25rem 0.5rem 0.75rem !important;
+            }
+            
+            .navbar-collapse.show {
+                height: 80vh;
+            }
+        }
+        
+        /* Reduce motion for users who prefer it */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            
+            .card:hover,
+            .btn:hover,
+            .dropdown-item:hover,
+            .btn-sign-in:hover,
+            .nav-link:hover:after,
+            .featured-badge {
+                animation: none !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            
+            .navbar-collapse {
+                transition: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'authentication:home' %}">JobHub</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+                <button class="mobile-menu-close d-lg-none" aria-label="Close menu">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <!-- Add language switcher and theme toggle for mobile view at the top right -->
+                <div class="d-lg-none position-absolute top-0 end-0 mt-2 me-2 d-flex align-items-center">
+                    <button class="theme-toggle-btn" id="mobileThemeToggle" aria-label="Toggle theme">
+                        <i class="bi bi-moon-stars"></i>
+                        <i class="bi bi-sun"></i>
+                    </button>
+                    <div class="language-switcher-mobile ms-2">
+                        {% include "mobile_language_toggle.html" %}
+                    </div>
+                </div>
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'authentication:home' %}">
@@ -1230,21 +1646,81 @@
                             {% trans "Companies" %}
                         </a>
                     </li>
-                    <li class="nav-item d-flex align-items-center ms-3">
+                    <li class="nav-item d-flex align-items-center ms-3 d-none d-lg-flex">
                         <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
                             <i class="bi bi-moon-stars"></i>
                         </button>
+                    </li>
+                    
+                    <!-- Mobile-only auth menu inside navbar -->
+                    <li class="nav-item d-lg-none">
+                        {% if not user.is_authenticated %}
+                            <div class="mobile-auth-menu">
+                                <div class="mobile-auth-header">{% trans "SIGN IN" %}</div>
+                                <ul class="mobile-auth-list">
+                                    <li>
+                                        <a href="{% url 'authentication:login' %}?next={{ request.path }}&type=candidate">
+                                            <i class="bi bi-person"></i>{% trans "Candidate" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'authentication:login' %}?next={{ request.path }}&type=recruiter">
+                                            <i class="bi bi-building"></i>{% trans "Company" %}
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                                <div class="mobile-auth-header">{% trans "SIGN UP" %}</div>
+                                <ul class="mobile-auth-list">
+                                    <li>
+                                        <a href="{% url 'authentication:signup' %}?next={{ request.path }}&type=candidate">
+                                            <i class="bi bi-person-plus"></i>{% trans "Candidate" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'authentication:signup' %}?next={{ request.path }}&type=recruiter">
+                                            <i class="bi bi-building-add"></i>{% trans "Company" %}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <div class="mobile-auth-menu">
+                                <div class="mobile-auth-header">{% trans "MY ACCOUNT" %}</div>
+                                <ul class="mobile-auth-list">
+                                    <li>
+                                        <a href="#">
+                                            <i class="bi bi-person"></i>{% trans "Profile" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="bi bi-briefcase"></i>{% trans "Applications" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="bi bi-bookmark"></i>{% trans "Saved Jobs" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'authentication:logout' %}">
+                                            <i class="bi bi-box-arrow-right"></i>{% trans "Logout" %}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
                     </li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
                     {% if request.path != '/login/' and request.path != '/signup/' %}
                     <a href="{% if user.is_authenticated %}{% url 'authentication:post_job' %}{% else %}{% url 'authentication:login' %}?next={% url 'authentication:post_job' %}&type=recruiter{% endif %}" class="btn-sign-in text-decoration-none">
-                        <i class="bi bi-plus-circle"></i>
                         <span>{% trans "POST A JOB" %}</span>
                     </a>
                     {% endif %}
                     {% if not user.is_authenticated %}
-                        <div class="dropdown dropdown-align-right">
+                        <div class="dropdown dropdown-align-right d-none d-lg-block">
                             <button class="btn-sign-in dropdown-toggle" id="authDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle"></i>
                                 <span>{% trans "LOG IN" %}</span>
@@ -1256,7 +1732,7 @@
                                     <i class="bi bi-person"></i>{% trans "Candidate" %}
                                 </a>
                                 <a class="dropdown-item" href="{% url 'authentication:login' %}?next={{ request.path }}&type=recruiter">
-                                    <i class="bi bi-building"></i>{% trans "Recruiter" %}
+                                    <i class="bi bi-building"></i>{% trans "Company" %}
                                 </a>
 
                                 <div class="dropdown-divider"></div>
@@ -1266,12 +1742,12 @@
                                     <i class="bi bi-person-plus"></i>{% trans "Candidate" %}
                                 </a>
                                 <a class="dropdown-item" href="{% url 'authentication:signup' %}?next={{ request.path }}&type=recruiter">
-                                    <i class="bi bi-building-add"></i>{% trans "Recruiter" %}
+                                    <i class="bi bi-building-add"></i>{% trans "Company" %}
                                 </a>
                             </div>
                         </div>
                     {% else %}
-                        <div class="dropdown dropdown-align-right">
+                        <div class="dropdown dropdown-align-right d-none d-lg-block">
                             <button class="btn-sign-in dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle"></i>
                                 <span>{{ user.username }}</span>
@@ -1298,8 +1774,8 @@
                         </div>
                     {% endif %}
 
-                    <!-- Language Switcher -->
-                    <div class="language-switcher ms-auto d-flex align-items-center">
+                    <!-- Language Switcher (hidden on mobile) -->
+                    <div class="language-switcher ms-auto d-none d-lg-flex align-items-center">
                         {% include "language_selector.html" %}
                     </div>
                 </div>
@@ -1346,6 +1822,225 @@
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/city-search.js' %}"></script>
     <script src="{% static 'js/language-switcher.js' %}"></script>
+    
+    <!-- Lazy loading for images -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if ('loading' in HTMLImageElement.prototype) {
+                // Browser supports the loading attribute
+                const images = document.querySelectorAll('img[data-src]');
+                images.forEach(img => {
+                    img.src = img.dataset.src;
+                    img.loading = 'lazy';
+                });
+            } else {
+                // Fallback for browsers that don't support lazy loading
+                const script = document.createElement('script');
+                script.src = "{% static 'js/lazysizes.min.js' %}";
+                document.body.appendChild(script);
+            }
+            
+            // Optimize performance for mobile
+            const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
+            
+            if (isSmallScreen) {
+                // Make sure both theme toggles work with the same functionality
+                const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+                if (mobileThemeToggle) {
+                    mobileThemeToggle.addEventListener('click', function() {
+                        // Trigger main theme toggle programmatically
+                        document.getElementById('themeToggle').click();
+                    });
+                }
+                
+                // Disable any heavy animations on mobile
+                document.querySelectorAll('.featured-badge').forEach(el => {
+                    el.style.animation = 'none';
+                });
+                
+                // Defer non-critical scripts
+                const deferScripts = [
+                    "{% static 'js/salary-slider.js' %}",
+                    "{% static 'js/load-more.js' %}"
+                ];
+                
+                deferScripts.forEach(src => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.setAttribute('defer', '');
+                    document.body.appendChild(script);
+                    
+                    // Remove the original script
+                    document.querySelectorAll(`script[src="${src}"]`).forEach(s => s.remove());
+                });
+                
+                // Enhanced mobile menu behavior
+                const navbarToggler = document.querySelector('.navbar-toggler');
+                const navbarCollapse = document.querySelector('.navbar-collapse');
+                const closeButton = document.querySelector('.mobile-menu-close');
+                
+                // Make close button functional
+                if (closeButton) {
+                    closeButton.addEventListener('click', function() {
+                        navbarCollapse.classList.remove('show');
+                        
+                        // Also collapse via Bootstrap API
+                        if (typeof bootstrap !== 'undefined') {
+                            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                            if (bsCollapse) {
+                                bsCollapse.hide();
+                            }
+                        }
+                    });
+                }
+                
+                // Force fullwidth modal style on small screens
+                function enforceFullWidth() {
+                    // Force the menu to be full width at all times
+                    navbarCollapse.style.setProperty('position', 'fixed', 'important');
+                    navbarCollapse.style.setProperty('left', '0', 'important');
+                    navbarCollapse.style.setProperty('right', '0', 'important');
+                    navbarCollapse.style.setProperty('width', '100vw', 'important');
+                    navbarCollapse.style.setProperty('max-width', '100vw', 'important');
+                    navbarCollapse.style.setProperty('box-sizing', 'border-box', 'important');
+                    navbarCollapse.style.setProperty('margin', '0', 'important');
+                    
+                    // Fix any Bootstrap containers or other elements that might be constraining width
+                    const allContainers = document.querySelectorAll('.container, .container-fluid');
+                    allContainers.forEach(container => {
+                        if (container.closest('.navbar-collapse')) {
+                            container.style.setProperty('width', '100%', 'important');
+                            container.style.setProperty('max-width', '100%', 'important');
+                            container.style.setProperty('padding', '0', 'important');
+                            container.style.setProperty('margin', '0', 'important');
+                        }
+                    });
+                }
+                
+                // Call immediately and on resize
+                enforceFullWidth();
+                window.addEventListener('resize', enforceFullWidth);
+                
+                // Add swipe down to close
+                let touchStartY = 0;
+                let touchEndY = 0;
+                
+                navbarCollapse.addEventListener('touchstart', function(e) {
+                    touchStartY = e.changedTouches[0].screenY;
+                });
+                
+                navbarCollapse.addEventListener('touchend', function(e) {
+                    touchEndY = e.changedTouches[0].screenY;
+                    if (touchEndY - touchStartY > 100) {
+                        // Swiped down
+                        navbarCollapse.classList.remove('show');
+                        
+                        // Also collapse via Bootstrap API
+                        if (typeof bootstrap !== 'undefined') {
+                            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                            if (bsCollapse) {
+                                bsCollapse.hide();
+                            }
+                        }
+                    }
+                });
+                
+                // Close menu when clicking menu items
+                document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+                    link.addEventListener('click', function() {
+                        navbarCollapse.classList.remove('show');
+                        
+                        // Also collapse via Bootstrap API
+                        if (typeof bootstrap !== 'undefined') {
+                            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                            if (bsCollapse) {
+                                bsCollapse.hide();
+                            }
+                        }
+                    });
+                });
+                
+                // Remove the top drag handle click handler since we now have a close button
+                // Instead, prevent clicks within the menu from closing it (unless it's a nav link)
+                navbarCollapse.addEventListener('click', function(e) {
+                    // Only prevent default if the click is directly on the collapse element
+                    // and not on a child element like a link or the close button
+                    if (e.target === navbarCollapse) {
+                        e.stopPropagation();
+                    }
+                });
+                
+                // Prevent scrolling on body when menu is open
+                navbarToggler.addEventListener('click', function() {
+                    // Force redraw to ensure proper dimensions
+                    setTimeout(() => {
+                        if (navbarCollapse.classList.contains('show')) {
+                            document.body.style.overflow = 'hidden';
+                            
+                            // Make 100% sure menu is visible and at the right position
+                            navbarCollapse.style.setProperty('transform', 'translateY(0)', 'important');
+                            navbarCollapse.style.setProperty('height', 'auto', 'important');
+                            navbarCollapse.style.setProperty('bottom', '0', 'important');
+                            
+                            // Force full width
+                            navbarCollapse.style.setProperty('width', '100vw', 'important');
+                            navbarCollapse.style.setProperty('left', '0', 'important');
+                            navbarCollapse.style.setProperty('right', '0', 'important');
+                            navbarCollapse.style.setProperty('margin', '0', 'important');
+                            
+                            // Try an alternative approach to make sure it's truly full width
+                            requestAnimationFrame(() => {
+                                const viewportWidth = window.innerWidth;
+                                navbarCollapse.style.setProperty('width', viewportWidth + 'px', 'important');
+                                navbarCollapse.style.setProperty('max-width', viewportWidth + 'px', 'important');
+                            });
+                        } else {
+                            document.body.style.overflow = '';
+                        }
+                    }, 50);
+                });
+                
+                // Reset body scroll when hiding collapse
+                navbarCollapse.addEventListener('hidden.bs.collapse', function() {
+                    document.body.style.overflow = '';
+                });
+                
+                // Additional fix for iOS
+                if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
+                    // Set padding for bottom safe area
+                    navbarCollapse.style.setProperty('padding-bottom', 'calc(1rem + env(safe-area-inset-bottom))', 'important');
+                    
+                    // Apply color to status bar (top safe area)
+                    document.head.insertAdjacentHTML('beforeend', `
+                        <style>
+                            @supports (padding: max(0px)) {
+                                html {
+                                    --status-bar-height: env(safe-area-inset-top);
+                                }
+                                
+                                body {
+                                    --navbar-background-solid: rgba(10, 25, 50, 1);
+                                }
+                                
+                                body::before,
+                                body::after {
+                                    background: var(--navbar-background-solid) !important;
+                                }
+                            }
+                        </style>
+                    `);
+                    
+                    // Handle scroll behavior to maintain color
+                    window.addEventListener('scroll', function() {
+                        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                        if (scrollTop <= 0) {
+                            document.documentElement.style.setProperty('--status-bar-height', 'env(safe-area-inset-top)');
+                        }
+                    });
+                }
+            }
+        });
+    </script>
     
     {% block extra_js %}{% endblock %}
 </body>

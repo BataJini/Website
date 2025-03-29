@@ -2499,3 +2499,94 @@ body {
 .job-listing {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
+/* Mobile auth menu styles */
+.mobile-auth-menu {
+  width: 100%;
+  padding: 0;
+  margin: 1.5rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-top: 1rem;
+}
+
+.mobile-auth-header {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--bs-gray-600);
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 1rem;
+}
+
+.mobile-auth-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mobile-auth-list li {
+  margin: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mobile-auth-list li:last-child {
+  border-bottom: none;
+}
+
+.mobile-auth-list li a {
+  display: flex;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: rgba(0, 0, 0, 0.02);
+  font-size: 0.95rem;
+}
+
+.mobile-auth-list li a:hover, 
+.mobile-auth-list li a:active {
+  background: rgba(var(--bs-primary-rgb), 0.1);
+  color: var(--bs-primary);
+}
+
+.mobile-auth-list li a i {
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+  color: var(--bs-primary);
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+/* Dark mode styles for mobile auth menu */
+[data-bs-theme="dark"] .mobile-auth-menu {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .mobile-auth-header {
+  color: var(--bs-gray-400);
+}
+
+[data-bs-theme="dark"] .mobile-auth-list li {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .mobile-auth-list li a {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--bs-gray-200);
+}
+
+[data-bs-theme="dark"] .mobile-auth-list li a:hover,
+[data-bs-theme="dark"] .mobile-auth-list li a:active {
+  background: rgba(var(--bs-primary-rgb), 0.2);
+  color: var(--bs-primary);
+}
+
+[data-bs-theme="dark"] .navbar-collapse .dropdown-menu {
+  background-color: #2A2A2A !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}

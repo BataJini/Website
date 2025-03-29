@@ -1,0 +1,51 @@
+{% load i18n %}
+{% load static %}
+
+<form action="{% url 'set_language' %}" method="post" class="language-form-mobile" id="language-form-mobile">
+  {% csrf_token %}
+  <input name="next" type="hidden" value="{{ redirect_to|default:request.path }}">
+  {% get_current_language as LANGUAGE_CODE %}
+  
+  {% if LANGUAGE_CODE == 'en' %}
+    <button type="submit" name="language" value="pl" class="language-toggle-btn">
+      <img src="{% static 'img/gb-flag.svg' %}" alt="Switch to Polski" class="flag-icon">
+    </button>
+  {% else %}
+    <button type="submit" name="language" value="en" class="language-toggle-btn">
+      <img src="{% static 'img/pl-flag.svg' %}" alt="Switch to English" class="flag-icon">
+    </button>
+  {% endif %}
+</form>
+
+<style>
+  .language-form-mobile {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  .language-form-mobile .language-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+  }
+  
+  .language-form-mobile .language-toggle-btn:active {
+    transform: scale(0.9);
+  }
+  
+  .language-form-mobile .flag-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+</style> 
