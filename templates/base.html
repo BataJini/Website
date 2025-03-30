@@ -58,55 +58,8 @@
             box-sizing: border-box;
         }
 
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-            position: relative;
-        }
-
-        /* Container width control for mobile */
-        @media (max-width: 991px) {
-            .container, 
-            .container-fluid,
-            .navbar .container,
-            .footer .container-fluid,
-            main.container {
-                width: 100% !important;
-                max-width: 100% !important;
-                padding-left: 15px !important;
-                padding-right: 15px !important;
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-                overflow-x: hidden !important;
-            }
-
-            .navbar-brand {
-                margin-left: 0 !important;
-            }
-
-            .navbar-nav {
-                margin-left: 0 !important;
-            }
-
-            .navbar-collapse .d-flex.align-items-center.gap-3 {
-                margin-right: 0 !important;
-            }
-
-            .language-switcher {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-            }
-
-            /* Control all potential overflow elements */
-            .row {
-                margin-left: -10px !important;
-                margin-right: -10px !important;
-            }
-
-            .col, [class*="col-"] {
-                padding-left: 10px !important;
-                padding-right: 10px !important;
-            }
+        html {
+            height: 100%;
         }
 
         body {
@@ -211,7 +164,11 @@
 
         .footer-bottom {
             position: relative;
-            width: 100%;
+            width: 100vw;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
             background: transparent;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -1466,7 +1423,7 @@
                 left: 0 !important;
                 right: 0 !important;
                 top: auto !important;
-                width: 100% !important;
+                width: 100vw !important;
                 height: auto !important;
                 max-height: 85vh !important;
                 min-height: 0 !important;
@@ -1816,7 +1773,11 @@
 
         .footer-bottom {
             position: relative;
-            width: 100%;
+            width: 100vw;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
             background: transparent;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -2491,6 +2452,7 @@
                             navbarCollapse.style.setProperty('bottom', '0', 'important');
                             
                             // Force full width
+                            navbarCollapse.style.setProperty('width', '100vw', 'important');
                             navbarCollapse.style.setProperty('left', '0', 'important');
                             navbarCollapse.style.setProperty('right', '0', 'important');
                             navbarCollapse.style.setProperty('margin', '0', 'important');
