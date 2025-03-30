@@ -18,18 +18,9 @@
         transition: all 0.2s ease-in-out !important;
     }
     
-    /* Container for job listings to ensure proper centering */
-    .job-listings {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        width: 100% !important;
-        gap: 1rem !important;
-    }
-    
     /* Position metadata at the bottom */
     .job-listing-meta {
-        margin-top: auto !important; /* Push to bottom */
+        margin-top: auto !important;
         position: relative !important;
         display: flex !important;
         gap: 15px !important;
@@ -44,6 +35,8 @@
     .job-listing-left {
         position: relative !important;
         padding-left: 10px !important;
+        padding-right: 0 !important; /* Ensure no right padding */
+        margin-right: 0 !important; /* Ensure no right margin */
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-start !important;
@@ -52,6 +45,7 @@
         min-height: 80px !important;
         z-index: 3 !important;
         background: transparent !important;
+        box-sizing: border-box !important; /* Ensure padding is included in width */
     }
     
     /* Style the job title */
@@ -65,10 +59,10 @@
         position: relative !important;
         z-index: 3 !important;
         background: transparent !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        max-width: 600px !important;
+        white-space: normal !important; /* Explicitly allow wrapping on desktop */
+        overflow: visible !important; /* Allow content to be visible */
+        text-overflow: clip !important; /* Default text overflow */
+        max-width: 600px !important; 
     }
 
     /* Style for company name */
@@ -186,7 +180,6 @@
 
     /* Style the tags container */
     .job-listing-tags {
-        display: flex !important;
         gap: 8px !important;
         flex-wrap: wrap !important;
         justify-content: flex-end !important;
@@ -234,9 +227,9 @@
 
     [data-bs-theme="dark"] .job-listing-title {
         color: var(--bs-body-color) !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        white-space: normal !important; /* Explicitly allow wrapping on desktop (dark) */
+        overflow: visible !important;
+        text-overflow: clip !important;
         max-width: 600px !important;
     }
 
@@ -264,85 +257,369 @@
     @media (max-width: 768px) {
         .job-listing {
             height: auto !important;
-            min-height: 160px !important;
-            padding: 20px 15px 20px 40px !important;
+            padding: 8px 10px 5px 45px !important;
             width: 100% !important;
-            max-width: 95% !important;
-        }
-        
-        .job-listing-details {
-            flex-direction: column !important;
-            height: auto !important;
-            gap: 10px !important;
+            max-width: 98% !important;
+            margin-bottom: 0 !important;
+            position: relative !important;
+            box-sizing: border-box !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
         }
         
         .job-listing-logo {
             width: 60px !important;
             height: 60px !important;
             left: -20px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+        }
+        
+        .job-listing-info {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100% !important;
+            gap: 5px !important;
+            width: 100% !important; /* Ensure full width */
+            padding-right: 0 !important; /* Ensure no right padding */
+            margin-right: 0 !important; /* Ensure no right margin */
+            box-sizing: border-box !important; /* Ensure padding is included in width */
+        }
+
+        .job-listing-details {
+            display: flex !important;
+            flex-direction: column !important;
+            height: auto !important;
+            width: 100% !important;
+            padding-right: 0 !important; /* Ensure no right padding */
+            margin-right: 0 !important; /* Ensure no right margin */
+            gap: 5px !important;
+            box-sizing: border-box !important; /* Ensure padding is included in width */
         }
         
         .job-listing-left {
             width: 100% !important;
-            padding-left: 5px !important;
-        }
-        
-        .job-listing-right {
-            width: 100% !important;
-            padding-top: 0 !important;
-        }
-        
-        .job-listing-meta {
-            flex-wrap: wrap !important;
+            padding-left: 10px !important;
+            padding-right: 0 !important;
+            margin-right: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
             gap: 8px !important;
-            font-size: 0.8rem !important;
-            margin-top: 8px !important;
-        }
-        
-        .job-listing-salary {
-            width: 100% !important;
-            text-align: left !important;
-        }
-        
-        .job-listing-tags {
-            justify-content: flex-start !important;
-            margin-top: 10px !important;
-            width: 100% !important;
+            padding-top: 0 !important;
+            box-sizing: border-box !important;
         }
         
         .job-listing-title {
-            font-size: 1.1rem !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            margin-bottom: 0 !important;
+            margin-right: 0 !important;
+            margin-left: 0 !important; /* Ensure no left margin */
+            padding-top: 0 !important;
+            padding-right: 0 !important;
+            padding-left: 0 !important; /* Ensure no left padding */
+            width: 100% !important;
+            min-width: 100% !important;
+            display: flex !important; 
+            align-items: center !important; 
+            gap: 5px !important; 
+            box-sizing: border-box !important;
         }
+
+        .job-title-text {
+            flex-grow: 1;
+            flex-shrink: 1;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            min-width: 0 !important;
+        }
+        
+        .job-listing-left .featured-badge,
+        .job-listing-left .badge-new {
+            font-size: 0.6rem !important;
+            padding: 2px 5px !important;
+            font-weight: 700 !important;
+            line-height: 1.2 !important;
+            border-radius: 4px !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .job-listing-left .featured-badge {
+            background-color: #FFC107 !important;
+            color: #333 !important;
+        }
+        
+        .job-listing-left .badge-new {
+            background-color: #17a2b8 !important;
+            color: white !important;
+        }
+        
+        .job-listing[data-featured="true"] .badge-new {
+             display: none !important;
+        }
+        
+        .job-listing-company {
+            font-size: 0.75rem !important;
+            line-height: 1.2 !important;
+            margin-bottom: 5px !important;
+        }
+
+        .job-listing-salary-tags-row {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important; /* Align items to the top edge */
+            gap: 8px !important;
+            width: 100% !important;
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+            margin-bottom: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        .job-listing-right {
+            width: 100% !important;
+            padding-top: 0 !important;
+            display: contents;
+        }
+        
+        .job-listing-salary {
+            font-size: 0.8rem !important;
+            font-weight: 500 !important;
+            padding: 3px 8px !important;
+            width: auto !important;
+            text-align: left !important;
+            margin-left: 0 !important;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        
+        .job-listing-tags {
+            display: flex !important;
+            align-items: flex-start !important; /* Align badges to the top edge */
+            gap: 5px !important;
+            flex-wrap: nowrap !important;
+            justify-content: flex-start !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 5px !important;
+            overflow-x: auto !important;
+            /* Hide scrollbar standard */
+            scrollbar-width: none !important;
+            /* Hide scrollbar for IE, Edge */
+            -ms-overflow-style: none !important;
+            flex-grow: 1 !important;
+            min-width: 0 !important;
+        }
+
+        /* Hide scrollbar for WebKit (Chrome, Safari, etc.) */
+        .job-listing-tags::-webkit-scrollbar {
+            display: none !important; /* Hide the scrollbar entirely */
+            width: 0 !important;
+            height: 0 !important;
+            background: transparent !important; /* Optional: ensure no background */
+        }
+
+        .job-listing-tags .badge {
+            font-size: 0.7rem !important;
+            padding: 3px 8px !important;
+            flex-shrink: 0;
+            margin: 0 !important;
+        }
+        
+        .job-listing-meta {
+            flex-wrap: nowrap !important; /* Prevent wrapping to multiple lines */
+            gap: 10px !important; /* Consistent spacing between items */
+            font-size: 0.75rem !important;
+            margin-top: 0 !important;
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+            line-height: 1.3 !important;
+            box-sizing: border-box !important;
+            display: flex !important;
+            align-items: center !important;
+            overflow-x: auto !important; /* Allow horizontal scrolling */
+            white-space: nowrap !important; /* Prevent text wrapping */
+            scrollbar-width: none !important; /* Hide scrollbar for Firefox */
+            -ms-overflow-style: none !important; /* Hide scrollbar for IE/Edge */
+            padding-bottom: 5px !important; /* Space for scrolling */
+            width: 100% !important; /* Ensure it takes full width */
+        }
+        
+        /* Hide scrollbar for WebKit browsers */
+        .job-listing-meta::-webkit-scrollbar {
+            display: none !important;
+        }
+        
+        /* Style for company name in metadata (mobile only) */
+        .job-listing-company-mobile {
+            font-size: 0.75rem !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            color: #666 !important;
+            margin-right: 5px !important;
+            flex-shrink: 0 !important;
+        }
+        
+        /* Dark mode for mobile company in metadata */
+        [data-bs-theme="dark"] .job-listing-company-mobile {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        /* Make all metadata items non-shrinkable */
+        .job-listing-location, 
+        .job-listing-type, 
+        .job-listing-posted {
+            flex-shrink: 0 !important; /* Prevent items from shrinking */
+            white-space: nowrap !important; /* Keep text on single line */
+        }
+
+        .job-listing-details > .job-listing-right > .job-listing-salary,
+        .job-listing-details > .job-listing-right > .job-listing-tags {
+             display: none !important; 
+        }
+
+        /* Adjust container to ensure perfect vertical alignment */
+        .job-listing-salary-tags-row {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important; /* Align items to the top edge */
+            gap: 8px !important;
+            width: 100% !important;
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+            margin-bottom: 0 !important;
+            box-sizing: border-box !important;
+        }
+        
+        /* Common mobile tag styles - baseline for both */
+        .job-listing-salary-tags-row .job-listing-tags .badge {
+            font-size: 0.65rem !important;
+            padding: 2px 6px !important;
+            border-radius: 4px !important;
+            font-weight: 500 !important;
+            line-height: 1.2 !important;
+            display: inline-block !important;
+            white-space: nowrap !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        }
+        
+        /* Dark mode styling for skill tags */
+        [data-bs-theme="dark"] .job-listing-salary-tags-row .job-listing-tags .badge {
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+        
+        /* Make salary match skill tags exactly */
+        .job-listing-salary-tags-row .job-listing-salary {
+            font-size: 0.65rem !important;
+            padding: 2px 6px !important;
+            border-radius: 4px !important;
+            font-weight: 500 !important;
+            line-height: 1.2 !important;
+            display: inline-block !important;
+            white-space: nowrap !important;
+            background-color: rgba(245, 245, 247, 0.8) !important;
+            text-align: left !important;
+            margin-left: 0 !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            top: 0 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        }
+        
+        /* Dark mode adjustments for mobile salary */
+        [data-bs-theme="dark"] .job-listing-salary-tags-row .job-listing-salary {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: var(--bs-body-color) !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+        
+        /* Specific skill tag container style */
+        .job-listing-salary-tags-row .job-listing-tags {
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 5px !important;
+            flex-wrap: nowrap !important;
+            justify-content: flex-start !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 5px !important; /* Keep padding for content spacing, scrollbar is hidden */
+            overflow-x: auto !important;
+            /* Hide scrollbar standard */
+            scrollbar-width: none !important;
+            /* Hide scrollbar for IE, Edge */
+            -ms-overflow-style: none !important;
+            flex-grow: 1 !important;
+            min-width: 0 !important;
+        }
+        
+        /* Hide scrollbar for WebKit (Chrome, Safari, etc.) */
+        .job-listing-salary-tags-row .job-listing-tags::-webkit-scrollbar {
+            display: none !important; /* Hide the scrollbar entirely */
+            width: 0 !important;
+            height: 0 !important;
+            background: transparent !important; /* Optional: ensure no background */
+        }
+
+        /* Remove thumb/track styles as they are hidden */
+        /*
+        .job-listing-tags::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .job-listing-tags::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 4px;
+        }
+        [data-bs-theme="dark"] .job-listing-tags::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.2);
+        }
+        */
+        
+        /* Keep original non-mobile salary style so desktop isn't affected */
     }
     
     @media (max-width: 480px) {
         .job-listing {
-            padding: 15px 15px 15px 35px !important;
-            min-height: 180px !important;
+            padding: 6px 8px 4px 40px !important;
         }
         
         .job-listing-logo {
             width: 50px !important;
             height: 50px !important;
             left: -15px !important;
+            top: 50% !important;
         }
         
-        .company-logo-placeholder {
-            font-size: 1.2rem !important;
+        .job-listing-left {
+            padding-left: 5px !important;
+            gap: 6px !important;
+        }
+
+        .job-listing-title {
+            font-size: 0.9rem !important;
         }
         
-        .job-listing-meta {
-            row-gap: 5px !important;
-        }
-        
-        .job-listing-location, .job-listing-type, .job-listing-posted {
-            font-size: 0.75rem !important;
-            white-space: nowrap !important;
-        }
-        
-        .badge {
+        .job-listing-company, 
+        .job-listing-salary,
+        .job-listing-meta,
+        .job-listing-meta > div {
             font-size: 0.7rem !important;
-            padding: 4px 8px !important;
+        }
+
+        .job-listing-tags .badge {
+            font-size: 0.65rem !important;
+            padding: 2px 6px !important;
+        }
+
+        .job-listing-location, .job-listing-type, .job-listing-posted {
+            font-size: 0.7rem !important;
+            white-space: nowrap !important;
         }
     }
 
@@ -382,7 +659,7 @@
         <div class="job-listing-details">
             <div class="job-listing-left">
                 <h2 class="job-listing-title">
-                    {{ job.title }}
+                    <span class="job-title-text">{{ job.title }}</span>
                     {% if job.is_featured %}
                         <span class="featured-badge">FEATURED</span>
                     {% endif %}
@@ -390,10 +667,51 @@
                         <span class="badge-new">NEW</span>
                     {% endif %}
                 </h2>
-                <div class="job-listing-company">
+                <div class="job-listing-company d-none d-lg-block">
                     {{ job.company }}
                 </div>
+                <div class="job-listing-salary-tags-row">
+                    <div class="job-listing-salary d-lg-none">
+                        {% if job.salary %}
+                            {{ job.salary }}
+                        {% else %}
+                            Undisclosed
+                        {% endif %}
+                    </div>
+                    <div class="job-listing-tags d-lg-none">
+                        {% if job.tags.all %}
+                            {% if job.title|length > 40 %}
+                                {% for tag in job|get_job_tags|limit_tags|slice:":3" %}
+                                    <span class="badge">{{ tag.name|format_tag }}</span>
+                                {% endfor %}
+                            {% else %}
+                                {% for tag in job|get_job_tags|limit_tags %}
+                                    <span class="badge">{{ tag.name|format_tag }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        {% elif job.requirements %}
+                            {% with skills=job.requirements|parse_requirements %}
+                                {% if job.title|length > 40 or skills|length > 0 and skills.0|length > 15 %}
+                                    {% for skill in skills|slice:":3" %}
+                                        <span class="badge">{{ skill|format_tag }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for skill in skills %}
+                                        <span class="badge">{{ skill|format_tag }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                        {% else %}
+                            {% for tech_tag in job.title|extract_tech_tags %}
+                                <span class="badge">{{ tech_tag }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="job-listing-meta">
+                    <div class="job-listing-company-mobile d-lg-none">
+                        {{ job.company }}
+                    </div>
                     <div class="job-listing-location">
                         📍
                         {{ job.location|format_location }}
@@ -408,7 +726,7 @@
                     </div>
                 </div>
             </div>
-            <div class="job-listing-right">
+            <div class="job-listing-right d-none d-lg-flex flex-column justify-content-space-between h-100 pt-1">
                 <div class="job-listing-salary">
                     {% if job.salary %}
                         {{ job.salary }}

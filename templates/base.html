@@ -58,8 +58,55 @@
             box-sizing: border-box;
         }
 
-        html {
-            height: 100%;
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Container width control for mobile */
+        @media (max-width: 991px) {
+            .container, 
+            .container-fluid,
+            .navbar .container,
+            .footer .container-fluid,
+            main.container {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                overflow-x: hidden !important;
+            }
+
+            .navbar-brand {
+                margin-left: 0 !important;
+            }
+
+            .navbar-nav {
+                margin-left: 0 !important;
+            }
+
+            .navbar-collapse .d-flex.align-items-center.gap-3 {
+                margin-right: 0 !important;
+            }
+
+            .language-switcher {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+
+            /* Control all potential overflow elements */
+            .row {
+                margin-left: -10px !important;
+                margin-right: -10px !important;
+            }
+
+            .col, [class*="col-"] {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
         }
 
         body {
@@ -164,11 +211,7 @@
 
         .footer-bottom {
             position: relative;
-            width: 100vw;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
+            width: 100%;
             background: transparent;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -195,6 +238,37 @@
 
             main {
                 margin-top: 56px; /* Adjust for smaller screens */
+            }
+            
+            /* Footer mobile styles - 2 column layout */
+            .footer-column {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .footer-main .row > div {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+            
+            .footer h6 {
+                font-size: 1rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            
+            .footer .small {
+                font-size: 0.8rem !important;
+            }
+            
+            .footer-column .list-unstyled li {
+                margin-bottom: 0.5rem !important;
+            }
+            
+            .social-links {
+                gap: 1rem !important;
+            }
+            
+            .social-links a {
+                font-size: 1.2rem !important;
             }
         }
 
@@ -1392,7 +1466,7 @@
                 left: 0 !important;
                 right: 0 !important;
                 top: auto !important;
-                width: 100vw !important;
+                width: 100% !important;
                 height: auto !important;
                 max-height: 85vh !important;
                 min-height: 0 !important;
@@ -1742,11 +1816,7 @@
 
         .footer-bottom {
             position: relative;
-            width: 100vw;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
+            width: 100%;
             background: transparent;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -1989,7 +2059,7 @@
                     <div class="col-lg-10">
                         <div class="row g-4">
                             <!-- Column 1: Logo and Contact Info -->
-                            <div class="col-md-3 mb-3 footer-column">
+                            <div class="col-md-3 col-6 mb-3 footer-column">
                                 <a href="{% url 'authentication:home' %}" class="text-decoration-none mb-2 d-block">
                                     <span class="h5 text-white fw-bold">JobHub</span>
                                 </a>
@@ -2006,7 +2076,7 @@
                             </div>
 
                             <!-- Column 2: First Menu Column -->
-                            <div class="col-md-3 mb-3 footer-column">
+                            <div class="col-md-3 col-6 mb-3 footer-column">
                                 <h6 class="mb-2 text-white">{% trans "Job Categories" %}</h6>
                                 <ul class="list-unstyled small">
                                     <li class="mb-1">
@@ -2025,7 +2095,7 @@
                             </div>
 
                             <!-- Column 3: Second Menu Column -->
-                            <div class="col-md-3 mb-3 footer-column">
+                            <div class="col-md-3 col-6 mb-3 footer-column">
                                 <h6 class="mb-2 text-white">{% trans "Locations" %}</h6>
                                 <ul class="list-unstyled small">
                                     <li class="mb-1">
@@ -2044,9 +2114,9 @@
                             </div>
 
                             <!-- Column 4: Social Media -->
-                            <div class="col-md-3 mb-3 footer-column">
+                            <div class="col-md-3 col-6 mb-3 footer-column">
                                 <h6 class="mb-2 text-white">{% trans "Social Media" %}</h6>
-                                <div class="d-flex gap-2">
+                                <div class="d-flex gap-2 social-links">
                                     <a href="#" class="text-white fs-6 hover-white" title="LinkedIn">
                                         <i class="bi bi-linkedin"></i>
                                     </a>
@@ -2421,7 +2491,6 @@
                             navbarCollapse.style.setProperty('bottom', '0', 'important');
                             
                             // Force full width
-                            navbarCollapse.style.setProperty('width', '100vw', 'important');
                             navbarCollapse.style.setProperty('left', '0', 'important');
                             navbarCollapse.style.setProperty('right', '0', 'important');
                             navbarCollapse.style.setProperty('margin', '0', 'important');

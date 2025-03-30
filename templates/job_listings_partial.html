@@ -2,6 +2,38 @@
 {% load i18n %}
 
 <style>
+    /* Styles for the wrapper containing job listings */
+    .job-listings-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important; /* Center cards horizontally */
+        width: 100% !important;
+        gap: 1rem !important; /* Default gap for desktop */
+    }
+    
+    /* Mobile adjustments for the wrapper */
+    @media (max-width: 768px) {
+        .job-listings-wrapper {
+            gap: 0.75rem !important; /* Increased gap slightly */
+        }
+
+        /* Remove border separation styles as gap is > 0 */
+        /*
+        .job-listings-wrapper > .job-listing {
+             border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+        }
+        .job-listings-wrapper > .job-listing:last-child {
+             border-bottom: none !important;
+        }
+        [data-bs-theme="dark"] .job-listings-wrapper > .job-listing {
+             border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+        [data-bs-theme="dark"] .job-listings-wrapper > .job-listing:last-child {
+             border-bottom: none !important;
+        }
+        */
+    }
+    
     /* Prevent italicization of time text */
     .job-listing-posted.text-normal,
     .job-listing-posted.text-normal span {

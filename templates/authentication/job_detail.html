@@ -14,16 +14,24 @@
     @media (max-width: 768px) {
         .card {
             border-radius: 12px !important;
-            margin-bottom: 1rem !important;
+            margin-bottom: 0.5rem !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
         }
 
         .card-body {
             padding: 1rem !important;
+            padding-left: 1.5rem !important;
         }
 
         .company-logo {
-            width: 80px !important;
-            height: 80px !important;
+            width: 65px !important;
+            height: 65px !important;
+            border-radius: 10px !important;
+            margin-right: 10px !important;
+            margin-left: 0.25rem !important;
         }
 
         .company-logo-placeholder {
@@ -31,18 +39,34 @@
         }
 
         .h2 {
-            font-size: 1.5rem !important;
+            font-size: 1.4rem !important;
+            line-height: 1.3 !important;
+            margin-bottom: 0.3rem !important;
         }
 
         .job-meta {
             flex-wrap: wrap !important;
             gap: 8px !important;
             font-size: 0.85rem !important;
+            padding-left: 0 !important;
+            position: static !important;
+            margin-top: 1rem !important;
+            border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+            padding: 1rem 0 0 0 !important;
+        }
+
+        [data-bs-theme="dark"] .job-meta {
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
         }
 
         .job-meta > div {
-            flex: 1 1 calc(50% - 8px) !important;
-            min-width: 120px !important;
+            flex: 1 1 calc(50% - 4px) !important;
+            min-width: 0 !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        .job-meta > div > i {
+            font-size: 1rem !important;
         }
 
         .job-description p,
@@ -52,6 +76,7 @@
 
         .h4 {
             font-size: 1.2rem !important;
+            padding-left: 0.5rem !important;
         }
 
         .badge {
@@ -68,6 +93,95 @@
             position: relative !important;
             top: 0 !important;
             z-index: 1 !important;
+        }
+        
+        /* Adjust job title and metadata for mobile */
+        .flex-grow-1.d-flex.flex-column {
+            width: calc(100% - 75px) !important;
+        }
+        
+        /* Fix margin and alignment issues */
+        .card.shadow-lg {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            width: 100% !important;
+        }
+        
+        .col-lg-8.left-aligned {
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+        }
+        
+        .row.left-aligned {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            width: 100% !important;
+        }
+        
+        /* Container fixes for mobile */
+        .container.left-aligned {
+            padding-left: 1rem !important;
+            padding-right: 0.75rem !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            width: 100% !important;
+            margin-top: 0 !important;
+        }
+        
+        section.py-0 {
+            margin-top: 0 !important;
+            padding-left: 0.75rem !important;
+            padding-right: 0 !important;
+            padding-top: 0 !important;
+        }
+        
+        /* Adjust content inside cards */
+        .job-qualifications, 
+        .nice-to-have-qualifications,
+        .job-description, 
+        .job-requirements,
+        .about-company {
+            padding-left: 0.5rem !important;
+        }
+        
+        /* Make apply button stick to bottom on mobile */
+        .mobile-sticky-apply {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 1000 !important;
+            background-color: var(--bs-body-bg) !important;
+            padding: 0.75rem !important;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+            display: block !important;
+            width: 100% !important;
+            border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        [data-bs-theme="dark"] .mobile-sticky-apply {
+            background-color: var(--bs-dark-bg-subtle) !important;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .mb-5 {
+            margin-bottom: 5rem !important;
+        }
+        
+        .mb-3 {
+            margin-bottom: 0.5rem !important;
+        }
+        
+        .mobile-section {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+        
+        /* Override base styles that might push content down */
+        .py-0 {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
         }
     }
 
@@ -87,10 +201,12 @@
 
         .h2 {
             font-size: 1.3rem !important;
+            line-height: 1.2 !important;
         }
 
         .job-meta {
             font-size: 0.8rem !important;
+            gap: 4px !important;
         }
 
         .job-meta > div {
@@ -123,20 +239,29 @@
         .form-label {
             font-size: 0.85rem !important;
         }
+        
+        /* Improved spacing for small mobile devices */
+        .d-flex.gap-3 {
+            gap: 0.5rem !important;
+        }
+        
+        .d-flex.flex-wrap.align-items-center.gap-3 {
+            gap: 0.5rem !important;
+        }
     }
 </style>
 
 {% block title %}{{ job.title }} - {{ job.company }} | JobHub{% endblock %}
 
 {% block content %}
-<section class="py-0" style="margin-top: -50px;">
+<section class="py-0 mobile-section" style="margin-top: 0; padding-top: 0;">
     <div class="container mt-0 ps-2 left-aligned">
         <!-- Removed breadcrumb navigation as requested -->
 
         <div class="row mt-0 left-aligned">
             <div class="col-lg-8 ps-1 left-aligned">
-                <div class="card shadow-lg border-0 mb-3" style="margin-left: -20px;">
-                    <div class="card-body p-4" style="position: relative; min-height: 220px;">
+                <div class="card shadow-lg border-0 mb-3">
+                    <div class="card-body p-4" style="position: relative;">
                         <div class="d-flex gap-3">
                             <div class="company-logo flex-shrink-0">
                                 {% if job.company_logo %}
@@ -156,7 +281,7 @@
                             </div>
                         </div>
 
-                        <div class="job-meta d-flex flex-wrap gap-5 py-3 border-top" style="padding-left: 114px; position: absolute; bottom: 0; left: 0; right: 0;">
+                        <div class="job-meta d-flex flex-wrap gap-5 py-3 border-top" style="padding-left: 0;">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-currency-dollar fs-5 me-1"></i>
                                 <span class="fw-semibold ms-2">{{ job.salary }}</span>
@@ -179,7 +304,7 @@
                 
                 <!-- Skills Card -->
                 {% if job.requirements or job.tags.all %}
-                <div class="card shadow-lg border-0 mb-3" style="margin-left: -20px;">
+                <div class="card shadow-lg border-0 mb-3">
                     <div class="card-body p-4">
                         <div class="job-qualifications">
                             <h3 class="h4 mb-3">Must Have</h3>
@@ -228,7 +353,7 @@
                 
                 <!-- Nice to Have Skills Card -->
                 {% if job.nice_to_have %}
-                <div class="card shadow-lg border-0 mb-3" style="margin-left: -20px;">
+                <div class="card shadow-lg border-0 mb-3">
                     <div class="card-body p-4">
                         <div class="nice-to-have-qualifications">
                             <h3 class="h4 mb-3">Nice to Have</h3>
@@ -264,7 +389,7 @@
                 
                 <!-- Description Card -->
                 {% if job.description %}
-                <div class="card shadow-lg border-0 mb-3" style="margin-left: -20px;">
+                <div class="card shadow-lg border-0 mb-3">
                     <div class="card-body p-4">
                         <div class="job-description">
                             <h3 class="h4 mb-3">Requirements Description</h3>
@@ -276,7 +401,7 @@
                 
                 <!-- Your Responsibilities Card -->
                 {% if job.requirements and not job.requirements|parse_requirements %}
-                <div class="card shadow-lg border-0 mb-3" style="margin-left: -20px;">
+                <div class="card shadow-lg border-0 mb-3">
                     <div class="card-body p-4">
                         <div class="job-requirements">
                             <h3 class="h4 mb-3">Your Responsibilities</h3>
@@ -288,7 +413,7 @@
                 
                 <!-- About Company Card -->
                 {% if job.company or job.location or job.job_url %}
-                <div class="card shadow-lg border-0 mb-5" style="margin-left: -20px;">
+                <div class="card shadow-lg border-0 mb-5">
                     <div class="card-body p-4">
                         <div class="about-company">
                             <h3 class="h4 mb-3">About {{ job.company }}</h3>
@@ -323,7 +448,7 @@
                 {% endif %}
 
                 {% if user.is_staff or job.created_by == user %}
-                <div class="text-end mb-5" style="margin-left: -20px;">
+                <div class="text-end mb-5">
                     <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteJobModal">
                         <i class="bi bi-trash me-1"></i>Delete Job
                     </button>
@@ -332,7 +457,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="sticky-top" style="top: 80px; z-index: 100;">
+                <div class="sticky-top d-none d-lg-block" style="top: 80px; z-index: 100;">
                     <div class="mb-4">
                         {% if job.job_url %}
                             <a href="{{ job.job_url|add_utm_params }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
@@ -351,10 +476,30 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Mobile Similar Jobs Section -->
+                <div class="d-lg-none mb-5 mt-4">
+                    <h3 class="h4 mb-3">Similar Jobs</h3>
+                    <div id="mobile-similar-jobs-container">
+                        {% include 'similar_jobs_snippet.html' with similar_jobs=similar_jobs %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Mobile Apply Button (fixed at bottom) -->
+<div class="d-lg-none fixed-bottom-apply-btn" id="mobileApplyButton">
+    {% if job.job_url %}
+        <a href="{{ job.job_url|add_utm_params }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
+    {% else %}
+        <form method="post" enctype="multipart/form-data" id="mobileApplicationForm">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg w-100">Apply Now</button>
+        </form>
+    {% endif %}
+</div>
 
 <!-- Delete Job Modal -->
 {% if user.is_staff or job.created_by == user %}
@@ -540,7 +685,8 @@
         gap: 8px !important;
     }
 
-    .job-qualifications .badge {
+    .job-qualifications .badge,
+    .nice-to-have-qualifications .badge {
         display: inline-block !important;
         padding: 6px 16px !important;
         background-color: #f5f5f7 !important;
@@ -555,7 +701,8 @@
     }
     
     /* Dark mode adjustments for badges */
-    [data-bs-theme="dark"] .job-qualifications .badge {
+    [data-bs-theme="dark"] .job-qualifications .badge,
+    [data-bs-theme="dark"] .nice-to-have-qualifications .badge {
         background-color: rgba(255, 255, 255, 0.1) !important;
         color: rgba(255, 255, 255, 0.8) !important;
         border: none !important;
@@ -584,5 +731,142 @@
     .badge.bg-primary, .badge.bg-success {
         color: white !important;
     }
+    
+    /* Additional padding at bottom to account for sticky apply button on mobile */
+    @media (max-width: 768px) {
+        .mb-5 {
+            margin-bottom: 5rem !important;
+        }
+        
+        .mobile-section {
+            margin-top: 0 !important;
+            padding-left: 1rem !important;
+            padding-right: 0.5rem !important;
+            width: 100% !important;
+            overflow-x: hidden !important;
+            padding-top: 0 !important;
+        }
+        
+        .container.left-aligned {
+            overflow-x: visible !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            padding-left: 1rem !important;
+            padding-right: 0.5rem !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+        
+        body {
+            overflow-x: hidden !important;
+        }
+    }
+
+    /* Desktop styles for the job metadata section */
+    @media (min-width: 769px) {
+        .job-meta {
+            padding-left: 114px !important;
+        }
+    }
+
+    /* Mobile Apply Button Styles */
+    .sticky-apply-btn {
+        font-weight: 600 !important;
+        padding: 0.8rem 1.2rem !important;
+        font-size: 1.1rem !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Ensure bottom sticky positioning works across all mobile browsers */
+    @supports (-webkit-touch-callout: none) {
+        /* iOS specific styles */
+        .mobile-sticky-apply {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            bottom: 0 !important;
+        }
+        
+        /* Add padding to the bottom of the page to prevent content from being hidden behind the sticky button */
+        body {
+            padding-bottom: 70px !important;
+        }
+    }
+
+    /* Fixed bottom apply button */
+    .fixed-bottom-apply-btn {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 15px;
+        background: var(--bs-body-bg);
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+        width: 100%;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    [data-bs-theme="dark"] .fixed-bottom-apply-btn {
+        background: var(--bs-dark-bg-subtle);
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .fixed-bottom-apply-btn .btn {
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 12px 15px;
+        border-radius: 8px;
+    }
+    
+    /* Add bottom padding to body to prevent content from being hidden */
+    @media (max-width: 768px) {
+        body {
+            padding-bottom: 80px !important;
+        }
+    }
 </style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hide apply button when menu is opened
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        const applyButton = document.getElementById('mobileApplyButton');
+        
+        if (navbarToggler && applyButton) {
+            navbarToggler.addEventListener('click', function() {
+                // Check if navbar is expanded or collapsed
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                
+                if (!isExpanded) {
+                    // Menu is being opened (will be expanded after click)
+                    applyButton.style.display = 'none';
+                } else {
+                    // Menu is being closed (will be collapsed after click)
+                    setTimeout(function() {
+                        applyButton.style.display = 'block';
+                    }, 300); // Small delay to match menu animation
+                }
+            });
+            
+            // Also listen for collapse/show events on the navbar
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            if (navbarCollapse) {
+                navbarCollapse.addEventListener('hidden.bs.collapse', function() {
+                    // Menu has been closed
+                    applyButton.style.display = 'block';
+                });
+                
+                navbarCollapse.addEventListener('shown.bs.collapse', function() {
+                    // Menu has been opened
+                    applyButton.style.display = 'none';
+                });
+            }
+        }
+    });
+</script>
 {% endblock %}
