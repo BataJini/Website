@@ -173,13 +173,6 @@
                                 <i class="bi bi-calendar-check fs-5 me-1"></i>
                                 <span class="ms-2">Posted {{ job.posted_date|timesince|remove_minutes }} ago</span>
                             </div>
-                            {% if user.is_staff or job.created_by == user %}
-                            <div class="ms-auto">
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteJobModal">
-                                    <i class="bi bi-trash me-2"></i>Delete Job
-                                </button>
-                            </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -328,24 +321,34 @@
                     </div>
                 </div>
                 {% endif %}
+
+                {% if user.is_staff or job.created_by == user %}
+                <div class="text-end mb-5" style="margin-left: -20px;">
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteJobModal">
+                        <i class="bi bi-trash me-1"></i>Delete Job
+                    </button>
+                </div>
+                {% endif %}
             </div>
 
             <div class="col-lg-4">
-                <div class="mb-4">
-                    {% if job.job_url %}
-                        <a href="{{ job.job_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
-                    {% else %}
-                        <form method="post" enctype="multipart/form-data" id="applicationForm">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary btn-lg w-100">Apply Now</button>
-                        </form>
-                    {% endif %}
-                </div>
+                <div class="sticky-top" style="top: 80px; z-index: 100;">
+                    <div class="mb-4">
+                        {% if job.job_url %}
+                            <a href="{{ job.job_url|add_utm_params }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
+                        {% else %}
+                            <form method="post" enctype="multipart/form-data" id="applicationForm">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-lg w-100">Apply Now</button>
+                            </form>
+                        {% endif %}
+                    </div>
 
-                <div class="sticky-top mb-5" style="top: 80px; z-index: 100;">
-                    <h3 class="h4 mb-3">Similar Jobs</h3>
-                    <div id="similar-jobs-container">
-                        {% include 'similar_jobs_snippet.html' with similar_jobs=similar_jobs %}
+                    <div class="mb-5">
+                        <h3 class="h4 mb-3">Similar Jobs</h3>
+                        <div id="similar-jobs-container">
+                            {% include 'similar_jobs_snippet.html' with similar_jobs=similar_jobs %}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -3,12 +3,28 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
+from django.core.exceptions import ValidationError
 
 class CustomUser(AbstractUser):
+    USER_TYPE_CHOICES = [
+        ('candidate', 'Candidate'),
+        ('recruiter', 'Recruiter'),
+    ]
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=255)
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='candidate')
+    company_name = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        super().clean()
+        if self.user_type == 'recruiter':
+            if not self.company_name:
+                raise ValidationError({'company_name': 'Company name is required for recruiters.'})
+            if not self.phone_number:
+                raise ValidationError({'phone_number': 'Phone number is required for recruiters.'})
 
 class Job(models.Model):
     title = models.CharField(_('Title'), max_length=255)

@@ -209,10 +209,6 @@
     transform: none;
 }
 
-[data-bs-theme="dark"] .search-container {
-    background-color: rgba(30, 30, 30, 0.95) !important;
-    border-radius: var(--border-radius-lg) !important;
-}
 
 [data-bs-theme="dark"] .search-input-wrapper {
     background-color: rgba(30, 30, 30, 0.95) !important;

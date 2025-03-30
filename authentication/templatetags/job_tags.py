@@ -193,3 +193,31 @@ def limit_title_tags(job_title, tags):
     if len(job_title) > 40:
         return tags[:3]
     return tags
+
+@register.filter
+def add_utm_params(url):
+    """
+    Add UTM parameters to job URLs
+    """
+    from datetime import datetime
+    
+    # Get current month name in lowercase
+    current_month = datetime.now().strftime('%B').lower()
+    
+    # Define UTM parameters
+    utm_params = {
+        'utm_source': 'jobhub',  # our job board name
+        'utm_medium': 'job_post',
+        'utm_campaign': f'{current_month}_hiring'
+    }
+    
+    # Check if URL already has parameters
+    if '?' in url:
+        utm_string = '&'
+    else:
+        utm_string = '?'
+    
+    # Build UTM string
+    utm_string += '&'.join([f'{key}={value}' for key, value in utm_params.items()])
+    
+    return f'{url}{utm_string}'

@@ -148,7 +148,7 @@
     }
 
     .job-listing[data-featured="true"]:hover {
-        background: white !important;
+        background: rgba(255, 236, 179, 0.3) !important;
     }
 
     .job-listing:hover .job-listing-logo {
@@ -229,7 +229,7 @@
     }
 
     [data-bs-theme="dark"] .job-listing[data-featured="true"]:hover {
-        background: rgba(255, 236, 179, 0.15) !important;
+        background: rgba(255, 236, 179, 0.1) !important;
     }
 
     [data-bs-theme="dark"] .job-listing-title {
@@ -410,7 +410,11 @@
             </div>
             <div class="job-listing-right">
                 <div class="job-listing-salary">
-                    {{ job.salary }}
+                    {% if job.salary %}
+                        {{ job.salary }}
+                    {% else %}
+                        Undisclosed
+                    {% endif %}
                 </div>
                 <div class="job-listing-tags">
                     {% if job.tags.all %}

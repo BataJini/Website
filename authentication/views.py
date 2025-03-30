@@ -191,18 +191,33 @@ def job_detail(request, job_id):
     return render(request, 'authentication/job_detail.html', context)
 
 def signup_view(request):
+    # Determine user_type from GET on initial load, or POST on submission
     if request.method == 'POST':
+        user_type = request.POST.get('user_type', 'candidate')
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, 'Account created successfully!')
+            if user.user_type == 'recruiter':
+                messages.success(request, 'Company account created successfully! You can now post jobs.')
+            else:
+                messages.success(request, 'Candidate account created successfully! You can now apply for jobs.')
             return redirect('authentication:home')
         else:
+            # Ensure the correct user_type is passed back on validation error
             messages.error(request, 'Please correct the errors below.')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'authentication/signup.html', {'form': form})
+    else: # GET request
+        user_type = request.GET.get('type', 'candidate')
+        if user_type not in ['candidate', 'recruiter']:
+            user_type = 'candidate'
+        form = CustomUserCreationForm(initial={'user_type': user_type})
+    
+    context = {
+        'form': form,
+        'user_type': user_type, # Use the determined user_type here
+        'title': 'Create Company Account' if user_type == 'recruiter' else 'Create Candidate Account'
+    }
+    return render(request, 'authentication/signup.html', context)
 
 def login_view(request):
     if request.method == 'POST':

@@ -77,7 +77,7 @@ class Command(BaseCommand):
                 
                 # For other dictionary formats (where 'from'/'to' might not exist)
                 currency = salary_data.get('currency', 'PLN')
-                return f"Salary in {currency}"
+                return "Undisclosed"
                     
             # Default fallback - return as simple string
             if isinstance(salary_data, str):
@@ -89,7 +89,7 @@ class Command(BaseCommand):
             
             # Try to extract currency from the dictionary if possible
             if isinstance(salary_data, dict) and 'currency' in salary_data:
-                return f"Salary in {salary_data['currency']}"
+                return "Undisclosed"
             
             return "Salary not specified"
 

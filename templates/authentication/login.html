@@ -1,36 +1,265 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load django_bootstrap5 %}
+{% load i18n %}
 
-{% block title %}Login - JobHub{% endblock %}
+{% block title %}{{ title }} - JobHub{% endblock %}
+
+{% block extra_css %}
+<style>
+    .signup-container {
+        max-width: 600px;
+        padding: 0;
+        margin: -50px auto 4rem;
+    }
+
+    .auth-tabs {
+        display: flex;
+        border-bottom: 2px solid #e9ecef;
+        margin-bottom: 1rem;
+    }
+
+    .auth-tab {
+        flex: 1;
+        text-align: center;
+        padding: 1rem;
+        color: #6c757d;
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        transition: color 0.2s ease;
+    }
+
+    .auth-tab:hover {
+        color: #0d6efd;
+        text-decoration: none;
+    }
+
+    .auth-tab.active {
+        color: #0d6efd;
+        font-weight: 600;
+    }
+
+    .auth-tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #0d6efd;
+    }
+
+    .signup-container .form-control {
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .signup-container .form-control:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    .signup-container .form-control::placeholder {
+        color: #adb5bd;
+    }
+
+    .signup-container .form-label {
+        font-size: 0.95rem;
+        color: #495057;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .signup-container .btn-next {
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.75rem;
+        font-weight: 500;
+        width: 100%;
+        font-size: 0.95rem;
+        transition: background-color 0.15s ease-in-out;
+    }
+
+    .signup-container .btn-next:hover {
+        background-color: #0b5ed7;
+    }
+
+    /* Password field container styles */
+    .password-container {
+        position: relative;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        padding: 0;
+        color: #6c757d;
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        .signup-container {
+            padding: 0 15px;
+        }
+
+        .auth-tabs {
+            margin-bottom: 1.5rem;
+        }
+
+        .signup-container .form-control {
+            font-size: 16px;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6 col-lg-5">
-        <div class="auth-container">
-            <h1 class="auth-title">Welcome Back</h1>
-            <form method="post">
-                {% csrf_token %}
-                {% bootstrap_form form %}
-                <div class="d-grid gap-2 mt-4">
-                    <button type="submit" class="btn btn-primary">Log In</button>
-                </div>
-                <p class="text-center mt-3">
-                    Don't have an account? <a href="{% url 'authentication:signup' %}" class="text-decoration-none fw-bold">Sign up</a>
-                </p>
-            </form>
+<div class="container p-0" id="auth-content">
+    <div class="signup-container">
+        <div class="auth-tabs">
+            <a href="{% url 'authentication:login' %}" class="auth-tab auth-nav-link active">{% trans "Log in" %}</a>
+            <a href="{% url 'authentication:signup' %}" class="auth-tab auth-nav-link">{% trans "Sign up" %}</a>
         </div>
+
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="{{ form.username.id_for_label }}" class="form-label">{% trans "E-mail" %}</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="invalid-feedback d-block">{{ form.username.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label for="{{ form.password.id_for_label }}" class="form-label">{% trans "Password" %}</label>
+                <div class="password-container">
+                    <input type="password" name="password" class="form-control" id="{{ form.password.id_for_label }}" placeholder="{% trans 'Enter your password' %}" required>
+                    <button type="button" class="password-toggle" data-target="{{ form.password.id_for_label }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588M5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
+                        </svg>
+                    </button>
+                </div>
+                {% if form.password.errors %}
+                    <div class="invalid-feedback d-block">{{ form.password.errors }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn-next mb-5">{% trans "Log in" %}</button>
+        </form>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Focus the first input field
-        const firstInput = document.querySelector('form input');
+    function initializeAuthForm() {
+        // Focus the first visible input field
+        const firstInput = document.querySelector('#auth-content form input:not([type="hidden"])');
         if (firstInput) {
             firstInput.focus();
+        }
+
+        // Add Bootstrap classes to form controls
+        document.querySelectorAll('#auth-content .form-control').forEach(input => {
+            input.classList.add('form-control-lg');
+        });
+
+        // Initialize password toggle buttons
+        document.querySelectorAll('.password-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const passwordInput = document.getElementById(targetId);
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    this.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                    </svg>`;
+                } else {
+                    passwordInput.type = 'password';
+                    this.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588M5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
+                    </svg>`;
+                }
+            });
+        });
+    }
+
+    function handleAuthTabClick(event) {
+        if (!event.target.matches('.auth-nav-link')) {
+            return; // Ignore clicks that aren't on the nav links
+        }
+        event.preventDefault();
+        let targetUrl = event.target.href;
+        const authContent = document.getElementById('auth-content');
+
+        fetch(targetUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newContent = doc.getElementById('auth-content').innerHTML;
+                const newTitle = doc.querySelector('title').innerText;
+
+                authContent.innerHTML = newContent;
+                document.title = newTitle;
+                window.history.pushState({path: targetUrl}, '', targetUrl);
+                initializeAuthForm();
+            })
+            .catch(error => {
+                console.error('Error fetching auth content:', error);
+                window.location.href = targetUrl;
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeAuthForm();
+
+        const authContainer = document.getElementById('auth-content');
+        if (authContainer) {
+            authContainer.addEventListener('click', handleAuthTabClick);
+        }
+    });
+
+    window.addEventListener('popstate', function(event) {
+        const authContent = document.getElementById('auth-content');
+        if (authContent && (window.location.pathname === '/login/' || window.location.pathname === '/signup/')) {
+             fetch(window.location.href)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newContent = doc.getElementById('auth-content').innerHTML;
+                    const newTitle = doc.querySelector('title').innerText;
+                    authContent.innerHTML = newContent;
+                    document.title = newTitle;
+                    initializeAuthForm();
+                })
+                .catch(error => console.error('Error fetching content on popstate:', error));
         }
     });
 </script>

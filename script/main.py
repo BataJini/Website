@@ -68,7 +68,7 @@ def format_salary(salary_data):
             
             # For other dictionary formats (where 'from'/'to' might not exist)
             currency = salary_data.get('currency', 'PLN')
-            return f"Salary in {currency}"
+            return "Undisclosed"
                 
         # Default fallback
         return str(salary_data)
