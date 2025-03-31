@@ -2,6 +2,29 @@
 
 @import url("https://fonts.googleapis.com/css?family=Inter:regular,500,600,700&display=swap");
 
+/* Fix for scrolling issues when hovering navbar */
+html, body {
+  overflow-y: auto !important;
+  height: auto !important;
+  position: relative !important;
+}
+
+body.menu-open {
+  overflow-y: hidden !important;
+}
+
+/* Prevent any element from blocking scroll */
+.navbar,
+.navbar-expand-lg,
+.navbar-collapse,
+.navbar-nav,
+.nav-link,
+.dropdown,
+.dropdown-menu,
+.navbar *:hover {
+  overflow: visible !important;
+}
+
 /* ************COMMON************ */
 
 .logo {
@@ -13,12 +36,15 @@ body {
   font-family: "Inter", sans-serif;
   font-size: 1.1rem;
   color: #303a4d;
+  overflow-y: auto !important;
 }
 
 [class*="__container"] {
   max-width: 72.624rem;
+  width: 100%;
   margin: 0 auto;
   padding: 0 0.938rem;
+  box-sizing: border-box;
 }
 
 .button {
@@ -523,8 +549,9 @@ body {
   margin-bottom: 15px;
 }
 
+/* Fixed iframe width to prevent horizontal scrolling */
 iframe {
-  width: 100vw;
+  width: 100%;
   height: 482px;
   filter: grayscale(100%);
 }
@@ -1653,6 +1680,7 @@ body {
   line-height: 1.6;
   color: var(--dark-color);
   background-color: #f5f7fa;
+  overflow-y: auto !important;
 }
 
 .wrapper {
@@ -1929,6 +1957,19 @@ body {
 
 /* Responsive styles */
 @media (max-width: 768px) {
+  .header__container,
+  [class*="__container"] {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+  }
+  
+  .wrapper {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
   .header__navigation {
     position: relative;
   }
@@ -2669,4 +2710,23 @@ body {
     transform: translateY(-2px) scale(1.01) !important;
     box-shadow: 0 6px 16px rgba(var(--bs-primary-rgb), 0.35) !important;
   }
+}
+
+/* Fix for navbar hover causing body to be unscrollable */
+.navbar, 
+.navbar:hover,
+.nav-link:hover,
+.menu__link:hover,
+.navbar-brand:hover {
+  overflow: visible !important;
+}
+
+.navbar *:hover {
+  overflow: visible !important;
+}
+
+/* Ensure dropdown menus don't block scrolling */
+.dropdown-menu, 
+.dropdown-menu.show {
+  overflow: visible !important;
 }

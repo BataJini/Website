@@ -1,0 +1,74 @@
+/* Mobile fixes for job categories horizontal scrolling */
+@media (max-width: 768px) {
+    .job-categories-wrapper {
+        width: 100%;
+        padding: 0;
+        margin-bottom: 15px;
+        position: relative;
+    }
+    
+    .d-flex.align-items-center {
+        display: flex;
+        position: relative;
+    }
+    
+    .filter-button-wrapper {
+        position: absolute;
+        left: 10px;
+        top: 0;
+        z-index: 10;
+        background: var(--bs-body-bg);
+        padding-right: 8px;
+        display: block;
+    }
+    
+    .filter-button-wrapper .btn-filters {
+        flex-shrink: 0;
+        white-space: nowrap;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .categories-scroll-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        padding-left: 85px; /* Width of filter button + padding */
+        position: relative;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+    
+    .categories-scroll-wrapper::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+    
+    .job-categories {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        padding-bottom: 5px !important;
+        gap: 8px !important;
+        margin-right: 15px;
+    }
+    
+    .job-categories .btn {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+    }
+    
+    /* Add gradient fade effect on the right side */
+    .categories-scroll-wrapper:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 30px;
+        background: linear-gradient(to right, transparent, var(--bs-body-bg));
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    /* Hide vertical divider on mobile completely */
+    .vr {
+        display: none !important;
+    }
+} 

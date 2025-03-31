@@ -26,10 +26,25 @@
     }
 
     domReady(() => {
+        // Force enable scrolling on document/body
+        const enableScrolling = function() {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.height = '';
+            document.documentElement.style.overflow = '';
+            document.documentElement.style.position = '';
+            document.documentElement.style.height = '';
+        };
+        
+        // Ensure scrolling is always enabled
+        document.addEventListener('mouseover', enableScrolling, true);
+
         // Mobile menu toggle functionality
         const toggleMenu = function() {
             document.body.classList.toggle('menu-open');
             document.documentElement.classList.toggle('menu-open');
+            // Always re-enable scrolling after menu operations
+            enableScrolling();
         };
 
         // Menu toggle event handlers
@@ -57,7 +72,6 @@
         safeAddEventListener('.navbar-collapse .dropdown-toggle', 'click', function(e) {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
-                e.stopPropagation();
                 
                 const parent = this.closest('.dropdown');
                 const menu = parent.querySelector('.dropdown-menu');
@@ -77,6 +91,9 @@
                     menu.classList.add('show');
                     this.setAttribute('aria-expanded', 'true');
                 }
+                
+                // Re-enable scrolling
+                enableScrolling();
             }
         });
         
@@ -253,6 +270,50 @@
             animateOnScroll(); // Run once on page load
         } catch (error) {
             console.error("Animate on scroll error:", error);
+        }
+
+        // Add this new function to ensure body remains scrollable on navbar hover
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            // Add mouseenter and leave events to ensure scrolling is enabled
+            navbar.addEventListener('mouseenter', function() {
+                document.body.style.overflow = 'auto';
+                document.body.style.overflowY = 'auto';
+                document.documentElement.style.overflow = 'auto';
+                document.documentElement.style.overflowY = 'auto';
+            });
+            
+            navbar.addEventListener('mouseleave', function() {
+                document.body.style.overflow = 'auto';
+                document.body.style.overflowY = 'auto';
+                document.documentElement.style.overflow = 'auto';
+                document.documentElement.style.overflowY = 'auto';
+            });
+            
+            // Create a MutationObserver to watch for style changes that might block scrolling
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === 'style') {
+                        document.body.style.overflow = 'auto';
+                        document.body.style.overflowY = 'auto';
+                        document.documentElement.style.overflow = 'auto';
+                        document.documentElement.style.overflowY = 'auto';
+                    }
+                });
+            });
+            
+            // Observe the body and html elements for style changes
+            observer.observe(document.body, { attributes: true });
+            observer.observe(document.documentElement, { attributes: true });
+            
+            // Monitor all hover events on navbar elements
+            const navbarElements = navbar.querySelectorAll('*');
+            navbarElements.forEach(function(element) {
+                element.addEventListener('mouseenter', function() {
+                    document.body.style.overflow = 'auto';
+                    document.body.style.overflowY = 'auto';
+                });
+            });
         }
     });
 })();

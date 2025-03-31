@@ -45,24 +45,26 @@
                             <i class="bi bi-funnel me-2"></i>{% trans "Filters" %}
                         </button>
                         <div class="vr mx-2 d-none d-md-inline-block"></div>
-                        <button class="btn btn-category" type="button" data-category="it">
-                            <i class="bi bi-laptop me-2"></i>{% trans "IT" %}
-                        </button>
-                        <button class="btn btn-category" type="button" data-category="marketing">
-                            <i class="bi bi-megaphone me-2"></i>{% trans "Marketing" %}
-                        </button>
-                        <button class="btn btn-category" type="button" data-category="customer-service">
-                            <i class="bi bi-headset me-2"></i>{% trans "Customer Service" %}
-                        </button>
-                        <button class="btn btn-category" type="button" data-category="sales">
-                            <i class="bi bi-graph-up me-2"></i>{% trans "Sales" %}
-                        </button>
-                        <button class="btn btn-category" type="button" data-category="hr">
-                            <i class="bi bi-people me-2"></i>{% trans "HR" %}
-                        </button>
-                        <button class="btn btn-category" type="button" data-category="engineering">
-                            <i class="bi bi-gear me-2"></i>{% trans "Engineering" %}
-                        </button>
+                        <div class="categories-scroll-container">
+                            <button class="btn btn-category" type="button" data-category="it">
+                                <i class="bi bi-laptop me-2"></i>{% trans "IT" %}
+                            </button>
+                            <button class="btn btn-category" type="button" data-category="marketing">
+                                <i class="bi bi-megaphone me-2"></i>{% trans "Marketing" %}
+                            </button>
+                            <button class="btn btn-category" type="button" data-category="customer-service">
+                                <i class="bi bi-headset me-2"></i>{% trans "Customer Service" %}
+                            </button>
+                            <button class="btn btn-category" type="button" data-category="sales">
+                                <i class="bi bi-graph-up me-2"></i>{% trans "Sales" %}
+                            </button>
+                            <button class="btn btn-category" type="button" data-category="hr">
+                                <i class="bi bi-people me-2"></i>{% trans "HR" %}
+                            </button>
+                            <button class="btn btn-category" type="button" data-category="engineering">
+                                <i class="bi bi-gear me-2"></i>{% trans "Engineering" %}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -284,6 +286,272 @@
         if (jobListingsContainer) {
             const observer = new MutationObserver(checkFeaturedBadges);
             observer.observe(jobListingsContainer, {childList: true, subtree: true});
+        }
+        
+        // Fix search tags container scrolling
+        const searchTags = document.getElementById('searchTags');
+        if (searchTags) {
+            // Explicitly set the container styles
+            Object.assign(searchTags.style, {
+                display: 'flex',
+                flexWrap: 'nowrap',
+                gap: '0.5rem',
+                height: '32px',
+                minHeight: '32px',
+                maxHeight: '32px',
+                overflowX: 'auto',
+                overflowY: 'hidden',
+                whiteSpace: 'nowrap',
+                scrollbarWidth: 'none',  // Firefox
+                msOverflowStyle: 'none', // IE and Edge
+                padding: '0 0.25rem',
+                alignItems: 'center'
+            });
+            
+            // Add CSS for WebKit browsers
+            const style = document.createElement('style');
+            style.textContent = `
+                #searchTags::-webkit-scrollbar {
+                    display: none;
+                }
+                
+                .search-tag {
+                    flex-shrink: 0;
+                }
+                
+                @media (max-width: 768px) {
+                    .search-input-wrapper {
+                        padding-left: 0.5rem !important;
+                    }
+                    
+                    #visibleSearchInput {
+                        text-align: left !important;
+                        padding-left: 0.5rem !important;
+                    }
+                    
+                    #visibleSearchInput::placeholder {
+                        text-align: left !important;
+                    }
+                }
+                
+                .search-clear-button {
+                    position: absolute;
+                    right: 60px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: none;
+                    border: none;
+                    color: var(--bs-secondary-color);
+                    font-size: 1rem;
+                    padding: 0.25rem;
+                    cursor: pointer;
+                    z-index: 10;
+                    opacity: 0.7;
+                    transition: all 0.2s ease;
+                    display: none;
+                }
+                
+                .search-clear-button:hover {
+                    opacity: 1;
+                    color: var(--primary-color);
+                }
+                
+                .search-clear-button.visible {
+                    display: block;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Add clear button to search input wrapper
+            const searchInputWrapper = document.querySelector('.search-input-wrapper');
+            if (searchInputWrapper) {
+                const clearButton = document.createElement('button');
+                clearButton.type = 'button';
+                clearButton.className = 'search-clear-button';
+                clearButton.innerHTML = '<i class="bi bi-x-circle"></i>';
+                clearButton.setAttribute('aria-label', 'Clear search');
+                searchInputWrapper.appendChild(clearButton);
+                
+                // Show clear button when there are tags
+                const updateClearButtonVisibility = function() {
+                    if (searchTags.children.length > 0) {
+                        clearButton.classList.add('visible');
+                    } else {
+                        clearButton.classList.remove('visible');
+                    }
+                };
+                
+                // Handle clear button click
+                clearButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Clear all search tags
+                    searchTags.innerHTML = '';
+                    
+                    // Reset all category buttons
+                    document.querySelectorAll('.btn-category').forEach(btn => {
+                        btn.classList.remove('active');
+                        const btnIcon = btn.querySelector('i');
+                        if (btnIcon) {
+                            btnIcon.style.opacity = '0.7';
+                        }
+                    });
+                    
+                    // Update search input
+                    const hiddenSearchInput = document.getElementById('hiddenSearchInput');
+                    if (hiddenSearchInput) {
+                        hiddenSearchInput.value = '';
+                    }
+                    
+                    // Reset placeholder
+                    const visibleSearchInput = document.getElementById('visibleSearchInput');
+                    if (visibleSearchInput) {
+                        const totalJobs = visibleSearchInput.getAttribute('data-total-jobs');
+                        if (totalJobs) {
+                            visibleSearchInput.placeholder = `${totalJobs} offers`;
+                        }
+                    }
+                    
+                    // Hide clear button
+                    updateClearButtonVisibility();
+                    
+                    // Perform search to update results
+                    if (typeof performAjaxSearch === 'function') {
+                        performAjaxSearch();
+                    } else {
+                        // If AJAX search is not available, submit the form
+                        document.querySelector('form.search-form').submit();
+                    }
+                });
+                
+                // Monitor search tags container for changes
+                const tagsObserver = new MutationObserver(function(mutations) {
+                    // Update clear button visibility
+                    updateClearButtonVisibility();
+                    
+                    // When tags are added, scroll to the end to show new tags
+                    searchTags.scrollLeft = searchTags.scrollWidth;
+                    
+                    // Check initial state of category buttons based on search tags
+                    mutations.forEach(mutation => {
+                        if (mutation.type === 'childList') {
+                            // Get all current tag texts
+                            const currentTagTexts = Array.from(searchTags.querySelectorAll('.search-tag span'))
+                                .map(span => span.textContent.trim());
+                            
+                            // Update category buttons based on tag presence
+                            document.querySelectorAll('.btn-category').forEach(btn => {
+                                const btnText = btn.querySelector('i').nextSibling.textContent.trim();
+                                const isTagPresent = currentTagTexts.includes(btnText);
+                                
+                                // Set button state based on tag presence
+                                if (isTagPresent && !btn.classList.contains('active')) {
+                                    btn.classList.add('active');
+                                    const btnIcon = btn.querySelector('i');
+                                    if (btnIcon) {
+                                        btnIcon.style.opacity = '1';
+                                    }
+                                } else if (!isTagPresent && btn.classList.contains('active')) {
+                                    btn.classList.remove('active');
+                                    const btnIcon = btn.querySelector('i');
+                                    if (btnIcon) {
+                                        btnIcon.style.opacity = '0.7';
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
+                
+                // Watch for changes to the search tags container
+                tagsObserver.observe(searchTags, { childList: true });
+                
+                // Initial check for category buttons
+                updateClearButtonVisibility();
+            }
+            
+            // Create a MutationObserver to watch for added tags
+            const tagsObserver = new MutationObserver(function(mutations) {
+                // When tags are added, scroll to the end to show new tags
+                searchTags.scrollLeft = searchTags.scrollWidth;
+            });
+            
+            // Watch for changes to the search tags container
+            tagsObserver.observe(searchTags, { childList: true });
+            
+            // Override the original createSearchTag function to add scrolling
+            if (typeof createSearchTag === 'function') {
+                const originalCreateSearchTag = createSearchTag;
+                window.createSearchTag = function(text, iconClass, dataAttribute, dataValue) {
+                    const tag = originalCreateSearchTag(text, iconClass, dataAttribute, dataValue);
+                    searchTags.scrollLeft = searchTags.scrollWidth;
+                    return tag;
+                };
+            }
+        }
+        
+        // Fix search input wrapper height
+        const searchInputWrapper = document.querySelector('.search-input-wrapper');
+        if (searchInputWrapper) {
+            Object.assign(searchInputWrapper.style, {
+                height: '52px',
+                minHeight: '52px',
+                maxHeight: '52px',
+                overflow: 'hidden'
+            });
+        }
+        
+        // Improve mobile search experience
+        const searchButton = document.querySelector('.search-button');
+        const visibleSearchInput = document.getElementById('visibleSearchInput');
+        
+        if (searchButton && searchTags) {
+            // Ensure search button doesn't interfere with tag clicks on mobile
+            searchButton.addEventListener('touchstart', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Ensure tags have enough space and don't overlap with search button
+            const ensureTagsVisibility = function() {
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    // Add right padding to ensure tags don't overlap with the button
+                    searchTags.style.paddingRight = '40px';
+                    
+                    // Add tap behavior to improve mobile interaction
+                    const tags = searchTags.querySelectorAll('.search-tag');
+                    tags.forEach(tag => {
+                        tag.style.minHeight = '28px';
+                        tag.style.display = 'inline-flex';
+                    });
+                } else {
+                    searchTags.style.paddingRight = '0.25rem';
+                }
+            };
+            
+            // Call initially
+            ensureTagsVisibility();
+            
+            // Call on resize
+            window.addEventListener('resize', ensureTagsVisibility);
+            
+            // Make search form more responsive on mobile
+            if (visibleSearchInput) {
+                visibleSearchInput.addEventListener('focus', function() {
+                    if (window.innerWidth <= 768) {
+                        searchInputWrapper.style.transform = 'scale(1.02)';
+                        searchInputWrapper.style.boxShadow = '0 8px 50px rgba(0, 0, 0, 0.25)';
+                    }
+                });
+                
+                visibleSearchInput.addEventListener('blur', function() {
+                    if (window.innerWidth <= 768) {
+                        searchInputWrapper.style.transform = '';
+                        searchInputWrapper.style.boxShadow = '';
+                    }
+                });
+            }
         }
     });
 </script>

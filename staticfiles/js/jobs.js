@@ -1,4 +1,3 @@
-// Jobs functionality for JobHub
 document.addEventListener('DOMContentLoaded', function() {
     // Double Range Slider functionality
     const minRange = document.getElementById('minSalaryRange');
@@ -796,7 +795,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 visibleSearchInput.value = '';
                 visibleSearchInput.placeholder = '';
             } else {
-                visibleSearchInput.placeholder = "19566 offers";
+                // Get the total jobs from the data attribute
+                const totalJobs = visibleSearchInput.getAttribute('data-total-jobs');
+                if (totalJobs) {
+                    visibleSearchInput.placeholder = `${totalJobs} offers`;
+                }
             }
         }
     }
@@ -929,53 +932,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update selected tags in storage
     updateSelectedTags();
 
-    // Add a reset button to clear selected tags (only if it doesn't exist)
-    if (!document.querySelector('.reset-tags-btn')) {
-        const resetButton = document.createElement('button');
-        resetButton.className = 'btn btn-sm btn-outline-light mt-2 reset-tags-btn';
-        resetButton.textContent = 'Reset Tags';
-        resetButton.style.fontSize = '0.7rem';
-        resetButton.style.padding = '0.2rem 0.5rem';
-        resetButton.style.opacity = '0.7';
-        resetButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Clear search tags
-            const searchTagsContainer = document.getElementById('searchTags');
-            if (searchTagsContainer) {
-                searchTagsContainer.innerHTML = '';
-                updateSearchInput();
-            }
-            
-            // Re-randomize hero tags
-            const heroTagsContainer = document.getElementById('heroTags');
-            if (heroTagsContainer) {
-                heroTagsContainer.innerHTML = '';
-                
-                // Get new random tags
-                const shuffledTags = [...allTags].sort(() => 0.5 - Math.random()).slice(0, 5);
-                
-                // Create and append new tag elements
-                shuffledTags.forEach(tag => {
-                    const tagElement = createTagElement(tag, false);
-                    heroTagsContainer.appendChild(tagElement);
-                });
-                
-                // Update storage with new unselected tags
-                updateSelectedTags();
-                
-                // Update search results
-                performAjaxSearch();
-            }
-        });
-
-        // Add the reset button after the hero tags
-        const heroTagsContainer = document.getElementById('heroTags');
-        if (heroTagsContainer) {
-            heroTagsContainer.parentNode.appendChild(resetButton);
-        }
-    }
-
     // AJAX Search Functionality
     const searchForm = document.querySelector("form.search-form");
     const searchTagsContainer = document.getElementById('searchTags');
@@ -1017,7 +973,11 @@ document.addEventListener('DOMContentLoaded', function() {
         visibleSearchInput.addEventListener('blur', function() {
             const tags = document.querySelectorAll('.search-tag');
             if (tags.length === 0 && !this.value) {
-                this.placeholder = "19566 offers";
+                // Get the total jobs from the data attribute
+                const totalJobs = this.getAttribute('data-total-jobs');
+                if (totalJobs) {
+                    this.placeholder = `${totalJobs} offers`;
+                }
             }
         });
     }
@@ -1086,7 +1046,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     
                     if (visibleSearchInput && searchTagsContainer.children.length === 0) {
-                        visibleSearchInput.placeholder = '19566 offers';
+                        // Get the total jobs from the data attribute
+                        const totalJobs = visibleSearchInput.getAttribute('data-total-jobs');
+                        if (totalJobs) {
+                            visibleSearchInput.placeholder = `${totalJobs} offers`;
+                        }
                     }
                 }
             }

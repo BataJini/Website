@@ -1880,13 +1880,6 @@ body {
   color: var(--error-color);
 }
 
-/* Error messages */
-.error-message {
-  color: var(--error-color);
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-}
-
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -2019,19 +2012,23 @@ body {
   }
   
   .navbar-nav {
-    flex-direction: column;
-    width: 100%;
+    width: 100% !important;
+    padding: 2.5rem 0 0 !important;
+    margin-left: 0 !important;
+    margin-bottom: 0 !important;
   }
   
   .navbar-nav .nav-item {
-    width: 100%;
-    margin: 0;
+    width: 100% !important;
+    margin: 0 0 !important;
   }
   
   .navbar-nav .nav-link {
-    padding: 0.75rem 0;
-    width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    width: 100% !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+    border-bottom: none !important;
   }
   
   [data-bs-theme="dark"] .navbar-nav .nav-link {
@@ -2498,4 +2495,178 @@ body {
 /* Animation for newly loaded jobs */
 .job-listing {
     transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Mobile auth menu styles */
+.mobile-auth-menu {
+  width: 100%;
+  padding: 0;
+  margin: 0.5rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-top: 0.5rem;
+}
+
+.mobile-auth-header {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--bs-gray-600);
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 1rem;
+}
+
+.mobile-auth-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mobile-auth-list li {
+  margin: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mobile-auth-list li:last-child {
+  border-bottom: none;
+}
+
+.mobile-auth-list li a {
+  display: flex;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: rgba(0, 0, 0, 0.02);
+  font-size: 0.95rem;
+}
+
+.mobile-auth-list li a:hover, 
+.mobile-auth-list li a:active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.mobile-auth-list li a i {
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+  color: inherit;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+/* Dark mode styles for mobile auth menu */
+[data-bs-theme="dark"] .mobile-auth-menu {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .mobile-auth-header {
+  color: var(--bs-gray-400);
+}
+
+[data-bs-theme="dark"] .mobile-auth-list li {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .mobile-auth-list li a {
+  background: rgba(255, 255, 255, 0.05);
+  color: #E9ECEF;
+}
+
+[data-bs-theme="dark"] .mobile-auth-list li a:hover,
+[data-bs-theme="dark"] .mobile-auth-list li a:active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+[data-bs-theme="dark"] .navbar-collapse .dropdown-menu {
+  background-color: #2A2A2A !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Mobile Post A Job button styles */
+@media (max-width: 768px) {
+  .navbar-collapse .btn-sign-in {
+    margin-top: 1rem !important;
+    padding: 0.9rem 1.25rem !important;
+    width: 100% !important;
+    font-size: 1.05rem !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: var(--bs-primary) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3) !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  /* Ensure the text is visible in the POST A JOB button */
+  .navbar-collapse .btn-sign-in span {
+    display: inline-block !important;
+    visibility: visible !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    opacity: 1 !important;
+  }
+  
+  .navbar-collapse .btn-sign-in:hover, 
+  .navbar-collapse .btn-sign-in:active {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(var(--bs-primary-rgb), 0.4) !important;
+  }
+  
+  .navbar-collapse .d-flex.align-items-center.gap-3 {
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: 0 0.5rem !important;
+    margin-top: 1rem !important;
+  }
+  
+  /* Special styles for the Post a Job button */
+  .navbar-collapse .btn-sign-in {
+    position: sticky !important;
+    bottom: 1rem !important;
+    margin-top: auto !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    padding: 0.8rem 1rem !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3) !important;
+    letter-spacing: 0.3px !important;
+  }
+  
+  /* Ensure the text is visible in the POST A JOB button */
+  .navbar-collapse .btn-sign-in span {
+    display: inline-block !important;
+    visibility: visible !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3px !important;
+    opacity: 1 !important;
+  }
+  
+  /* Add a subtle gradient to make it stand out more */
+  .navbar-collapse .btn-sign-in {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, #2e54de 100%) !important;
+    border: none !important;
+    text-transform: uppercase !important;
+  }
+  
+  /* Add a slight scale effect on hover/active */
+  .navbar-collapse .btn-sign-in:hover,
+  .navbar-collapse .btn-sign-in:active {
+    transform: translateY(-2px) scale(1.01) !important;
+    box-shadow: 0 6px 16px rgba(var(--bs-primary-rgb), 0.35) !important;
+  }
 }

@@ -723,9 +723,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to create a search tag element
     function createSearchTag(text, iconClass = 'bi-tag', dataAttribute = '', dataValue = {}) {
+        const searchTags = document.getElementById('searchTags');
+        if (!searchTags) return;
+        
+        // Create tag element
         const tag = document.createElement('div');
         tag.className = 'search-tag';
         
+        // Add icon
         const icon = document.createElement('i');
         // Ensure the icon has both 'bi' and the specific icon class
         icon.className = `bi ${iconClass.startsWith('bi-') ? iconClass : 'bi-' + iconClass} me-2`;
@@ -742,8 +747,20 @@ document.addEventListener('DOMContentLoaded', function() {
             tag.setAttribute(`data-${dataAttribute}`, JSON.stringify(dataValue));
         }
         
+        // Add touch-friendly styles for mobile
+        if (window.innerWidth <= 768) {
+            tag.style.minHeight = '28px';
+            tag.style.display = 'inline-flex';
+            tag.style.padding = '0.25rem 0.75rem';
+            tag.style.margin = '0 0.15rem';
+            tag.style.touchAction = 'manipulation';
+        }
+        
         // Add click event to remove tag
-        tag.addEventListener('click', function() {
+        tag.addEventListener('click', function(e) {
+            // Prevent clicks from propagating (especially important on mobile)
+            e.stopPropagation();
+            
             // Find and deactivate corresponding category button if it exists
             document.querySelectorAll('.btn-category').forEach(btn => {
                 const btnText = btn.querySelector('i').nextSibling.textContent.trim();
@@ -771,9 +788,36 @@ document.addEventListener('DOMContentLoaded', function() {
             this.remove();
             updateSearchInput();
             
+            // Manually trigger a sync between all search tags and category buttons
+            syncCategoryButtonsWithTags();
+            
             // Use AJAX to update results
             performAjaxSearch();
         });
+        
+        // Add better mobile touch handling
+        tag.addEventListener('touchstart', function(e) {
+            // Change appearance briefly to indicate the tag is being touched
+            this.style.opacity = '0.7';
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        tag.addEventListener('touchend', function(e) {
+            // Reset appearance
+            this.style.opacity = '';
+            this.style.transform = '';
+        });
+        
+        // Add the tag to the container
+        searchTags.appendChild(tag);
+        
+        // Scroll the search tags container to show the newly added tag
+        setTimeout(() => {
+            searchTags.scrollLeft = searchTags.scrollWidth;
+        }, 10);
+        
+        // Update hidden input
+        updateSearchInput();
         
         return tag;
     }
@@ -799,9 +843,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 const totalJobs = visibleSearchInput.getAttribute('data-total-jobs');
                 if (totalJobs) {
                     visibleSearchInput.placeholder = `${totalJobs} offers`;
+                    // Ensure placeholder is aligned left on mobile
+                    if (window.innerWidth <= 768) {
+                        visibleSearchInput.style.textAlign = 'left';
+                        visibleSearchInput.style.paddingLeft = '0.5rem';
+                    }
                 }
             }
         }
+    }
+
+    // Function to synchronize category buttons with search tags
+    function syncCategoryButtonsWithTags() {
+        const searchTags = document.getElementById('searchTags');
+        if (!searchTags) return;
+        
+        // Get all current tag texts
+        const currentTagTexts = Array.from(searchTags.querySelectorAll('.search-tag span'))
+            .map(span => span.textContent.trim());
+        
+        // Update category buttons based on tag presence
+        document.querySelectorAll('.btn-category').forEach(btn => {
+            const btnText = btn.querySelector('i').nextSibling.textContent.trim();
+            const isTagPresent = currentTagTexts.includes(btnText);
+            
+            // Set button state based on tag presence
+            if (isTagPresent && !btn.classList.contains('active')) {
+                btn.classList.add('active');
+                const btnIcon = btn.querySelector('i');
+                if (btnIcon) {
+                    btnIcon.style.opacity = '1';
+                }
+            } else if (!isTagPresent && btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                const btnIcon = btn.querySelector('i');
+                if (btnIcon) {
+                    btnIcon.style.opacity = '0.7';
+                }
+            }
+        });
     }
 
     // Function to create a tag element
@@ -977,6 +1057,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const totalJobs = this.getAttribute('data-total-jobs');
                 if (totalJobs) {
                     this.placeholder = `${totalJobs} offers`;
+                    // Ensure placeholder is aligned left on mobile
+                    if (window.innerWidth <= 768) {
+                        this.style.textAlign = 'left';
+                        this.style.paddingLeft = '0.5rem';
+                    }
                 }
             }
         });
@@ -989,6 +1074,9 @@ document.addEventListener('DOMContentLoaded', function() {
             performAjaxSearch();
         });
     }
+    
+    // Initial sync to ensure category buttons match any existing search tags
+    syncCategoryButtonsWithTags();
     
     // Handle category button clicks
     categoryButtons.forEach(button => {
@@ -1050,7 +1138,23 @@ document.addEventListener('DOMContentLoaded', function() {
                         const totalJobs = visibleSearchInput.getAttribute('data-total-jobs');
                         if (totalJobs) {
                             visibleSearchInput.placeholder = `${totalJobs} offers`;
+                            // Ensure placeholder is aligned left on mobile
+                            if (window.innerWidth <= 768) {
+                                visibleSearchInput.style.textAlign = 'left';
+                                visibleSearchInput.style.paddingLeft = '0.5rem';
+                            }
                         }
+                    }
+                    
+                    // Hide clear button
+                    updateClearButtonVisibility();
+                    
+                    // Perform search to update results
+                    if (typeof performAjaxSearch === 'function') {
+                        performAjaxSearch();
+                    } else {
+                        // If AJAX search is not available, submit the form
+                        document.querySelector('form.search-form').submit();
                     }
                 }
             }
@@ -1275,6 +1379,33 @@ document.addEventListener('DOMContentLoaded', function() {
             performAjaxSearch();
         });
     }
+
+    // Make sure category buttons and search tags are synchronized on page load
+    setTimeout(function() {
+        syncCategoryButtonsWithTags();
+    }, 100);
+
+    // Initial check for category buttons
+    updateClearButtonVisibility();
+    
+    // Ensure placeholder is aligned left on mobile for initial load
+    if (visibleSearchInput && window.innerWidth <= 768) {
+        visibleSearchInput.style.textAlign = 'left';
+        visibleSearchInput.style.paddingLeft = '0.5rem';
+    }
+    
+    // Handle window resize for placeholder alignment
+    window.addEventListener('resize', function() {
+        if (visibleSearchInput) {
+            if (window.innerWidth <= 768) {
+                visibleSearchInput.style.textAlign = 'left';
+                visibleSearchInput.style.paddingLeft = '0.5rem';
+            } else {
+                visibleSearchInput.style.textAlign = '';
+                visibleSearchInput.style.paddingLeft = '';
+            }
+        }
+    });
 });
 
 // Reset hero tags on page refresh
