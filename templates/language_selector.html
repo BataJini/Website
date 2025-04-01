@@ -46,22 +46,31 @@
     min-width: 80px;
     height: 42px;
     border-radius: 21px;
-    background: transparent;
+    background: transparent !important;
     border: none;
-    transition: all 0.2s ease;
     color: #fff;
+    transform: none !important;
+    transition: none !important;
   }
   
   .language-form .btn-sign-in:hover {
-    background-color: transparent;
-    transform: scale(1.05);
+    background-color: transparent !important;
+    transform: none !important;
   }
   
   .language-form .flag-icon {
     width: 24px;
     height: 24px;
-    border-radius: 50%;
+    border-radius: 50% !important;
     object-fit: cover;
+    transform: none !important;
+    transition: none !important;
+    pointer-events: none;
+  }
+
+  .language-form .btn-sign-in:hover .flag-icon {
+    transform: none !important;
+    border-radius: 50% !important;
   }
 
   .language-form .lang-code {
@@ -87,6 +96,7 @@
   .language-form .dropdown-item .flag-icon {
     width: 20px;
     height: 20px;
+    border-radius: 50% !important;
   }
   
   .language-form .dropdown-item span {

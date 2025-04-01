@@ -31,7 +31,7 @@
                                         <p class="card-subtitle mb-2 text-muted">{{ job.company }}</p>
                                     </div>
                                     <div class="btn-group">
-                                        <a href="{% url 'authentication:job_detail' job.id %}" class="btn btn-outline-primary btn-sm">View</a>
+                                        <a href="{% url 'authentication:job_detail' job_slug=job.get_url_slug %}" class="btn btn-outline-primary btn-sm">View</a>
                                         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteJobModal{{ job.id }}">
                                             Delete
                                         </button>

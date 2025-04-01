@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
 from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 
 class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = [
@@ -55,6 +56,16 @@ class Job(models.Model):
 
     def __str__(self):
         return f"{self.title} at {self.company}"
+
+    def get_url_slug(self):
+        """
+        Returns the URL-friendly slug for the job posting
+        """
+        # Create slug from title and company
+        title_slug = slugify(self.title)
+        company_slug = slugify(self.company)
+        # Return the combined slug
+        return f"{title_slug}-{company_slug}"
 
     class Meta:
         unique_together = ('title', 'company', 'location')

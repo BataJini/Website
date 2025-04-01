@@ -59,10 +59,21 @@
         position: relative !important;
         z-index: 3 !important;
         background: transparent !important;
-        white-space: normal !important; /* Explicitly allow wrapping on desktop */
-        overflow: visible !important; /* Allow content to be visible */
-        text-overflow: clip !important; /* Default text overflow */
-        max-width: 600px !important; 
+        white-space: nowrap !important; /* Force single line */
+        overflow: hidden !important; /* Hide overflow */
+        text-overflow: ellipsis !important; /* Add ellipsis */
+        max-width: 600px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .job-title-text {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        flex: 1 !important;
+        min-width: 0 !important; /* Required for text-overflow to work in a flex container */
     }
 
     /* Style for company name */
@@ -645,7 +656,7 @@
     }
 </style>
 
-<a href="{% url 'authentication:job_detail' job.id %}" class="job-listing text-decoration-none" {% if job.is_featured %}data-featured="true"{% endif %}>
+<a href="{% url 'authentication:job_detail' job_slug=job.get_url_slug %}" class="job-listing text-decoration-none" {% if job.is_featured %}data-featured="true"{% endif %}>
     <div class="job-listing-logo">
         {% if job.company_logo %}
             <img src="{{ job.company_logo.url }}" alt="{{ job.company }} Logo">

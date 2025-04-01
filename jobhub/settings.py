@@ -64,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'jobhub.middleware.Custom404Middleware',  # Add custom 404 middleware
 ]
 
 ROOT_URLCONF = 'jobhub.urls'

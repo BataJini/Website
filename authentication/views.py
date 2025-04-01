@@ -110,10 +110,20 @@ def home(request):
     }
     return render(request, 'index.html', context)
 
-def job_detail(request, job_id):
-    logger.debug(f'Accessing job_detail view with job_id: {job_id}')
+def job_detail(request, job_slug):
+    logger.debug(f'Accessing job_detail view with job_slug: {job_slug}')
     try:
-        job = Job.objects.get(id=job_id, is_archived=False)
+        # Find the job by matching the slug
+        jobs = Job.objects.filter(is_archived=False)
+        job = None
+        for j in jobs:
+            if j.get_url_slug() == job_slug:
+                job = j
+                break
+        
+        if not job:
+            raise Job.DoesNotExist
+            
         logger.debug(f'Found job: {job.title}')
         
         # Handle job application submission
@@ -124,12 +134,12 @@ def job_detail(request, job_id):
             else:
                 # If no URL is available, just show a success message
                 messages.success(request, 'Your application has been submitted successfully!')
-                return redirect('authentication:job_detail', job_id=job_id)
+                return redirect('authentication:job_detail', job_slug=job.get_url_slug())
         
         # Find similar jobs based on tags, title keywords, and job type
         similar_jobs = Job.objects.filter(
             is_archived=False
-        ).exclude(id=job_id).order_by('-is_featured', '-posted_date')
+        ).exclude(id=job.id).order_by('-is_featured', '-posted_date')
         
         # First priority: Match by tags
         if job.tags.exists():
@@ -151,37 +161,20 @@ def job_detail(request, job_id):
                 if len(similar_jobs) < 5:
                     type_jobs = Job.objects.filter(
                         type=job.type, is_archived=False
-                    ).exclude(id=job_id).exclude(
+                    ).exclude(id=job.id).exclude(
                         id__in=[j.id for j in similar_jobs]
                     ).order_by('-is_featured', '-posted_date')
                     
                     similar_jobs = similar_jobs + list(type_jobs)
         
-        # Fallback: If no similar jobs found by tags or keywords, use job type
-        else:
-            title_words = [word.lower() for word in job.title.split() if len(word) > 3]
-            title_filter = Q()
-            for word in title_words:
-                title_filter |= Q(title__icontains=word)
-            
-            keyword_jobs = similar_jobs.filter(title_filter)
-            if keyword_jobs.count() >= 5:
-                similar_jobs = keyword_jobs[:5]
-            else:
-                # Use job type as fallback
-                type_jobs = similar_jobs.filter(type=job.type).exclude(
-                    id__in=keyword_jobs.values_list('id', flat=True)
-                )
-                similar_jobs = list(keyword_jobs) + list(type_jobs)
-        
         # Limit to maximum 5 jobs
         similar_jobs = similar_jobs[:5]
         
     except Job.DoesNotExist:
-        logger.error(f'Job with id {job_id} not found')
+        logger.error(f'Job with slug {job_slug} not found')
         return render(request, '404.html', {'message': 'Job not found'}, status=404)
     except Exception as e:
-        logger.error(f'Error retrieving job {job_id}: {str(e)}')
+        logger.error(f'Error retrieving job with slug {job_slug}: {str(e)}')
         return render(request, '404.html', {'message': 'An error occurred'}, status=404)
     
     context = {
@@ -515,4 +508,10 @@ def search_cities(request):
         for city in cities
     ]
     return JsonResponse(data, safe=False)
+
+def handle_404(request):
+    """
+    Handle 404 errors at the app level
+    """
+    return render(request, '404.html', {'message': 'Page not found'}, status=404)
 

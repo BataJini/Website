@@ -195,21 +195,33 @@ def limit_title_tags(job_title, tags):
     return tags
 
 @register.filter
-def add_utm_params(url):
+def add_utm_params(url, job_title=None):
     """
-    Add UTM parameters to job URLs
+    Add UTM parameters to job URLs with proper structure
     """
     from datetime import datetime
+    import re
     
     # Get current month name in lowercase
     current_month = datetime.now().strftime('%B').lower()
     
+    # Clean the job title if provided
+    clean_job_title = ""
+    if job_title:
+        # Remove special characters and convert spaces to hyphens
+        clean_job_title = re.sub(r'[^a-zA-Z0-9\s-]', '', job_title)
+        clean_job_title = clean_job_title.strip().replace(" ", "-").lower()
+    
     # Define UTM parameters
     utm_params = {
-        'utm_source': 'jobhub',  # our job board name
+        'utm_source': 'jobhub',
         'utm_medium': 'job_post',
         'utm_campaign': f'{current_month}_hiring'
     }
+    
+    # Add utm_content if we have a job title
+    if clean_job_title:
+        utm_params['utm_content'] = clean_job_title
     
     # Check if URL already has parameters
     if '?' in url:
@@ -220,4 +232,6 @@ def add_utm_params(url):
     # Build UTM string
     utm_string += '&'.join([f'{key}={value}' for key, value in utm_params.items()])
     
-    return f'{url}{utm_string}'
+    # Remove any trailing slashes from the base URL
+    base_url = url.rstrip('/')
+    return f'{base_url}{utm_string}'

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Page Not Found - JobHub{% endblock %}
+{% block title %}404 - Page Not Found{% endblock %}
 
 {% block content %}
 <section class="py-5">
@@ -10,10 +10,9 @@
             <div class="col-md-8 text-center">
                 <img src="{% static 'img/404.svg' %}" alt="404 Error" class="img-fluid mb-4" style="max-height: 250px;">
                 <h1 class="display-4 mb-4">Page Not Found</h1>
-                <p class="lead mb-4">The page you're looking for doesn't exist or has been moved.</p>
-                <div class="d-flex justify-content-center gap-3">
+                <p class="lead mb-4">{{ message|default:"The page you're looking for doesn't exist or has been moved." }}</p>
+                <div class="d-flex justify-content-center">
                     <a href="{% url 'authentication:home' %}" class="btn btn-primary">Go to Homepage</a>
-                    <a href="{% url 'authentication:jobs' %}" class="btn btn-outline-primary">Browse Jobs</a>
                 </div>
             </div>
         </div>

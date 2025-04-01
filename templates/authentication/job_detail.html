@@ -90,9 +90,9 @@
         }
 
         .sticky-top {
-            position: relative !important;
-            top: 0 !important;
-            z-index: 1 !important;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
         }
         
         /* Adjust job title and metadata for mobile */
@@ -460,7 +460,7 @@
                 <div class="sticky-top d-none d-lg-block" style="top: 80px; z-index: 100;">
                     <div class="mb-4">
                         {% if job.job_url %}
-                            <a href="{{ job.job_url|add_utm_params }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
+                            <a href="{{ job.job_url|add_utm_params:job.title }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
                         {% else %}
                             <form method="post" enctype="multipart/form-data" id="applicationForm">
                                 {% csrf_token %}
@@ -492,7 +492,7 @@
 <!-- Mobile Apply Button (fixed at bottom) -->
 <div class="d-lg-none fixed-bottom-apply-btn" id="mobileApplyButton">
     {% if job.job_url %}
-        <a href="{{ job.job_url|add_utm_params }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
+        <a href="{{ job.job_url|add_utm_params:job.title }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
     {% else %}
         <form method="post" enctype="multipart/form-data" id="mobileApplicationForm">
             {% csrf_token %}
@@ -528,6 +528,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="{% static 'css/pages/job-detail.css' %}">
 <style>
     /* Custom container padding */
     .container.left-aligned {
@@ -869,4 +870,6 @@
         }
     });
 </script>
+<!-- Include the job-detail.js script for sticky functionality -->
+<script src="{% static 'js/job-detail.js' %}"></script>
 {% endblock %}
