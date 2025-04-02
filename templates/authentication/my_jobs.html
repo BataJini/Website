@@ -9,7 +9,12 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-12">
-            <h1 class="mb-4">My Job Postings</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>My Job Postings</h1>
+                <a href="{% url 'authentication:archived_jobs' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-archive"></i> View Archived Jobs
+                </a>
+            </div>
 
             {% if messages %}
                 {% for message in messages %}
@@ -32,6 +37,9 @@
                                     </div>
                                     <div class="btn-group">
                                         <a href="{% url 'authentication:job_detail' job_slug=job.get_url_slug %}" class="btn btn-outline-primary btn-sm">View</a>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#archiveJobModal{{ job.id }}">
+                                            Archive
+                                        </button>
                                         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteJobModal{{ job.id }}">
                                             Delete
                                         </button>
@@ -70,12 +78,39 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Archive Modal for each job -->
+                        <div class="modal fade" id="archiveJobModal{{ job.id }}" tabindex="-1" aria-labelledby="archiveJobModalLabel{{ job.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="archiveJobModalLabel{{ job.id }}">Confirm Archive</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to archive the job posting "{{ job.title }}"?</p>
+                                        <p class="text-muted">Archived jobs are no longer visible to candidates but can be restored later if needed.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <form action="{% url 'authentication:archive_job' job.id %}" method="POST" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary">Archive Job</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
                 </div>
             {% else %}
                 <div class="alert alert-info">
+                    {% if user.user_type == 'recruiter' %}
                     You haven't posted any jobs yet.
                     <a href="{% url 'authentication:post_job' %}" class="alert-link">Post your first job</a>
+                    {% else %}
+                    Only company accounts can post jobs. This feature is not available for candidate accounts.
+                    {% endif %}
                 </div>
             {% endif %}
         </div>

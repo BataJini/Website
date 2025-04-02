@@ -2730,3 +2730,44 @@ body {
 .dropdown-menu.show {
   overflow: visible !important;
 }
+
+/* Cookie Consent Banner */
+.cookie-consent-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--bs-body-bg);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+    z-index: 1050;
+    border-top: 1px solid var(--bs-border-color);
+}
+
+[data-bs-theme="dark"] .cookie-consent-banner {
+    background-color: var(--bs-dark-bg-subtle);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.25);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cookie-consent-banner p {
+    font-size: 0.9rem;
+    color: var(--bs-body-color);
+    margin-bottom: 0;
+}
+
+.cookie-consent-banner a {
+    color: var(--bs-primary);
+}
+
+/* Mobile cookie consent adjustments */
+@media (max-width: 767px) {
+    .cookie-consent-banner {
+        padding: 1rem 0;
+    }
+    
+    .cookie-consent-banner .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}

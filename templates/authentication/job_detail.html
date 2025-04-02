@@ -459,7 +459,11 @@
             <div class="col-lg-4">
                 <div class="sticky-top d-none d-lg-block" style="top: 80px; z-index: 100;">
                     <div class="mb-4">
-                        {% if job.job_url %}
+                        {% if has_applied %}
+                            <button class="btn btn-success btn-lg w-100" disabled>
+                                <i class="bi bi-check-circle me-2"></i>Already Applied
+                            </button>
+                        {% elif job.job_url %}
                             <a href="{{ job.job_url|add_utm_params:job.title }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
                         {% else %}
                             <form method="post" enctype="multipart/form-data" id="applicationForm">
@@ -491,7 +495,11 @@
 
 <!-- Mobile Apply Button (fixed at bottom) -->
 <div class="d-lg-none fixed-bottom-apply-btn" id="mobileApplyButton">
-    {% if job.job_url %}
+    {% if has_applied %}
+        <button class="btn btn-success btn-lg w-100" disabled>
+            <i class="bi bi-check-circle me-2"></i>Already Applied
+        </button>
+    {% elif job.job_url %}
         <a href="{{ job.job_url|add_utm_params:job.title }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg w-100">Apply on Company Website</a>
     {% else %}
         <form method="post" enctype="multipart/form-data" id="mobileApplicationForm">

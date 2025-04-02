@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
+from datetime import timedelta
 
 class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = [
@@ -67,11 +68,44 @@ class Job(models.Model):
         # Return the combined slug
         return f"{title_slug}-{company_slug}"
 
+    def is_older_than_two_months(self):
+        """
+        Checks if the job posting is older than 2 months
+        """
+        two_months_ago = timezone.now() - timedelta(days=60)
+        return self.posted_date < two_months_ago
+
     class Meta:
         unique_together = ('title', 'company', 'location')
         ordering = ['-posted_date']
         verbose_name = _('Job')
         verbose_name_plural = _('Jobs')
+
+class JobApplication(models.Model):
+    STATUS_CHOICES = [
+        ('applied', _('Applied')),
+        ('interviewing', _('Interviewing')),
+        ('offer', _('Received Offer')),
+        ('rejected', _('Rejected')),
+        ('accepted', _('Accepted Offer')),
+        ('declined', _('Declined Offer')),
+    ]
+    
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='applications')
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
+    status = models.CharField(_('Status'), max_length=20, choices=STATUS_CHOICES, default='applied')
+    applied_date = models.DateTimeField(_('Applied Date'), default=timezone.now)
+    notes = models.TextField(_('Notes'), blank=True, null=True)
+    employer_viewed = models.BooleanField(_('Employer Viewed'), default=False)
+    
+    class Meta:
+        verbose_name = _('Job Application')
+        verbose_name_plural = _('Job Applications')
+        unique_together = ('user', 'job')  # A user can apply to a job only once
+        ordering = ['-applied_date']
+        
+    def __str__(self):
+        return f"{self.user.username}'s application for {self.job.title} at {self.job.company}"
 
 class PolishCity(models.Model):
     name = models.CharField(_('Name'), max_length=100, unique=True)

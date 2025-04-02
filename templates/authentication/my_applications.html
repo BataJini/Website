@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load job_tags %}
+
+{% block title %}My Applications - JobHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>My Applications</h1>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if applications %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Company</th>
+                                <th>Location</th>
+                                <th>Applied Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for application in applications %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'authentication:job_detail' job_slug=application.job.get_url_slug %}" class="text-decoration-none fw-bold">
+                                            {{ application.job.title }}
+                                        </a>
+                                    </td>
+                                    <td>{{ application.job.company }}</td>
+                                    <td>
+                                        {{ application.job.location }}
+                                        {% if application.job.is_remote %} <span class="badge bg-secondary">Remote</span>{% endif %}
+                                    </td>
+                                    <td>{{ application.applied_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if application.status == 'applied' %}bg-primary
+                                            {% elif application.status == 'interviewing' %}bg-info
+                                            {% elif application.status == 'offer' %}bg-warning
+                                            {% elif application.status == 'accepted' %}bg-success
+                                            {% elif application.status == 'rejected' %}bg-danger
+                                            {% elif application.status == 'declined' %}bg-secondary
+                                            {% endif %}">
+                                            {{ application.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updateStatusModal{{ application.id }}">
+                                                Update Status
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#deleteApplicationModal{{ application.id }}">
+                                                Remove
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Status Update Modals -->
+                {% for application in applications %}
+                    <div class="modal fade" id="updateStatusModal{{ application.id }}" tabindex="-1" aria-labelledby="updateStatusModalLabel{{ application.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateStatusModalLabel{{ application.id }}">Update Application Status</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post" action="{% url 'authentication:my_applications' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="application_id" value="{{ application.id }}">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="status{{ application.id }}" class="form-label">Status</label>
+                                            <select class="form-select" id="status{{ application.id }}" name="status" required>
+                                                {% for status_key, status_label in status_choices %}
+                                                    <option value="{{ status_key }}" {% if application.status == status_key %}selected{% endif %}>{{ status_label }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="notes{{ application.id }}" class="form-label">Notes</label>
+                                            <textarea class="form-control" id="notes{{ application.id }}" name="notes" rows="3">{{ application.notes|default:'' }}</textarea>
+                                            <div class="form-text">Add any notes about interviews, offers, or other details.</div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- Delete Confirmation Modals -->
+                {% for application in applications %}
+                    <div class="modal fade" id="deleteApplicationModal{{ application.id }}" tabindex="-1" aria-labelledby="deleteApplicationModalLabel{{ application.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteApplicationModalLabel{{ application.id }}">Remove Application</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to remove your application for "{{ application.job.title }}" at "{{ application.job.company }}"?</p>
+                                    <p class="text-danger">This action cannot be undone.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="{% url 'authentication:delete_application' application.id %}" method="POST" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Remove Application</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info">
+                    <p>You haven't applied for any jobs yet.</p>
+                    <p>When you apply for jobs on the platform, they will appear here so you can track your applications.</p>
+                    <a href="{% url 'authentication:home' %}" class="btn btn-primary mt-2">Find Jobs</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

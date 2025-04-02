@@ -2059,20 +2059,28 @@
                                 <div class="mobile-auth-header">{% trans "MY ACCOUNT" %}</div>
                                 <ul class="mobile-auth-list">
                                     <li>
-                                        <a href="#">
+                                        <a href="{% url 'authentication:profile' %}">
                                             <i class="bi bi-person" style="color: inherit;"></i>{% trans "Profile" %}
                                         </a>
                                     </li>
+                                    {% if user.user_type == 'recruiter' %}
                                     <li>
-                                        <a href="#">
-                                            <i class="bi bi-briefcase" style="color: inherit;"></i>{% trans "Applications" %}
+                                        <a href="{% url 'authentication:my_jobs' %}">
+                                            <i class="bi bi-briefcase" style="color: inherit;"></i>{% trans "My Job Postings" %}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
-                                            <i class="bi bi-bookmark" style="color: inherit;"></i>{% trans "Saved Jobs" %}
+                                        <a href="{% url 'authentication:post_job' %}">
+                                            <i class="bi bi-plus-circle" style="color: inherit;"></i>{% trans "Post a Job" %}
                                         </a>
                                     </li>
+                                    {% else %}
+                                    <li>
+                                        <a href="{% url 'authentication:my_applications' %}">
+                                            <i class="bi bi-briefcase"></i>{% trans "My Applications" %}
+                                        </a>
+                                    </li>
+                                    {% endif %}
                                     <li>
                                         <a href="{% url 'authentication:logout' %}">
                                             <i class="bi bi-box-arrow-right" style="color: inherit;"></i>{% trans "Logout" %}
@@ -2125,15 +2133,21 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <div class="dropdown-header">{% trans "MY ACCOUNT" %}</div>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{% url 'authentication:profile' %}">
                                     <i class="bi bi-person"></i>{% trans "Profile" %}
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi bi-briefcase"></i>{% trans "Applications" %}
+                                {% if user.user_type == 'recruiter' %}
+                                <a class="dropdown-item" href="{% url 'authentication:my_jobs' %}">
+                                    <i class="bi bi-briefcase"></i>{% trans "My Job Postings" %}
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi bi-bookmark"></i>{% trans "Saved Jobs" %}
+                                <a class="dropdown-item" href="{% url 'authentication:post_job' %}">
+                                    <i class="bi bi-plus-circle"></i>{% trans "Post a Job" %}
                                 </a>
+                                {% else %}
+                                <a class="dropdown-item" href="{% url 'authentication:my_applications' %}">
+                                    <i class="bi bi-briefcase"></i>{% trans "My Applications" %}
+                                </a>
+                                {% endif %}
 
                                 <div class="dropdown-divider"></div>
 
@@ -2262,7 +2276,9 @@
                                 <span class="text-white small">{% trans "Copyright © 2025 JobHub – All Rights Reserved" %}</span>
                             </div>
                             <div class="col-md-6 text-center text-md-end">
-                                <a href="#" class="text-decoration-none text-white small hover-white">{% trans "Privacy Policy" %}</a>
+                                <a href="{% url 'authentication:privacy_policy' %}" class="text-decoration-none text-white small hover-white">{% trans "Privacy Policy" %}</a>
+                                <span class="text-white mx-2">•</span>
+                                <a href="{% url 'authentication:cookie_policy' %}" class="text-decoration-none text-white small hover-white">{% trans "Cookie Policy" %}</a>
                                 <span class="text-white mx-2">•</span>
                                 <a href="#" class="text-decoration-none text-white small hover-white">{% trans "Terms & Conditions" %}</a>
                             </div>
@@ -2272,6 +2288,25 @@
             </div>
         </div>
     </footer>
+
+    <!-- Cookie Consent Popup -->
+    <div class="cookie-consent-banner" id="cookieConsentBanner" style="display: none;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 col-md-7">
+                    <p class="mb-md-0 mb-3">
+                        {% trans "We use cookies to improve your experience on our site. By continuing to use our site, you consent to our use of cookies in accordance with our " %}
+                        <a href="{% url 'authentication:cookie_policy' %}" class="text-decoration-underline">{% trans "Cookie Policy" %}</a> {% trans "and" %}
+                        <a href="{% url 'authentication:privacy_policy' %}" class="text-decoration-underline">{% trans "Privacy Policy" %}</a>.
+                    </p>
+                </div>
+                <div class="col-lg-4 col-md-5 d-flex justify-content-md-end gap-2">
+                    <button id="rejectCookiesBtn" class="btn btn-outline-secondary">{% trans "Reject" %}</button>
+                    <button id="acceptCookiesBtn" class="btn btn-primary">{% trans "Accept Cookies" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap JavaScript -->
     {% bootstrap_javascript %}
@@ -2284,6 +2319,34 @@
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/city-search.js' %}"></script>
     <script src="{% static 'js/language-switcher.js' %}"></script>
+    
+    <!-- Cookie Consent JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user has already accepted cookies
+            const cookiesAccepted = localStorage.getItem('cookiesAccepted');
+            
+            if (!cookiesAccepted) {
+                // Show the cookie banner
+                document.getElementById('cookieConsentBanner').style.display = 'block';
+                
+                // Handle accept button click
+                document.getElementById('acceptCookiesBtn').addEventListener('click', function() {
+                    localStorage.setItem('cookiesAccepted', 'true');
+                    document.getElementById('cookieConsentBanner').style.display = 'none';
+                });
+                
+                // Handle reject button click
+                document.getElementById('rejectCookiesBtn').addEventListener('click', function() {
+                    // Store rejection but still hide the banner
+                    localStorage.setItem('cookiesAccepted', 'false');
+                    document.getElementById('cookieConsentBanner').style.display = 'none';
+                    
+                    // You could implement more functionality here to disable non-essential cookies
+                });
+            }
+        });
+    </script>
     
     <!-- Lazy loading for images -->
     <script>

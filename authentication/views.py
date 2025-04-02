@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
-from .models import Job, CustomUser, PolishCity  # Import the Job model, CustomUser model, and PolishCity model
+from .models import Job, CustomUser, PolishCity, JobApplication  # Import the JobApplication model
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.admin.views.decorators import staff_member_required
@@ -11,6 +11,8 @@ import logging
 from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.contrib.auth import update_session_auth_hash
+from django.core.exceptions import ValidationError
 
 logger = logging.getLogger('django')
 
@@ -113,8 +115,8 @@ def home(request):
 def job_detail(request, job_slug):
     logger.debug(f'Accessing job_detail view with job_slug: {job_slug}')
     try:
-        # Find the job by matching the slug
-        jobs = Job.objects.filter(is_archived=False)
+        # Find the job by matching the slug - include archived jobs for viewing
+        jobs = Job.objects.all()  # Include all jobs, even archived ones
         job = None
         for j in jobs:
             if j.get_url_slug() == job_slug:
@@ -126,15 +128,41 @@ def job_detail(request, job_slug):
             
         logger.debug(f'Found job: {job.title}')
         
+        # Add a warning message if the job is archived
+        if job.is_archived:
+            messages.warning(request, 'This job posting has been archived and may no longer be active.')
+        
         # Handle job application submission
         if request.method == 'POST':
-            # Redirect to the company's application website if available
+            # First record the application if the user is a logged-in candidate
+            application_recorded = False
+            if request.user.is_authenticated and request.user.user_type == 'candidate':
+                # Create or update application
+                application, created = JobApplication.objects.get_or_create(
+                    user=request.user,
+                    job=job,
+                    defaults={'status': 'applied'}
+                )
+                application_recorded = True
+                
+                if created:
+                    messages.success(request, f'Your application for {job.title} has been recorded!')
+                else:
+                    messages.info(request, f'You have already applied for this job on {application.applied_date.strftime("%B %d, %Y")}.')
+            
+            # Then handle the redirect, regardless of whether we recorded an application
             if job.job_url:
                 return redirect(job.job_url)
             else:
-                # If no URL is available, just show a success message
-                messages.success(request, 'Your application has been submitted successfully!')
+                # If no URL is available, just show a success message for anonymous users
+                if not application_recorded:
+                    messages.success(request, 'Your application has been submitted successfully!')
                 return redirect('authentication:job_detail', job_slug=job.get_url_slug())
+        
+        # Check if the user has already applied for this job
+        has_applied = False
+        if request.user.is_authenticated and request.user.user_type == 'candidate':
+            has_applied = JobApplication.objects.filter(user=request.user, job=job).exists()
         
         # Find similar jobs based on tags, title keywords, and job type
         similar_jobs = Job.objects.filter(
@@ -179,7 +207,8 @@ def job_detail(request, job_slug):
     
     context = {
         'job': job,
-        'similar_jobs': similar_jobs
+        'similar_jobs': similar_jobs,
+        'has_applied': has_applied
     }
     return render(request, 'authentication/job_detail.html', context)
 
@@ -231,6 +260,11 @@ def logout_view(request):
 
 @login_required
 def post_job_view(request):
+    # Check if the user is a recruiter, if not redirect with error message
+    if request.user.user_type != 'recruiter':
+        messages.error(request, 'Only company users can post jobs. Please switch to a company account.')
+        return redirect('authentication:home')
+        
     if request.method == 'POST':
         # This is a placeholder for actual job posting logic
         # You would typically use a form to validate and save the data
@@ -316,6 +350,35 @@ def my_jobs(request):
     return render(request, 'authentication/my_jobs.html', {'jobs': jobs})
 
 @login_required
+def archived_jobs(request):
+    jobs = Job.objects.filter(created_by=request.user, is_archived=True)
+    return render(request, 'authentication/archived_jobs.html', {'jobs': jobs})
+
+@login_required
+def archive_job(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+    if job.created_by == request.user or request.user.is_staff:
+        job.is_archived = True
+        job.save()
+        messages.success(request, 'Job posting archived successfully.')
+        return redirect('authentication:my_jobs')
+    else:
+        messages.error(request, 'You do not have permission to archive this job.')
+        return redirect('authentication:home')
+
+@login_required
+def unarchive_job(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+    if job.created_by == request.user or request.user.is_staff:
+        job.is_archived = False
+        job.save()
+        messages.success(request, 'Job posting unarchived successfully.')
+        return redirect('authentication:archived_jobs')
+    else:
+        messages.error(request, 'You do not have permission to unarchive this job.')
+        return redirect('authentication:home')
+
+@login_required
 def delete_job(request, job_id):
     job = get_object_or_404(Job, id=job_id)
     if job.created_by == request.user or request.user.is_staff:
@@ -325,6 +388,93 @@ def delete_job(request, job_id):
     else:
         messages.error(request, 'You do not have permission to delete this job.')
         return redirect('authentication:home')
+
+@login_required
+def profile_view(request):
+    user = request.user
+    
+    if request.method == 'POST':
+        # Handle form submission to update profile
+        user.full_name = request.POST.get('full_name', user.full_name)
+        user.email = request.POST.get('email', user.email)
+        user.phone_number = request.POST.get('phone_number', user.phone_number)
+        
+        # Handle company_name for recruiters
+        if user.user_type == 'recruiter':
+            user.company_name = request.POST.get('company_name', user.company_name)
+        
+        # Set password if provided
+        password = request.POST.get('password')
+        password_confirm = request.POST.get('password_confirm')
+        
+        if password and password == password_confirm:
+            user.set_password(password)
+            update_session_auth_hash(request, user)  # Keep user logged in
+            messages.success(request, 'Password updated successfully.')
+        elif password:
+            messages.error(request, 'Passwords do not match.')
+            return render(request, 'authentication/profile.html', {'user': user})
+        
+        try:
+            user.full_clean()  # Validate the model
+            user.save()
+            messages.success(request, 'Profile updated successfully.')
+        except ValidationError as e:
+            for field, errors in e.message_dict.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+            return render(request, 'authentication/profile.html', {'user': user})
+            
+        return redirect('authentication:profile')
+    
+    return render(request, 'authentication/profile.html', {'user': user})
+
+@login_required
+def my_applications(request):
+    """View for candidates to see their job applications"""
+    # Ensure the user is a candidate
+    if request.user.user_type != 'candidate':
+        messages.error(request, 'This feature is only available for candidate accounts.')
+        return redirect('authentication:home')
+    
+    # Get all applications for the user
+    applications = JobApplication.objects.filter(user=request.user).select_related('job')
+    
+    # Handle application status updates
+    if request.method == 'POST':
+        application_id = request.POST.get('application_id')
+        new_status = request.POST.get('status')
+        notes = request.POST.get('notes')
+        
+        if application_id and new_status:
+            try:
+                application = JobApplication.objects.get(id=application_id, user=request.user)
+                application.status = new_status
+                if notes:
+                    application.notes = notes
+                application.save()
+                messages.success(request, 'Application status updated successfully.')
+                return redirect('authentication:my_applications')
+            except JobApplication.DoesNotExist:
+                messages.error(request, 'Application not found.')
+    
+    context = {
+        'applications': applications,
+        'status_choices': JobApplication.STATUS_CHOICES
+    }
+    return render(request, 'authentication/my_applications.html', context)
+
+@login_required
+def delete_application(request, application_id):
+    """View to delete a job application"""
+    application = get_object_or_404(JobApplication, id=application_id, user=request.user)
+    
+    if request.method == 'POST':
+        application.delete()
+        messages.success(request, 'Application removed successfully.')
+        return redirect('authentication:my_applications')
+        
+    return redirect('authentication:my_applications')
 
 @staff_member_required
 def user_list(request):
@@ -508,6 +658,14 @@ def search_cities(request):
         for city in cities
     ]
     return JsonResponse(data, safe=False)
+
+def cookie_policy(request):
+    """View for the cookie policy page"""
+    return render(request, 'cookie_policy.html')
+
+def privacy_policy(request):
+    """View for the privacy policy page"""
+    return render(request, 'privacy_policy.html')
 
 def handle_404(request):
     """

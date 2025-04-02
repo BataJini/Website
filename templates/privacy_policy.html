@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block title %}Privacy Policy - JobHub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <h1 class="h2 mb-4">Privacy Policy</h1>
+                    <p class="text-muted mb-4">Last updated: {% now "F j, Y" %}</p>
+
+                    <div class="mb-4">
+                        <p>At JobHub, we take your privacy seriously. This Privacy Policy describes how we collect, use, and share your personal information when you use our website.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h4 mb-3">Information We Collect</h2>
+                        <p>We collect several types of information from and about users of our website, including:</p>
+                        <ul>
+                            <li><strong>Personal information:</strong> This includes your name, email address, phone number, and other identifiers you provide when you register, post jobs, or apply for jobs.</li>
+                            <li><strong>Profile information:</strong> This includes your username, password, and preferences.</li>
+                            <li><strong>Job application data:</strong> Information related to your job applications, including your resume, cover letter, and application status.</li>
+                            <li><strong>Usage data:</strong> Information about how you use our website, such as pages visited, time spent on pages, and other usage patterns.</li>
+                            <li><strong>Device information:</strong> Information about your device, browser type, IP address, and operating system.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h4 mb-3">How We Use Your Information</h2>
+                        <p>We use the information we collect to:</p>
+                        <ul>
+                            <li>Provide, maintain, and improve our services</li>
+                            <li>Process job applications and connect candidates with potential employers</li>
+                            <li>Send you notifications about job opportunities, application updates, and other communications</li>
+                            <li>Understand how users interact with our website to improve user experience</li>
+                            <li>Protect against fraud and unauthorized access</li>
+                            <li>Comply with legal obligations</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h4 mb-3">How We Share Your Information</h2>
+                        <p>We may share your personal information with:</p>
+                        <ul>
+                            <li><strong>Employers:</strong> If you apply for a job, your application information may be shared with the potential employer.</li>
+                            <li><strong>Service providers:</strong> Companies that perform services on our behalf, such as hosting, data analysis, payment processing, and customer service.</li>
+                            <li><strong>Legal authorities:</strong> When required by law or to protect our rights or the safety of our users.</li>
+                        </ul>
+                        <p>We do not sell your personal information to third parties.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h4 mb-3">Your Rights</h2>
+                        <p>Depending on your location, you may have certain rights regarding your personal information, including:</p>
+                        <ul>
+                            <li>The right to access your personal information</li>
+                            <li>The right to correct inaccurate information</li>
+                            <li>The right to delete your personal information</li>
+                            <li>The right to restrict or object to processing</li>
+                            <li>The right to data portability</li>
+                            <li>The right to withdraw consent</li>
+                        </ul>
+                        <p>To exercise these rights, please contact us at <a href="mailto:info@jobhub.com">info@jobhub.com</a>.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h4 mb-3">Data Security</h2>
+                        <p>We have implemented appropriate technical and organizational measures to protect your personal information from unauthorized access, use, or disclosure. However, no method of transmission over the internet or electronic storage is 100% secure.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h4 mb-3">Children's Privacy</h2>
+                        <p>Our website is not intended for children under the age of 16, and we do not knowingly collect personal information from children under 16.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h4 mb-3">Changes to Our Privacy Policy</h2>
+                        <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h4 mb-3">Contact Us</h2>
+                        <p>If you have any questions about our Privacy Policy, please contact us at <a href="mailto:info@jobhub.com">info@jobhub.com</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
