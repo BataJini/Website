@@ -265,6 +265,26 @@
             --dark-hover: #2A2A2A;
         }
 
+        /* Ensure no content flickering during mobile menu transitions */
+        @media (max-width: 768px) {
+            .navbar-collapse:not(.show) {
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+            
+            .navbar-collapse.collapsing {
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+            
+            /* Hide button text when collapse is not shown */
+            .navbar-collapse:not(.show) .btn-sign-in span {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+        }
+        
         body {
             padding-top: 64px;
             background-color: var(--bs-body-bg);
@@ -2307,6 +2327,12 @@
             function enhanceMobilePostJobButton() {
                 const postJobBtn = document.querySelector('.navbar-collapse .btn-sign-in');
                 if (postJobBtn && window.innerWidth <= 768) {
+                    // Only apply styles if navbar is visible/showing
+                    const navbarCollapse = document.querySelector('.navbar-collapse');
+                    if (!navbarCollapse || !navbarCollapse.classList.contains('show')) {
+                        return; // Don't apply styles if navbar is hidden
+                    }
+                    
                     // Apply enhanced styling
                     postJobBtn.style.marginTop = '1rem';
                     postJobBtn.style.marginBottom = '0.75rem';
@@ -2531,7 +2557,23 @@
                 // Make close button functional
                 if (closeButton) {
                     closeButton.addEventListener('click', function() {
+                        // First reset the post job button
+                        const postJobBtn = document.querySelector('.navbar-collapse .btn-sign-in');
+                        if (postJobBtn) {
+                            postJobBtn.removeAttribute('style');
+                            
+                            const postJobBtnText = postJobBtn.querySelector('span');
+                            if (postJobBtnText) {
+                                postJobBtnText.removeAttribute('style');
+                            }
+                        }
+                        
+                        // Then hide the navbar
                         navbarCollapse.classList.remove('show');
+                        
+                        // Apply transition before hiding
+                        navbarCollapse.style.transition = 'all 0.2s ease';
+                        navbarCollapse.style.opacity = '0';
                         
                         // Also collapse via Bootstrap API
                         if (typeof bootstrap !== 'undefined') {
@@ -2621,6 +2663,10 @@
                 
                 // Prevent scrolling on body when menu is open
                 navbarToggler.addEventListener('click', function() {
+                    // Reset any display:none style that might be applied from the hidden event
+                    navbarCollapse.style.display = '';
+                    navbarCollapse.style.transition = '';
+                    
                     // Force redraw to ensure proper dimensions
                     setTimeout(() => {
                         if (navbarCollapse.classList.contains('show')) {
@@ -2652,6 +2698,32 @@
                 // Reset body scroll when hiding collapse
                 navbarCollapse.addEventListener('hidden.bs.collapse', function() {
                     document.body.style.overflow = '';
+                    
+                    // Clean up the Post a Job button to prevent text from staying visible
+                    const postJobBtn = document.querySelector('.navbar-collapse .btn-sign-in');
+                    if (postJobBtn) {
+                        // Reset the button's styling 
+                        postJobBtn.removeAttribute('style');
+                        
+                        // Reset the span text visibility
+                        const postJobBtnText = postJobBtn.querySelector('span');
+                        if (postJobBtnText) {
+                            postJobBtnText.removeAttribute('style');
+                        }
+                    }
+                    
+                    // Force a small delay before removing all styles to prevent flashing
+                    setTimeout(() => {
+                        // Clean up inline styles that might cause flashing
+                        navbarCollapse.style.transition = 'none';
+                        navbarCollapse.style.display = 'none';
+                        
+                        // Re-enable transition after a small delay
+                        setTimeout(() => {
+                            navbarCollapse.style.transition = '';
+                            navbarCollapse.style.display = '';
+                        }, 50);
+                    }, 10);
                 });
                 
                 // Additional fix for iOS
