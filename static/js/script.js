@@ -35,8 +35,13 @@
                     // Basic toggle with no animations or transitions
                     if (menu.classList.contains('show')) {
                         menu.classList.remove('show');
+                        navbar.setAttribute('aria-expanded', 'false');
                     } else {
                         menu.classList.add('show');
+                        navbar.setAttribute('aria-expanded', 'true');
+                        // Reset any opacity that might have been set by the X button
+                        menu.style.opacity = '';
+                        menu.style.transition = '';
                     }
                     
                     return false;

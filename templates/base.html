@@ -2554,6 +2554,26 @@
                 const navbarCollapse = document.querySelector('.navbar-collapse');
                 const closeButton = document.querySelector('.mobile-menu-close');
                 
+                // Ensure the menu is always in a clean state when toggled
+                if (navbarToggler && navbarCollapse) {
+                    // Add a mutation observer to monitor show/hide classes
+                    const observer = new MutationObserver(function(mutations) {
+                        mutations.forEach(function(mutation) {
+                            if (mutation.attributeName === 'class') {
+                                // Reset opacity and transition properties
+                                if (!navbarCollapse.classList.contains('show')) {
+                                    setTimeout(() => {
+                                        navbarCollapse.style.opacity = '';
+                                        navbarCollapse.style.transition = '';
+                                    }, 300);
+                                }
+                            }
+                        });
+                    });
+                    
+                    observer.observe(navbarCollapse, { attributes: true });
+                }
+                
                 // Make close button functional
                 if (closeButton) {
                     closeButton.addEventListener('click', function() {
@@ -2575,12 +2595,23 @@
                         navbarCollapse.style.transition = 'all 0.2s ease';
                         navbarCollapse.style.opacity = '0';
                         
+                        // Reset the opacity after animation completes to ensure menu can be reopened
+                        setTimeout(() => {
+                            navbarCollapse.style.opacity = '';
+                            navbarCollapse.style.transition = '';
+                        }, 300);
+                        
                         // Also collapse via Bootstrap API
                         if (typeof bootstrap !== 'undefined') {
                             const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
                             if (bsCollapse) {
                                 bsCollapse.hide();
                             }
+                        }
+                        
+                        // Reset navbar toggler state
+                        if (navbarToggler) {
+                            navbarToggler.setAttribute('aria-expanded', 'false');
                         }
                     });
                 }
