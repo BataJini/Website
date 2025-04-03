@@ -303,7 +303,7 @@
 }
 
 /* Additional fixes for responsive displays */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     #jobFiltersModal .modal-dialog {
         width: 90% !important;
         max-width: 90% !important;
@@ -347,7 +347,7 @@
     }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 992px) and (max-width: 1024px) {
     #jobFiltersModal .modal-dialog {
         width: 65% !important;
         max-width: 65% !important;
@@ -381,7 +381,7 @@ body.modal-open {
 }
 
 /* Responsive adjustments for salary inputs */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .salary-input-wrapper {
         gap: 10px;
     }
@@ -548,7 +548,7 @@ body.modal-open {
 }
 
 /* Mobile responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .input-tags-wrapper {
         min-height: 40px;
         padding: 3px 10px;

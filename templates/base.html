@@ -111,7 +111,7 @@
             }
             
             /* Adjust mobile menu to account for bottom safe area */
-            @media (max-width: 768px) {
+            @media (max-width: 993px) {
                 .navbar-collapse {
                     padding-bottom: calc(1rem + var(--safe-area-inset-bottom)) !important;
                 }
@@ -210,7 +210,7 @@
         }
 
         /* Responsive adjustments */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .navbar-collapse {
                 max-height: 80vh;
                 overflow-y: auto;
@@ -266,7 +266,7 @@
         }
 
         /* Ensure no content flickering during mobile menu transitions */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .navbar-collapse:not(.show) {
                 visibility: hidden !important;
                 opacity: 0 !important;
@@ -940,7 +940,7 @@
         }
 
         /* Responsive adjustments for others dropdown */
-        @media (max-width: 576px) {
+        @media (max-width: 992px) {
             .others-dropdown-menu {
                 width: 280px !important;
             }
@@ -1313,7 +1313,7 @@
             box-shadow: none !important;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .navbar-nav {
                 width: 100% !important;
                 padding: 2.5rem 0 0 !important;
@@ -1335,7 +1335,7 @@
         }
 
         /* Improved touch targets and mobile/tablet styles */
-        @media (max-width: 991px) { 
+        @media (max-width: 992px) { 
             /* Styles previously only in 768px block, now needed up to 991px */
             .navbar-nav {
                 width: 100% !important;
@@ -1489,7 +1489,7 @@
                 padding: 1.25rem 0.5rem 0.75rem !important;
                 transform: translateY(100%) !important;
                 visibility: hidden;
-                transition: all 0.3s ease !important;
+                transition: transform 0.3s ease, opacity 0.3s ease !important;
                 background: linear-gradient(135deg, rgba(5, 15, 30, 0.98) 0%, rgba(10, 25, 45, 0.98) 100%) !important;
                 z-index: 2000 !important;
                 overflow-y: auto !important;
@@ -1509,6 +1509,7 @@
                 position: relative !important;
                 color: #E9ECEF !important;
                 border-color: rgba(255, 255, 255, 0.1) !important;
+                opacity: 0;
             }
             
             /* Updated mobile menu text colors to match dark mode */
@@ -1662,6 +1663,7 @@
                 height: auto !important; /* Auto height instead of fixed */
                 transform: translateY(0) !important;
                 visibility: visible; /* Make it visible when shown */
+                opacity: 1;
             }
             
             /* Align auth buttons in bottom menu */
@@ -1720,7 +1722,7 @@
         }
         
         /* Small mobile devices */
-        @media (max-width: 576px) {
+        @media (max-width: 992px) {
             body {
                 font-size: 14px;
             }
@@ -1888,7 +1890,7 @@
         }
 
         /* Mobile viewport fixes */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             html, body {
                 overflow-x: hidden !important;
                 width: 100% !important;
@@ -2354,7 +2356,7 @@
             // Function to ensure mobile menu has correct spacing
             function fixMobileMenuSpacing() {
                 // Only run on mobile screens
-                if (window.innerWidth > 768) return;
+                if (window.innerWidth > 993) return;
                 
                 // Find the mobile auth menu container and adjust its spacing
                 const mobileAuthMenu = document.querySelector('.nav-item.d-lg-none .mobile-auth-menu');
@@ -2389,7 +2391,7 @@
             // Function to make the POST A JOB button bigger and more prominent
             function enhanceMobilePostJobButton() {
                 const postJobBtn = document.querySelector('.navbar-collapse .btn-sign-in');
-                if (postJobBtn && window.innerWidth <= 768) {
+                if (postJobBtn && window.innerWidth <= 993) {
                     // Only apply styles if navbar is visible/showing
                     const navbarCollapse = document.querySelector('.navbar-collapse');
                     if (!navbarCollapse || !navbarCollapse.classList.contains('show')) {
@@ -2520,7 +2522,7 @@
             
             // Fix layout when resizing between mobile and desktop
             function resetNavbar() {
-                const isDesktop = window.innerWidth >= 992;
+                const isDesktop = window.innerWidth >= 993;
                 const navbarCollapse = document.querySelector('.navbar-collapse');
                 const navbarNav = document.querySelector('.navbar-nav');
                 

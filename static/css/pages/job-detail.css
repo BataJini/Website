@@ -42,7 +42,7 @@
 }
 
 /* Add bottom padding to body to prevent content from being hidden */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     body.has-fixed-apply-btn {
         padding-bottom: 80px !important;
     }

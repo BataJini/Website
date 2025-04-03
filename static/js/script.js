@@ -34,14 +34,20 @@
                     
                     // Basic toggle with no animations or transitions
                     if (menu.classList.contains('show')) {
-                        menu.classList.remove('show');
-                        navbar.setAttribute('aria-expanded', 'false');
+                        // Use transition to hide properly
+                        menu.style.transform = 'translateY(100%)';
+                        menu.style.opacity = '0';
+                        
+                        // Remove class after transition completes
+                        setTimeout(function() {
+                            menu.classList.remove('show');
+                            navbar.setAttribute('aria-expanded', 'false');
+                        }, 300);
                     } else {
+                        menu.style.transform = '';
+                        menu.style.opacity = '';
                         menu.classList.add('show');
                         navbar.setAttribute('aria-expanded', 'true');
-                        // Reset any opacity that might have been set by the X button
-                        menu.style.opacity = '';
-                        menu.style.transition = '';
                     }
                     
                     return false;
@@ -52,8 +58,27 @@
                     if (!e.target.closest('.navbar-collapse') && 
                         !e.target.closest('.navbar-toggler') && 
                         menu.classList.contains('show')) {
-                        menu.classList.remove('show');
+                        // Use same transition as above
+                        menu.style.transform = 'translateY(100%)';
+                        menu.style.opacity = '0';
+                        
+                        setTimeout(function() {
+                            menu.classList.remove('show');
+                        }, 300);
                     }
+                });
+                
+                // Handle window resize to prevent flicker at the breakpoint
+                let resizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimer);
+                    // Prevent any animation during resize
+                    menu.style.transition = 'none';
+                    
+                    resizeTimer = setTimeout(function() {
+                        // Restore transitions after resize completes
+                        menu.style.transition = '';
+                    }, 250);
                 });
             }
             

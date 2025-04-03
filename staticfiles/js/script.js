@@ -26,10 +26,78 @@
     }
 
     domReady(() => {
+        // Initialize by cleaning up any stuck menu states
+        const cleanupMenuState = function() {
+            // Remove any menu-open classes that might be stuck
+            document.body.classList.remove('menu-open');
+            document.documentElement.classList.remove('menu-open');
+            
+            // Reset dropdown menus
+            document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                menu.classList.remove('show');
+                const toggle = menu.previousElementSibling;
+                if (toggle) {
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+            
+            // Ensure navbar collapse is closed
+            const navbarCollapse = document.querySelector('.navbar-collapse.show');
+            if (navbarCollapse) {
+                navbarCollapse.classList.remove('show');
+                const toggle = document.querySelector('.navbar-toggler');
+                if (toggle) {
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            }
+            
+            // CRITICAL: Force enable pointer events on all interactive elements
+            document.querySelectorAll('a, button, input, select, [role="button"], .dropdown-toggle, .nav-link').forEach(function(el) {
+                el.style.pointerEvents = 'auto !important';
+                // Remove any inline styles that might be blocking interaction
+                if (el.style.getPropertyValue('pointer-events') === 'none') {
+                    el.style.removeProperty('pointer-events');
+                }
+            });
+            
+            // Force remove any body overflow settings that might be stuck
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        };
+        
+        // Run cleanup on page load
+        cleanupMenuState();
+        
+        // Force enable clickability on all interactive elements for mobile view
+        const forceMobileClickability = function() {
+            // Check if we're in mobile view on desktop
+            if (window.innerWidth <= 992) {
+                document.querySelectorAll('a, button, input, select, [role="button"], .dropdown-toggle, .nav-link').forEach(function(el) {
+                    el.style.pointerEvents = 'auto !important';
+                });
+                
+                // Add touch-action auto to ensure touch events work properly
+                document.body.style.touchAction = 'auto';
+                document.documentElement.style.touchAction = 'auto';
+            }
+        };
+        
+        // Run on load and periodically check
+        forceMobileClickability();
+        setInterval(forceMobileClickability, 1000);
+
         // Mobile menu toggle functionality
         const toggleMenu = function() {
             document.body.classList.toggle('menu-open');
             document.documentElement.classList.toggle('menu-open');
+            
+            // Make sure all elements are clickable in mobile view on desktop
+            if (document.body.classList.contains('menu-open')) {
+                document.querySelectorAll('a, button, input, select, [role="button"]').forEach(function(el) {
+                    // Remove any lingering pointer-events: none that might be applied
+                    el.style.pointerEvents = 'auto';
+                });
+            }
         };
 
         // Menu toggle event handlers
@@ -52,6 +120,48 @@
                 toggleMenu();
             }
         });
+        
+        // Fix for mobile view on desktop - ensure menu class is removed on resize
+        let previousWidth = window.innerWidth;
+        window.addEventListener('resize', function() {
+            const currentWidth = window.innerWidth;
+            
+            // Force clean up menu state on ANY resize 
+            // Remove menu-open class if it exists
+            if (document.body.classList.contains('menu-open')) {
+                document.body.classList.remove('menu-open');
+                document.documentElement.classList.remove('menu-open');
+            }
+            
+            // Reset any dropdowns that might be open
+            document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                menu.classList.remove('show');
+                const toggle = menu.previousElementSibling;
+                if (toggle) {
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+            
+            // Close any open navbar
+            const navbarCollapse = document.querySelector('.navbar-collapse.show');
+            if (navbarCollapse) {
+                navbarCollapse.classList.remove('show');
+                const toggle = document.querySelector('.navbar-toggler');
+                if (toggle) {
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            }
+            
+            // Force enable clickability
+            forceMobileClickability();
+            
+            previousWidth = currentWidth;
+        });
+        
+        // Add touch event handlers for mobile
+        document.addEventListener('touchstart', function() {
+            forceMobileClickability();
+        }, {passive: true});
         
         // Handle mobile dropdown menus
         safeAddEventListener('.navbar-collapse .dropdown-toggle', 'click', function(e) {

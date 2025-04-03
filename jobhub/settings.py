@@ -36,7 +36,7 @@ if 'pythonanywhere.com' in sys.modules or 'PYTHONANYWHERE_SITE' in os.environ:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 else:
     DEBUG = True
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.4', '172.20.10.1', '172.20.10.9']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.210']
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

@@ -264,8 +264,66 @@
         background-color: rgba(255, 255, 255, 0.15) !important;
     }
     
+    /* Scaling for medium screens (993px-1200px) */
+    @media (min-width: 993px) and (max-width: 1200px) {
+        .job-listing {
+            width: 1020px !important; /* Keep the width consistent */
+            max-width: 90% !important; /* Keep the max-width consistent */
+            transform: none !important; /* Remove the scale transformation */
+            margin: 0 auto !important;
+        }
+        
+        /* Make content inside smaller */
+        .job-listing-title {
+            font-size: 1.1rem !important;
+            max-width: 450px !important;
+        }
+        
+        .job-listing-company {
+            font-size: 0.8rem !important;
+        }
+        
+        .job-listing-meta {
+            font-size: 0.8rem !important;
+            gap: 12px !important;
+        }
+        
+        .job-listing-salary {
+            font-size: 0.85rem !important;
+            padding: 4px 10px !important;
+        }
+        
+        .job-listing-tags {
+            flex-wrap: wrap !important;
+            max-height: 60px !important;
+            overflow: hidden !important;
+            gap: 6px !important;
+        }
+        
+        .job-listing-tags .badge {
+            font-size: 0.75rem !important;
+            padding: 3px 8px !important;
+        }
+    }
+
+    @media (min-width: 1201px) and (max-width: 1500px) {
+        /* Slightly adjust content size for larger medium screens */
+        .job-listing-title {
+            font-size: 1.2rem !important;
+            max-width: 550px !important;
+        }
+        
+        .job-listing-tags .badge {
+            font-size: 0.8rem !important;
+        }
+        
+        .job-listing-meta {
+            font-size: 0.85rem !important;
+        }
+    }
+    
     /* Mobile optimizations */
-    @media (max-width: 768px) {
+    @media (max-width: 991px) {
         .job-listing {
             height: auto !important;
             padding: 8px 10px 5px 45px !important;
@@ -594,7 +652,7 @@
         
         /* Keep original non-mobile salary style so desktop isn't affected */
     }
-    
+
     @media (max-width: 480px) {
         .job-listing {
             padding: 6px 8px 4px 40px !important;
@@ -635,20 +693,39 @@
     }
 
     /* Media queries for responsiveness */
-    @media (max-width: 992px) {
+    @media (max-width: 993px) {
         .job-listing-title {
             max-width: 400px !important;
         }
     }
 
-    @media (max-width: 768px) {
+    @media (min-width: 993px) {
+        /* Ensure desktop layout is consistent from 993px to 2000px+ */
+        .job-listing-details {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            height: 80px !important;
+            width: 100% !important;
+        }
+        
+        /* Ensure right container is always displayed in desktop mode */
+        .job-listing-right {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            height: 100% !important;
+        }
+    }
+
+    @media (max-width: 993px) {
         .job-listing-title {
             max-width: 300px !important;
             font-size: 1.1rem !important;
         }
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 993px) {
         .job-listing-title {
             max-width: 200px !important;
             font-size: 1rem !important;

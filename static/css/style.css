@@ -1050,13 +1050,13 @@ iframe {
   }
 }
 
-@media (max-width: 995px) {
+@media (max-width: 992px) {
   .item-pricing__button {
     font-size: 19px;
   }
 }
 
-@media (max-width: 62.6875rem) {
+@media (max-width: 992px) {
   .resources__container {
     padding-top: 70px;
     padding-bottom: 70px;
@@ -1151,7 +1151,7 @@ iframe {
   }
 }
 
-@media (max-width: 47.999rem) {
+@media (max-width: 992px) {
   .spollers-faq__item.active .spollers-faq__button img {
     transform: translate(-10px, -10px) rotate(180deg);
   }
@@ -1372,7 +1372,7 @@ iframe {
   }
 }
 
-@media (max-width: 61.936rem) {
+@media (max-width: 992px) {
   .footer__container {
     flex-direction: column;
     justify-content: center;
@@ -1386,7 +1386,7 @@ iframe {
   }
 }
 
-@media (max-width: 530px) {
+@media (max-width: 992px) {
   .reviews__row {
     grid-template-columns: 1fr;
   }
@@ -1525,7 +1525,7 @@ iframe {
 }
 
 /* Responsive Adjustments */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .search-input-group {
         flex-direction: column;
     }
@@ -1956,7 +1956,7 @@ body {
 }
 
 /* Responsive styles */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .header__container,
   [class*="__container"] {
     width: 100%;
@@ -2414,7 +2414,7 @@ body {
 }
 
 /* Responsive Adjustments */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .job-listing.skeleton {
         padding: 20px 20px 20px 45px !important;
         height: auto !important;
@@ -2451,7 +2451,7 @@ body {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 992px) {
     .job-listing.skeleton {
         padding: 15px 15px 15px 35px !important;
         min-height: 180px !important;
@@ -2630,7 +2630,7 @@ body {
 }
 
 /* Mobile Post A Job button styles */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .navbar-collapse .btn-sign-in {
     margin-top: 1rem !important;
     padding: 0.9rem 1.25rem !important;
@@ -2761,7 +2761,7 @@ body {
 }
 
 /* Mobile cookie consent adjustments */
-@media (max-width: 767px) {
+@media (max-width: 992px) {
     .cookie-consent-banner {
         padding: 1rem 0;
     }
