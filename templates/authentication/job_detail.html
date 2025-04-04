@@ -45,24 +45,19 @@
         }
 
         .job-meta {
-            flex-wrap: wrap !important;
-            gap: 8px !important;
-            font-size: 0.85rem !important;
+            font-size: 0.8rem !important;
+            gap: 0.5rem !important;
             padding-left: 0 !important;
-            position: static !important;
             margin-top: 1rem !important;
-            border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
-            padding: 1rem 0 0 0 !important;
+        }
+
+        .job-meta > div {
+            flex: 0 0 auto !important;
+            margin-right: 0.5rem !important;
         }
 
         [data-bs-theme="dark"] .job-meta {
             border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-        }
-
-        .job-meta > div {
-            flex: 1 1 calc(50% - 4px) !important;
-            min-width: 0 !important;
-            margin-bottom: 0.5rem !important;
         }
 
         .job-meta > div > i {
@@ -94,30 +89,30 @@
             top: 0;
             z-index: 1020;
         }
-        
+
         /* Adjust job title and metadata for mobile */
         .flex-grow-1.d-flex.flex-column {
             width: calc(100% - 75px) !important;
         }
-        
+
         /* Fix margin and alignment issues */
         .card.shadow-lg {
             margin-left: 0 !important;
             margin-right: 0 !important;
             width: 100% !important;
         }
-        
+
         .col-lg-8.left-aligned {
             padding-left: 1.5rem !important;
             padding-right: 1.5rem !important;
         }
-        
+
         .row.left-aligned {
             margin-left: 0 !important;
             margin-right: 0 !important;
             width: 100% !important;
         }
-        
+
         /* Container fixes for mobile */
         .container.left-aligned {
             padding-left: 1rem !important;
@@ -127,23 +122,23 @@
             width: 100% !important;
             margin-top: 0 !important;
         }
-        
+
         section.py-0 {
             margin-top: 0 !important;
             padding-left: 0.75rem !important;
             padding-right: 0 !important;
             padding-top: 0 !important;
         }
-        
+
         /* Adjust content inside cards */
-        .job-qualifications, 
+        .job-qualifications,
         .nice-to-have-qualifications,
-        .job-description, 
+        .job-description,
         .job-requirements,
         .about-company {
             padding-left: 0.5rem !important;
         }
-        
+
         /* Make apply button stick to bottom on mobile */
         .mobile-sticky-apply {
             position: fixed !important;
@@ -158,7 +153,7 @@
             width: 100% !important;
             border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
         }
-        
+
         [data-bs-theme="dark"] .mobile-sticky-apply {
             background-color: var(--bs-dark-bg-subtle) !important;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2) !important;
@@ -168,16 +163,16 @@
         .mb-5 {
             margin-bottom: 5rem !important;
         }
-        
+
         .mb-3 {
             margin-bottom: 0.5rem !important;
         }
-        
+
         .mobile-section {
             margin-top: 0 !important;
             padding-top: 0 !important;
         }
-        
+
         /* Override base styles that might push content down */
         .py-0 {
             padding-top: 0 !important;
@@ -206,11 +201,14 @@
 
         .job-meta {
             font-size: 0.8rem !important;
-            gap: 4px !important;
+            gap: 0.5rem !important;
+            padding-left: 0 !important;
+            margin-top: 1rem !important;
         }
 
         .job-meta > div {
-            flex: 1 1 100% !important;
+            flex: 0 0 auto !important;
+            margin-right: 0.5rem !important;
         }
 
         .job-description p,
@@ -239,14 +237,38 @@
         .form-label {
             font-size: 0.85rem !important;
         }
-        
+
         /* Improved spacing for small mobile devices */
         .d-flex.gap-3 {
             gap: 0.5rem !important;
         }
-        
+
         .d-flex.flex-wrap.align-items-center.gap-3 {
             gap: 0.5rem !important;
+        }
+    }
+
+    [data-bs-theme="dark"] .job-meta.border-top {
+        border-top-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Desktop styles for the job metadata section */
+    @media (min-width: 992px) {
+        .job-meta {
+            padding-left: 0 !important;
+            gap: 1.5rem !important;
+        }
+
+        .job-meta .d-flex.align-items-center {
+            margin-bottom: 0 !important;
+        }
+
+        .job-meta i {
+            font-size: 1rem !important;
+        }
+
+        .job-meta span {
+            font-size: 0.9rem !important;
         }
     }
 </style>
@@ -281,27 +303,27 @@
                             </div>
                         </div>
 
-                        <div class="job-meta d-flex flex-wrap gap-5 py-3 border-top" style="padding-left: 0;">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-currency-dollar fs-5 me-1"></i>
-                                <span class="fw-semibold ms-2">{{ job.salary }}</span>
+                        <div class="job-meta d-flex flex-wrap gap-3 py-2 border-top mt-3" style="padding-left: 0; padding-bottom: 2px;">
+                            <div class="d-flex align-items-center" style="padding-top: 5px;">
+                                <i class="bi bi-currency-dollar fs-6 me-1" style="position: relative; top: -1px;"></i>
+                                <span class="fw-semibold ms-1">{{ job.salary }}</span>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-briefcase fs-5 me-1"></i>
-                                <span class="fw-semibold ms-2">{{ job.type }}</span>
+                            <div class="d-flex align-items-center" style="padding-top: 5px;">
+                                <i class="bi bi-briefcase fs-6 me-1" style="position: relative; top: -1px;"></i>
+                                <span class="fw-semibold ms-1">{{ job.type }}</span>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-star fs-5 me-1"></i>
-                                <span class="fw-semibold ms-2">2+ years</span>
+                            <div class="d-flex align-items-center" style="padding-top: 5px;">
+                                <i class="bi bi-star fs-6 me-1" style="position: relative; top: -1px;"></i>
+                                <span class="fw-semibold ms-1">2+ years</span>
                             </div>
-                            <div class="d-flex align-items-center text-normal">
-                                <i class="bi bi-calendar-check fs-5 me-1"></i>
-                                <span class="ms-2">Posted {{ job.posted_date|timesince|remove_minutes }} ago</span>
+                            <div class="d-flex align-items-center text-normal" style="padding-top: 5px;">
+                                <i class="bi bi-calendar-check fs-6 me-1" style="position: relative; top: -1px;"></i>
+                                <span class="ms-1">Posted {{ job.posted_date|timesince|remove_minutes }} ago</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Skills Card -->
                 {% if job.requirements or job.tags.all %}
                 <div class="card shadow-lg border-0 mb-3">
@@ -317,7 +339,7 @@
                                                 try {
                                                     const skillsContainer = document.querySelector('.job-qualifications .d-flex');
                                                     const skillsData = JSON.parse(document.getElementById('skills-data').textContent);
-                                                    
+
                                                     if (Array.isArray(skillsData) && skillsData.length > 0) {
                                                         skillsContainer.innerHTML = '';
                                                         skillsData.forEach(skill => {
@@ -339,7 +361,7 @@
                                     <span class="badge">JavaScript</span>
                                     <span class="badge">SQL</span>
                                 {% endif %}
-                                
+
                                 {% if job.tags.all %}
                                     {% for tag in job.tags.all %}
                                         <span class="badge">{{ tag.name|format_tag }}</span>
@@ -350,7 +372,7 @@
                     </div>
                 </div>
                 {% endif %}
-                
+
                 <!-- Nice to Have Skills Card -->
                 {% if job.nice_to_have %}
                 <div class="card shadow-lg border-0 mb-3">
@@ -365,7 +387,7 @@
                                             try {
                                                 const niceSkillsContainer = document.querySelector('.nice-to-have-qualifications .d-flex');
                                                 const niceSkillsData = JSON.parse(document.getElementById('nice-skills-data').textContent);
-                                                
+
                                                 if (Array.isArray(niceSkillsData) && niceSkillsData.length > 0) {
                                                     niceSkillsContainer.innerHTML = '';
                                                     niceSkillsData.forEach(skill => {
@@ -386,7 +408,7 @@
                     </div>
                 </div>
                 {% endif %}
-                
+
                 <!-- Description Card -->
                 {% if job.description %}
                 <div class="card shadow-lg border-0 mb-3">
@@ -398,7 +420,7 @@
                     </div>
                 </div>
                 {% endif %}
-                
+
                 <!-- Your Responsibilities Card -->
                 {% if job.requirements and not job.requirements|parse_requirements %}
                 <div class="card shadow-lg border-0 mb-3">
@@ -410,7 +432,7 @@
                     </div>
                 </div>
                 {% endif %}
-                
+
                 <!-- About Company Card -->
                 {% if job.company or job.location or job.job_url %}
                 <div class="card shadow-lg border-0 mb-5">
@@ -480,7 +502,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Mobile Similar Jobs Section -->
                 <div class="d-lg-none mb-5 mt-4">
                     <h3 class="h4 mb-3">Similar Jobs</h3>
@@ -544,33 +566,33 @@
         margin-left: 0 !important;
         max-width: 100% !important;
     }
-    
+
     /* Custom row margin */
     .row.left-aligned {
         margin-left: -20px !important;
     }
-    
+
     /* Custom column padding */
     .col-lg-8.left-aligned {
         padding-left: 10px !important;
     }
-    
+
     /* Override global hover effects from base.html */
-    .card, 
+    .card,
     .card:hover {
         transform: none !important;
         transition: box-shadow 0.2s ease !important;
     }
-    
+
     .card:hover {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
     }
-    
+
     /* Dark mode adjustments for card hover */
     [data-bs-theme="dark"] .card:hover {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
     }
-    
+
     /* Match job listing design while keeping layout */
     .card.shadow-lg {
         background: var(--bs-body-bg) !important;
@@ -579,7 +601,7 @@
         overflow: visible !important;
         border: 1px solid rgba(0, 0, 0, 0.08) !important;
     }
-    
+
     [data-bs-theme="dark"] .card.shadow-lg {
         background: rgba(255, 255, 255, 0.05) !important;
         box-shadow: none !important;
@@ -598,7 +620,7 @@
         border: none !important;
         box-shadow: none !important;
     }
-    
+
     .company-logo img {
         width: 60% !important;
         height: auto !important;
@@ -626,11 +648,11 @@
         margin: 0 !important;
         line-height: 1.4 !important;
     }
-    
+
     [data-bs-theme="dark"] .h2 {
         color: var(--bs-body-color) !important;
     }
-    
+
     .company-name {
         font-size: 1rem !important;
         color: #666 !important;
@@ -639,7 +661,7 @@
         font-weight: 500 !important;
         line-height: 1 !important;
     }
-    
+
     [data-bs-theme="dark"] .company-name {
         color: rgba(255, 255, 255, 0.7) !important;
     }
@@ -652,7 +674,7 @@
         font-weight: 500 !important;
         line-height: 1 !important;
     }
-    
+
     [data-bs-theme="dark"] .location-name {
         color: rgba(255, 255, 255, 0.7) !important;
     }
@@ -663,7 +685,7 @@
         color: #666 !important;
         font-size: 0.9rem !important;
     }
-    
+
     [data-bs-theme="dark"] .job-meta {
         color: rgba(255, 255, 255, 0.7) !important;
     }
@@ -678,7 +700,7 @@
     .text-muted {
         color: #666 !important;
     }
-    
+
     [data-bs-theme="dark"] .text-muted {
         color: rgba(255, 255, 255, 0.7) !important;
     }
@@ -708,7 +730,7 @@
         white-space: nowrap !important;
         border: none !important;
     }
-    
+
     /* Dark mode adjustments for badges */
     [data-bs-theme="dark"] .job-qualifications .badge,
     [data-bs-theme="dark"] .nice-to-have-qualifications .badge {
@@ -735,18 +757,18 @@
     [data-bs-theme="dark"] .job-description p {
         color: var(--bs-body-color);
     }
-    
+
     /* Keep the header badges styled properly */
     .badge.bg-primary, .badge.bg-success {
         color: white !important;
     }
-    
+
     /* Additional padding at bottom to account for sticky apply button on mobile */
     @media (max-width: 992px) {
         .mb-5 {
             margin-bottom: 5rem !important;
         }
-        
+
         .mobile-section {
             margin-top: 0 !important;
             padding-left: 1rem !important;
@@ -755,7 +777,7 @@
             overflow-x: hidden !important;
             padding-top: 0 !important;
         }
-        
+
         .container.left-aligned {
             overflow-x: visible !important;
             width: 100% !important;
@@ -767,7 +789,7 @@
             margin-top: 0 !important;
             padding-top: 0 !important;
         }
-        
+
         body {
             overflow-x: hidden !important;
         }
@@ -776,7 +798,8 @@
     /* Desktop styles for the job metadata section */
     @media (min-width: 992px) {
         .job-meta {
-            padding-left: 114px !important;
+            padding-left: 0 !important;
+            gap: 1.5rem !important;
         }
     }
 
@@ -787,7 +810,7 @@
         font-size: 1.1rem !important;
         border-radius: 8px !important;
     }
-    
+
     /* Ensure bottom sticky positioning works across all mobile browsers */
     @supports (-webkit-touch-callout: none) {
         /* iOS specific styles */
@@ -796,7 +819,7 @@
             position: sticky !important;
             bottom: 0 !important;
         }
-        
+
         /* Add padding to the bottom of the page to prevent content from being hidden behind the sticky button */
         body {
             padding-bottom: 70px !important;
@@ -816,20 +839,20 @@
         width: 100%;
         border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
-    
+
     [data-bs-theme="dark"] .fixed-bottom-apply-btn {
         background: var(--bs-dark-bg-subtle);
         box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
+
     .fixed-bottom-apply-btn .btn {
         font-weight: 600;
         font-size: 1.1rem;
         padding: 12px 15px;
         border-radius: 8px;
     }
-    
+
     /* Add bottom padding to body to prevent content from being hidden */
     @media (max-width: 992px) {
         body {
@@ -845,12 +868,12 @@
         // Hide apply button when menu is opened
         const navbarToggler = document.querySelector('.navbar-toggler');
         const applyButton = document.getElementById('mobileApplyButton');
-        
+
         if (navbarToggler && applyButton) {
             navbarToggler.addEventListener('click', function() {
                 // Check if navbar is expanded or collapsed
                 const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                
+
                 if (!isExpanded) {
                     // Menu is being opened (will be expanded after click)
                     applyButton.style.display = 'none';
@@ -861,7 +884,7 @@
                     }, 300); // Small delay to match menu animation
                 }
             });
-            
+
             // Also listen for collapse/show events on the navbar
             const navbarCollapse = document.querySelector('.navbar-collapse');
             if (navbarCollapse) {
@@ -869,7 +892,7 @@
                     // Menu has been closed
                     applyButton.style.display = 'block';
                 });
-                
+
                 navbarCollapse.addEventListener('shown.bs.collapse', function() {
                     // Menu has been opened
                     applyButton.style.display = 'none';

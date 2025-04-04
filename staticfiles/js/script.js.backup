@@ -1,0 +1,377 @@
+(function() {
+    // Defensive wrapper to prevent global scope pollution
+    'use strict';
+
+    console.log('Script loaded - initialization starting');
+
+    let clickCount = 0; // To track potential infinite loops
+    let lastClickTime = 0;
+    let isFirstLoad = true;
+
+    // Utility function to safely add event listeners
+    function safeAddEventListener(selectors, event, handler) {
+        if (typeof selectors === 'string') {
+            selectors = [selectors];
+        }
+        
+        selectors.forEach(function(selector) {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(function(element) {
+                element.addEventListener(event, handler);
+            });
+        });
+    }
+
+    // DOM ready function
+    function ready(callback) {
+        if (document.readyState !== 'loading') {
+            console.log('DOM already ready');
+            callback();
+        } else {
+            console.log('Waiting for DOM ready event');
+            document.addEventListener('DOMContentLoaded', callback);
+        }
+    }
+
+    ready(() => {
+        // Force enable scrolling on document/body
+        const enableScrolling = function() {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.height = '';
+            document.documentElement.style.overflow = '';
+            document.documentElement.style.position = '';
+            document.documentElement.style.height = '';
+        };
+        
+        // Ensure scrolling is always enabled
+        document.addEventListener('mouseover', enableScrolling, true);
+
+        // Handle mobile menu - simplified with logging
+        ready(function() {
+            console.log('DOM ready - setting up event handlers');
+            
+            // Track all click events on the page for debugging
+            document.addEventListener('click', function(e) {
+                const now = Date.now();
+                
+                // Reset count if more than 500ms has passed
+                if (now - lastClickTime > 500) {
+                    clickCount = 0;
+                }
+                
+                clickCount++;
+                lastClickTime = now;
+                
+                if (clickCount > 5 && now - lastClickTime < 300) {
+                    console.warn('Possible infinite click loop detected!', e.target);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    clickCount = 0; // Reset counter after warning
+                    return false;
+                }
+            }, true); // Use capture to get events first
+            
+            // Super simple mobile menu toggle that avoids any complex logic
+            const toggleButton = document.querySelector('.navbar-toggler');
+            const mobileMenu = document.querySelector('.navbar-collapse');
+            
+            if (toggleButton && mobileMenu) {
+                console.log('Found navbar elements, initializing mobile menu');
+                
+                // iOS-specific fixes
+                if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+                    console.log('iOS device detected - applying navbar fixes');
+                    
+                    // Add specific handler for iOS
+                    console.log('Adding touchstart handler to navbar-toggler');
+                    toggleButton.addEventListener('touchstart', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Simple toggle with minimal DOM manipulation
+                        const isOpen = mobileMenu.classList.contains('show');
+                        mobileMenu.classList.toggle('show');
+                        
+                        // Only change body style if necessary
+                        if (isOpen) {
+                            document.body.style.removeProperty('overflow');
+                        } else {
+                            document.body.style.overflow = 'hidden';
+                        }
+                        
+                        return false;
+                    }, {passive: false});
+                } else {
+                    // For non-iOS devices
+                    toggleButton.addEventListener('click', function(e) {
+                        console.log('Toggle button clicked');
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Simple toggle without any extra logic
+                        const isOpen = mobileMenu.classList.contains('show');
+                        mobileMenu.classList.toggle('show');
+                        
+                        // Only change body style if necessary
+                        if (isOpen) {
+                            document.body.style.removeProperty('overflow');
+                        } else {
+                            document.body.style.overflow = 'hidden';
+                        }
+                        
+                        return false;
+                    });
+                }
+                
+                // Close menu when clicking anywhere else
+                document.addEventListener('click', function(e) {
+                    // Only run if menu is open
+                    if (!mobileMenu.classList.contains('show')) return;
+                    
+                    // If click target is not in the menu or toggle button
+                    if (!e.target.closest('.navbar-collapse') && !e.target.closest('.navbar-toggler')) {
+                        console.log('Closing menu from outside click');
+                        mobileMenu.classList.remove('show');
+                        document.body.style.removeProperty('overflow');
+                    }
+                });
+                
+                // Simple dropdown handling
+                const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+                dropdownToggles.forEach(function(toggle) {
+                    toggle.addEventListener('click', function(e) {
+                        console.log('Dropdown toggle clicked');
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const menu = this.nextElementSibling;
+                        if (menu && menu.classList.contains('dropdown-menu')) {
+                            menu.classList.toggle('show');
+                        }
+                        return false;
+                    });
+                });
+            } else {
+                console.warn('Navbar elements not found!');
+            }
+            
+            // Fully disable any hover or mouseover events on mobile
+            if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+                console.log('Touch device detected, disabling hover events');
+                
+                // Add class to body for CSS targeting
+                document.body.classList.add('touch-device');
+                
+                // Override hover events
+                const style = document.createElement('style');
+                style.textContent = `
+                    @media (max-width: 992px) {
+                        .navbar *:hover { 
+                            pointer-events: none !important;
+                        }
+                        /* Force all hover states to be applied on touch */
+                        .navbar a:active, .navbar button:active {
+                            background-color: transparent !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            console.log('Initialization complete');
+        });
+
+        // Spoller buttons with additional error checking
+        try {
+            const spollerButtons = document.querySelectorAll("[data-spoller] .spollers-faq__button");
+            spollerButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    try {
+                        const currentItem = button.closest("[data-spoller]");
+                        const content = currentItem.querySelector(".spollers-faq__text");
+
+                        const parent = currentItem.parentNode;
+                        const isOneSpoller = parent.hasAttribute("data-one-spoller");
+
+                        if (isOneSpoller) {
+                            const allItems = parent.querySelectorAll("[data-spoller]");
+                            allItems.forEach((item) => {
+                                if (item !== currentItem) {
+                                    const otherContent = item.querySelector(".spollers-faq__text");
+                                    item.classList.remove("active");
+                                    otherContent.style.maxHeight = null;
+                                }
+                            });
+                        }
+
+                        if (currentItem.classList.contains("active")) {
+                            currentItem.classList.remove("active");
+                            content.style.maxHeight = null;
+                        } else {
+                            currentItem.classList.add("active");
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    } catch (error) {
+                        console.error("Spoller button error:", error);
+                    }
+                });
+            });
+        } catch (error) {
+            console.error("Spoller initialization error:", error);
+        }
+
+        // Auto-hide messages
+        try {
+            const messages = document.querySelectorAll('.message, .alert');
+            if (messages.length > 0) {
+                setTimeout(function() {
+                    messages.forEach(message => {
+                        message.style.opacity = '0';
+                        setTimeout(() => {
+                            if (message.parentNode) {
+                                message.parentNode.removeChild(message);
+                            }
+                        }, 300);
+                    });
+                }, 5000);
+            }
+        } catch (error) {
+            console.error("Message auto-hide error:", error);
+        }
+
+        // Form input validation
+        try {
+            const formInputs = document.querySelectorAll('.form-group input, .form-control');
+            formInputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value.trim() !== '') {
+                        this.classList.add('has-value');
+                    } else {
+                        this.classList.remove('has-value');
+                    }
+                });
+            });
+        } catch (error) {
+            console.error("Form input validation error:", error);
+        }
+
+        // Job search form
+        try {
+            const searchForm = document.querySelector('.search-form');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    // Safely get form values
+                    const getInputValue = (selector) => {
+                        const input = this.querySelector(selector);
+                        return input ? input.value : '';
+                    };
+                    const getCheckboxValue = (selector) => {
+                        const checkbox = this.querySelector(selector);
+                        return checkbox ? checkbox.checked : false;
+                    };
+
+                    const keyword = getInputValue('input[name="q"]');
+                    const location = getInputValue('input[name="location"]');
+                    const isRemote = getCheckboxValue('input[name="remote"]');
+                    const isFullTime = getCheckboxValue('input[name="fulltime"]');
+                    const isPartTime = getCheckboxValue('input[name="parttime"]');
+
+                    const params = new URLSearchParams();
+                    if (keyword) params.append('q', keyword);
+                    if (location) params.append('location', location);
+                    if (isRemote) params.append('remote', '1');
+                    if (isFullTime) params.append('fulltime', '1');
+                    if (isPartTime) params.append('parttime', '1');
+
+                    window.location.href = `/jobs?${params.toString()}`;
+                });
+            }
+        } catch (error) {
+            console.error("Job search form error:", error);
+        }
+
+        // Smooth scroll for anchor links
+        try {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetSelector = this.getAttribute('href');
+                    const target = document.querySelector(targetSelector);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        } catch (error) {
+            console.error("Smooth scroll error:", error);
+        }
+
+        // Animate on scroll
+        try {
+            const animateOnScroll = function() {
+                const elements = document.querySelectorAll('.animate-on-scroll');
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    if (elementPosition < windowHeight - 100) {
+                        element.classList.add('animated');
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Run once on page load
+        } catch (error) {
+            console.error("Animate on scroll error:", error);
+        }
+
+        // Add this new function to ensure body remains scrollable on navbar hover
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            // Add mouseenter and leave events to ensure scrolling is enabled
+            navbar.addEventListener('mouseenter', function() {
+                document.body.style.overflow = 'auto';
+                document.body.style.overflowY = 'auto';
+                document.documentElement.style.overflow = 'auto';
+                document.documentElement.style.overflowY = 'auto';
+            });
+            
+            navbar.addEventListener('mouseleave', function() {
+                document.body.style.overflow = 'auto';
+                document.body.style.overflowY = 'auto';
+                document.documentElement.style.overflow = 'auto';
+                document.documentElement.style.overflowY = 'auto';
+            });
+            
+            // Create a MutationObserver to watch for style changes that might block scrolling
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === 'style') {
+                        document.body.style.overflow = 'auto';
+                        document.body.style.overflowY = 'auto';
+                        document.documentElement.style.overflow = 'auto';
+                        document.documentElement.style.overflowY = 'auto';
+                    }
+                });
+            });
+            
+            // Observe the body and html elements for style changes
+            observer.observe(document.body, { attributes: true });
+            observer.observe(document.documentElement, { attributes: true });
+            
+            // Monitor all hover events on navbar elements
+            const navbarElements = navbar.querySelectorAll('*');
+            navbarElements.forEach(function(element) {
+                element.addEventListener('mouseenter', function() {
+                    document.body.style.overflow = 'auto';
+                    document.body.style.overflowY = 'auto';
+                });
+            });
+        }
+    });
+})();
