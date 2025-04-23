@@ -1,0 +1,2883 @@
+{% load static %}
+{% load django_bootstrap5 %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" data-bs-theme="light">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' https:;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+        style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/ https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/;
+        font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/;
+        img-src 'self' data: https:;
+        connect-src 'self' https:;
+        frame-src 'none';
+        object-src 'none';
+    ">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="description" content="{% trans ' - Find your dream job today' %}">
+    <meta name="keywords" content="{% trans 'jobs, career, employment, hiring, job search' %}">
+    <meta name="theme-color" content="#0A1932">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" />
+    <title>{% block title %}{% trans '' %}{% endblock %}</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    
+    <!-- Critical CSS first -->
+    {% bootstrap_css %}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Defer non-critical CSS for mobile -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'css/hero.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'css/salary-slider.css' %}?v=1.0" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'css/filters.css' %}" media="print" onload="this.media='all'">
+    
+    <!-- Fallback for browsers that don't support onload -->
+    <noscript>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/hero.css' %}">
+        <link rel="stylesheet" href="{% static 'css/salary-slider.css' %}?v=1.0">
+        <link rel="stylesheet" href="{% static 'css/filters.css' %}">
+    </noscript>
+    
+    {% block extra_css %}{% endblock %}
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+            position: relative;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
+        
+        /* iOS safe area handling */
+        @supports (padding: max(0px)) {
+            body {
+                --safe-area-inset-top: env(safe-area-inset-top, 0px);
+                --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+                --navbar-background: linear-gradient(135deg, rgba(10, 25, 50, 1) 0%, rgba(20, 40, 80, 1) 100%);
+            }
+            
+            /* Status bar background (top notch area) */
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: var(--safe-area-inset-top);
+                background: rgba(10, 25, 50, 1);
+                z-index: 2001;
+            }
+            
+            /* Bottom safe area background */
+            body::after {
+                content: '';
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: var(--safe-area-inset-bottom);
+                background: rgba(10, 25, 50, 1);
+                z-index: 2001;
+            }
+            
+            /* Adjust navbar to account for notch */
+            .navbar {
+                padding-top: calc(0.3rem + var(--safe-area-inset-top)) !important;
+            }
+            
+            /* Adjust mobile menu to account for bottom safe area */
+            @media (max-width: 993px) {
+                .navbar-collapse {
+                    padding-bottom: calc(1rem + var(--safe-area-inset-bottom)) !important;
+                }
+            }
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: var(--bs-body-bg);
+            border-bottom: 1px solid var(--bs-border-color);
+            padding: 0.5rem 1rem;
+            pointer-events: auto !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 1030 !important;
+        }
+
+        .navbar .container {
+            pointer-events: auto !important;
+        }
+
+        .navbar-brand,
+        .navbar-nav,
+        .nav-link,
+        .navbar-toggler,
+        .btn-sign-in,
+        .dropdown-toggle,
+        .theme-toggle-btn,
+        .language-switcher {
+            pointer-events: auto !important;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            color: white !important;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        /* Main content area */
+        main {
+            flex: 1 0 auto;
+            width: 100%;
+            padding: 1rem;
+            margin-top: 64px; /* Adjust based on navbar height */
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            width: 100%;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(10, 25, 50, 1) 0%, rgba(20, 40, 80, 1) 100%);
+        }
+
+        .footer-main {
+            position: relative;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(10, 25, 50, 0.95) 0%, rgba(20, 40, 80, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom {
+            position: relative;
+            width: 100vw;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            background: transparent;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Dropdown improvements */
+        .dropdown-menu {
+            margin-top: 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navbar-collapse {
+                max-height: 80vh;
+                overflow-y: auto;
+                pointer-events: auto !important;
+            }
+
+            main {
+                margin-top: 56px; /* Adjust for smaller screens */
+            }
+            
+            /* Footer mobile styles - 2 column layout */
+            .footer-column {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .footer-main .row > div {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+            
+            .footer h6 {
+                font-size: 1rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            
+            .footer .small {
+                font-size: 0.8rem !important;
+            }
+            
+            .footer-column .list-unstyled li {
+                margin-bottom: 0.5rem !important;
+            }
+            
+            .social-links {
+                gap: 1rem !important;
+            }
+            
+            .social-links a {
+                font-size: 1.2rem !important;
+            }
+        }
+
+        :root {
+            --primary-color: #2684FF;
+            --secondary-color: #0052CC;
+            --success-color: #36B37E;
+            --danger-color: #FF5630;
+            --dark-bg: #121212;
+            --dark-card: #1E1E1E;
+            --dark-border: #2D2D2D;
+            --dark-input: #2D2D2D;
+            --dark-hover: #2A2A2A;
+        }
+
+        /* Ensure no content flickering during mobile menu transitions */
+        @media (max-width: 992px) {
+            .navbar-collapse:not(.show) {
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+            
+            .navbar-collapse.collapsing {
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+            
+            /* Hide button text when collapse is not shown */
+            .navbar-collapse:not(.show) .btn-sign-in span {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+        }
+        
+        body {
+            padding-top: 64px;
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
+
+        .navbar {
+            height: 64px;
+            background: linear-gradient(135deg, rgba(10, 25, 50, 1) 0%, rgba(20, 40, 80, 1) 100%);
+            border-bottom: 1px solid rgba(38, 132, 255, 0.2);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-link {
+            font-weight: 400 !important;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 0.5rem 0;
+            margin: 0 1rem;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: transparent;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid white;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            opacity: 0.7;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-link.active:after {
+            display: none;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--bs-body-color);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(38, 132, 255, 0.08);
+            color: var(--primary-color);
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: rgba(255, 86, 48, 0.08);
+            color: var(--danger-color);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Dark mode switch styles */
+        .form-switch .form-check-input {
+            width: 2.5em;
+            height: 1.5em;
+            margin-top: 0;
+            cursor: pointer;
+        }
+
+        .form-switch .form-check-input:focus {
+            box-shadow: none;
+        }
+
+        .bi-moon-stars {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        [data-bs-theme="dark"] .bi-moon-stars {
+            color: white;
+        }
+
+        [data-bs-theme="dark"] {
+            --bs-body-bg: var(--dark-bg);
+            --bs-body-color: #E9ECEF;
+            --bs-border-color: var(--dark-border);
+            --bs-navbar-bg: var(--dark-bg);
+            --bs-card-bg: var(--dark-card);
+            --bs-input-bg: var(--dark-input);
+            --bs-input-color: #E9ECEF;
+            --bs-input-border-color: var(--dark-border);
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background: linear-gradient(135deg, rgba(5, 15, 30, 1) 0%, rgba(10, 25, 45, 1) 100%);
+            border-color: rgba(38, 132, 255, 0.1);
+            box-shadow: 0 1px 0 0 rgba(38, 132, 255, 0.1);
+        }
+
+        /* Fix for dark rectangle in navbar */
+        [data-bs-theme="dark"] .navbar-nav,
+        [data-bs-theme="dark"] .navbar-nav.me-auto,
+        [data-bs-theme="dark"] .navbar-collapse {
+            background-color: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        [data-bs-theme="dark"] .navbar-brand:hover {
+            color: white !important;
+            text-shadow: 0 0 15px rgba(38, 132, 255, 0.5);
+        }
+
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #1E1E1E !important;
+            border-color: #2D2D2D !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-bs-theme="dark"] .dropdown-divider {
+            border-color: #2D2D2D !important;
+        }
+
+        [data-bs-theme="dark"] .card {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        [data-bs-theme="dark"] .bg-light {
+            background-color: var(--dark-card) !important;
+        }
+
+        [data-bs-theme="dark"] .border-bottom {
+            border-color: var(--dark-border) !important;
+        }
+
+        [data-bs-theme="dark"] .text-muted {
+            color: #9BA1A6 !important;
+        }
+
+        /* Smooth transitions */
+        * {
+            transition: background-color 0.2s ease,
+                        color 0.2s ease,
+                        border-color 0.2s ease,
+                        box-shadow 0.2s ease,
+                        transform 0.2s ease;
+        }
+
+        /* Improved form controls */
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border: 1px solid var(--bs-border-color);
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(38, 132, 255, 0.2);
+        }
+
+        /* Card hover effects */
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] .card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Navbar improvements */
+        .navbar {
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .navbar .container {
+            padding-left: 0;  /* Remove left padding */
+        }
+
+        /* Move logo and menu items to the left */
+        .navbar-brand {
+            margin-left: -25px;  /* Increased negative margin */
+            margin-right: 2rem;  /* Add space after the logo */
+            padding-left: 0;
+        }
+
+        .navbar-nav {
+            margin-left: -20px;  /* Increased negative margin */
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: transparent;
+        }
+
+        /* Add right margin adjustment for the navbar container */
+        .navbar .container {
+            padding-right: 0;
+        }
+
+        /* Move right-side buttons closer to the edge */
+        .navbar-collapse .d-flex.align-items-center.gap-3 {
+            margin-right: -35px;
+            gap: 0.5rem !important;  /* Reduce gap between elements */
+        }
+
+        /* Ensure language switcher is properly positioned */
+        .language-switcher {
+            margin-right: 0;  /* Remove right margin */
+            margin-left: -10px;  /* Add negative left margin */
+        }
+
+        .dropdown-menu {
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 0.5rem;
+        }
+
+        .dropdown-item {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Dropdown item styling - with rounded corners for first and last items */
+        .dropdown-item:first-child {
+            border-top-left-radius: 8px !important;
+            border-top-right-radius: 8px !important;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom-left-radius: 8px !important;
+            border-bottom-right-radius: 8px !important;
+        }
+
+        /* Dropdown menu show class with animation */
+        .dropdown-menu.show {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            position: absolute !important;
+            z-index: 1000 !important;
+            animation: none !important;
+            transform: none !important;
+        }
+
+        /* Dropdown menu styling - updated with less rounded corners */
+        .dropdown-menu {
+            display: none;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            border-radius: 4px !important; /* Reduced border radius */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+            padding: 0 !important;
+            min-width: 220px !important;
+            margin-top: 0.5rem !important;
+            background-color: white !important;
+            overflow: hidden !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #1E1E1E !important;
+            border-color: #2D2D2D !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .dropdown-item {
+            padding: 8px 16px !important;
+            font-weight: 500 !important;
+            font-size: 0.9rem !important;
+            color: #333 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            border-radius: 0 !important; /* Remove border radius from items */
+            border-left: 2px solid transparent !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-item {
+            color: #E9ECEF !important;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f5f8ff !important;
+            color: var(--primary-color) !important;
+            border-left-color: var(--primary-color) !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: #2A2A2A !important;
+        }
+
+        .dropdown-header {
+            font-size: 0.75rem !important;
+            font-weight: 600 !important;
+            color: #6c757d !important;
+            padding: 8px 16px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            background-color: #f8f9fa !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+            border-radius: 0 !important; /* Remove border radius from header */
+        }
+
+        [data-bs-theme="dark"] .dropdown-header {
+            background-color: #2A2A2A !important;
+            border-color: #2D2D2D !important;
+            color: #9BA1A6 !important;
+        }
+
+        .dropdown-divider {
+            margin: 0 !important;
+            border-color: rgba(0, 0, 0, 0.1) !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-divider {
+            border-color: #2D2D2D !important;
+        }
+
+        /* Remove any remaining rounded corners */
+        .dropdown-menu.show {
+            border-radius: 4px !important;
+        }
+
+        .dropdown-item:first-child,
+        .dropdown-item:last-child {
+            border-radius: 0 !important;
+        }
+
+        /* Dropdown item icon styling - exact match */
+        .dropdown-item i {
+            margin-right: 0.75rem !important;
+            font-size: 1rem !important;
+            color: #6c757d !important;
+            width: 20px !important;
+            text-align: center !important;
+        }
+
+        .dropdown-item:hover i {
+            color: #2684FF !important;
+        }
+
+        /* NoFluffJobs style button */
+        .btn-sign-in, .dropdown-toggle.btn-primary {
+            background-color: transparent !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 50px !important;
+            padding: 0.5rem 1rem !important;
+            font-weight: 400 !important;
+            font-size: 0.9rem !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            transition: all 0.2s ease !important;
+            box-shadow: none !important;
+        }
+
+        /* Special style for POST A JOB button and LOG IN button */
+        a.btn-sign-in, .dropdown-toggle.btn-sign-in {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 0.35rem 1.2rem !important;
+        }
+
+        /* Specific style for POST A JOB button */
+        a.btn-sign-in {
+            background-color: transparent !important;
+        }
+
+        /* Specific style for LOG IN button */
+        .dropdown-toggle.btn-sign-in {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* Special hover effect for POST A JOB and LOG IN buttons */
+        a.btn-sign-in:hover, .dropdown-toggle.btn-sign-in:hover {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            background-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* Navbar brand (logo) styles */
+        .navbar-brand {
+            color: white !important;
+        }
+
+        .navbar-brand:hover,
+        .navbar-brand:focus,
+        .navbar-brand:active,
+        .navbar-brand:visited {
+            color: white !important;
+        }
+
+        /* Dark mode adjustments */
+        [data-bs-theme="dark"] .dropdown-toggle.btn-sign-in {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        [data-bs-theme="dark"] .dropdown-toggle.btn-sign-in:hover {
+            background-color: rgba(255, 255, 255, 0.12) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* Dropdown menu positioning fix - align left sides */
+        .dropdown {
+            position: relative !important;
+        }
+
+        .dropdown-menu {
+            left: 0 !important; /* Default alignment to left side of parent */
+            right: auto !important;
+            transform-origin: top left !important;
+            margin-top: 12px !important; /* Increased margin to prevent covering the button */
+            top: 100% !important; /* Position below the button */
+        }
+
+        /* Special case for right-aligned dropdowns */
+        .dropdown-menu.dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+            transform-origin: top right !important;
+            margin-top: 12px !important; /* Increased margin to prevent covering the button */
+        }
+
+        /* Apply ripple effect to all buttons with dropdowns */
+        .dropdown-toggle {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-toggle:active {
+            transform: scale(0.95) !important;
+        }
+
+        .dropdown-toggle::after {
+            display: none !important;
+        }
+
+        /* Add a class to handle dropdown alignment */
+        .dropdown-align-left .dropdown-menu {
+            left: 0 !important;
+            right: auto !important;
+            transform-origin: top left !important;
+        }
+
+        .dropdown-align-right .dropdown-menu {
+            right: 0 !important;
+            left: auto !important;
+            transform-origin: top right !important;
+        }
+
+        /* Improved active state for nav links */
+        .nav-link.active {
+            color: white !important;
+            border-bottom: 2px solid white;
+            font-weight: 500 !important;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Improved spacing for nav items */
+        .navbar-nav .nav-item {
+            margin: 0 0.5rem;
+        }
+
+        .navbar-nav .nav-link {
+            padding: 0.75rem 0;
+            margin: 0;
+            position: relative;
+        }
+
+        /* Ensure only one chevron is shown */
+        .dropdown-toggle::after {
+            display: none !important;
+        }
+
+        /* Additional class to hide default caret */
+        .no-caret::after {
+            display: none !important;
+        }
+
+        /* Button click animation */
+        .btn-sign-in {
+            transition: all 0.2s ease !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-sign-in:active {
+            transform: scale(0.95) !important;
+        }
+
+        .btn-sign-in::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%, -50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn-sign-in:active::after {
+            animation: ripple 0.4s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0) translate(-50%, -50%);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20) translate(-50%, -50%);
+                opacity: 0;
+            }
+        }
+
+        /* Dropdown item hover animation */
+        .dropdown-item {
+            transition: all 0.15s ease-out !important;
+        }
+
+        .dropdown-item:hover {
+            transform: translateX(3px);
+        }
+
+        /* Dropdown menu positioning fix - align left sides */
+        .dropdown {
+            position: relative !important;
+        }
+
+        .dropdown-menu {
+            left: 0 !important; /* Default alignment to left side of parent */
+            right: auto !important;
+            transform-origin: top left !important;
+        }
+
+        /* Special case for right-aligned dropdowns */
+        .dropdown-menu.dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+            transform-origin: top right !important;
+        }
+
+        /* Others specialization dropdown specific styles */
+        .others-dropdown-menu {
+            width: 350px !important;
+            max-width: 90vw !important;
+            padding: 0 !important;
+            overflow: visible !important;
+        }
+
+        .others-dropdown-menu .row {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            margin: 0 -5px !important;
+        }
+
+        .others-dropdown-menu .col-4 {
+            flex: 0 0 33.333333% !important;
+            max-width: 33.333333% !important;
+            padding: 0 5px !important;
+        }
+
+        .others-dropdown-menu .form-check {
+            margin-bottom: 8px !important;
+            padding: 4px 0 !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .others-dropdown-menu .form-check-input {
+            margin-right: 8px !important;
+            position: static !important;
+            opacity: 1 !important;
+        }
+
+        .others-dropdown-menu .form-check-label {
+            font-size: 14px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: block !important;
+            width: 100% !important;
+        }
+
+        /* Responsive adjustments for others dropdown */
+        @media (max-width: 992px) {
+            .others-dropdown-menu {
+                width: 280px !important;
+            }
+
+            .others-dropdown-menu .col-4 {
+                flex: 0 0 50% !important;
+                max-width: 50% !important;
+            }
+        }
+
+        /* Messages/Notifications styling */
+        .messages {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            width: auto;
+            max-width: 300px;
+        }
+
+        .alert {
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateX(100%);
+            animation: slideIn 0.3s forwards;
+        }
+
+        .alert-success {
+            background-color: rgba(54, 179, 126, 0.95);
+            color: white;
+            border: none;
+        }
+
+        .alert-danger {
+            background-color: rgba(255, 86, 48, 0.95);
+            color: white;
+            border: none;
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 171, 0, 0.95);
+            color: white;
+            border: none;
+        }
+
+        .alert-info {
+            background-color: rgba(38, 132, 255, 0.95);
+            color: white;
+            border: none;
+        }
+
+        .alert .btn-close {
+            padding: 12px;
+            margin: -8px -8px -8px 8px;
+            opacity: 0.8;
+        }
+
+        .alert .btn-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        .alert.fade-out {
+            animation: slideOut 0.3s forwards;
+        }
+
+        /* Updated language switcher styles for direct toggle */
+        .language-switcher .btn-sign-in {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 50%;
+            background-color: transparent !important;
+            color: var(--bs-body-color);
+            border: none !important;
+            width: 42px;
+            height: 42px;
+            overflow: hidden;
+            box-shadow: none !important;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-left: -5px;  /* Add negative left margin to the button itself */
+        }
+
+        .language-switcher .btn-sign-in:hover {
+            transform: scale(1.1);
+            background-color: transparent !important; /* Remove background on hover */
+            box-shadow: none !important; /* Remove box shadow */
+        }
+
+        .language-switcher .btn-sign-in:active {
+            transform: scale(0.95);
+        }
+
+        .language-switcher .flag-icon {
+            width: 24px;  /* Slightly increased flag size */
+            height: 24px; /* Slightly increased flag size */
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+
+        .language-switcher .btn-sign-in:hover .flag-icon {
+            transform: rotate(10deg);
+        }
+
+        /* Dropdown menu flag icons */
+        .dropdown-item img.me-2 {
+            width: 24px !important;
+            height: 24px !important;
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            object-position: center !important;
+        }
+
+        footer .text-primary {
+            color: var(--primary-color) !important;
+            transition: all 0.3s ease;
+        }
+
+        footer .text-primary:hover {
+            color: var(--secondary-color) !important;
+            text-shadow: 0 0 10px rgba(38, 132, 255, 0.3);
+        }
+
+        [data-bs-theme="dark"] footer .text-primary:hover {
+            text-shadow: 0 0 10px rgba(38, 132, 255, 0.5);
+        }
+
+        [data-bs-theme="dark"] .btn-sign-in {
+            border: none !important;
+        }
+
+        [data-bs-theme="dark"] .btn-sign-in:hover {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        /* Add these new styles for the theme toggle button */
+        .theme-toggle-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            color: rgba(255, 255, 255, 0.85);
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle-btn:hover {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .theme-toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        .theme-toggle-btn i {
+            font-size: 1.25rem;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-toggle-btn i.rotate {
+            transform: rotate(360deg);
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn i.bi-moon-stars {
+            display: none;
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn i.bi-sun {
+            display: block;
+        }
+
+        .theme-toggle-btn i.bi-sun {
+            display: none;
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn i.bi-moon-stars {
+            display: none;
+        }
+
+        [data-bs-theme="dark"] .theme-toggle-btn i.bi-sun {
+            display: block;
+            color: #ffd43b;
+        }
+
+        .badge-new {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 1rem;
+            background-color: #3772FF;
+            color: white;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .badge-featured {
+            display: inline-block !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+            padding: 3px 8px !important;
+            border-radius: 1rem !important;
+            background-color: #FFC107 !important;
+            color: #212529 !important;
+            margin-left: 8px !important;
+            vertical-align: middle !important;
+            z-index: 10 !important;
+        }
+
+        @keyframes featured-pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+            }
+            
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+            }
+            
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+            }
+        }
+
+        @keyframes featured-shine {
+            0% {
+                background-position: -100% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .featured-badge {
+            display: inline-block !important;
+            background: linear-gradient(
+                110deg, 
+                #FFC107 20%, 
+                #FFD54F 40%, 
+                #FFE082 60%, 
+                #FFC107 80%
+            ) !important;
+            background-size: 200% auto !important;
+            color: #000000 !important;
+            font-size: 10px !important;
+            font-weight: bold !important;
+            padding: 4px 10px !important;
+            border-radius: 12px !important;
+            margin-left: 8px !important;
+            vertical-align: middle !important;
+            animation: featured-pulse 2s infinite, featured-shine 3s linear infinite !important;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+            letter-spacing: 0.5px !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 
+                0 2px 4px rgba(255, 193, 7, 0.3),
+                inset 0 1px 3px rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .featured-badge:hover {
+            transform: translateY(-1px) scale(1.05) !important;
+            box-shadow: 
+                0 4px 8px rgba(255, 193, 7, 0.4),
+                inset 0 1px 3px rgba(255, 255, 255, 0.3) !important;
+        }
+
+        [data-bs-theme="dark"] .featured-badge {
+            color: #000000 !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 
+                0 2px 4px rgba(255, 193, 7, 0.3),
+                inset 0 1px 3px rgba(255, 255, 255, 0.3) !important;
+        }
+
+        /* Override Bootstrap badge styles for job listing tags */
+        .job-listing-tags .badge {
+            display: inline-block !important;
+            padding: 6px 16px !important; /* Reduced height by decreasing padding */
+            background-color: #f5f5f7 !important;
+            border-radius: 6px !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; /* Increased shadow */
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            color: #5f6368 !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            transition: all 0.2s ease !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            margin: 0.25rem 0.25rem 0.25rem 0 !important;
+            border: none !important; /* Removed border */
+        }
+        
+        .job-listing-tags .badge:hover {
+            background-color: #eeeef0 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important; /* Increased hover shadow */
+        }
+        
+        /* Dark mode adjustments for badges */
+        [data-bs-theme="dark"] .job-listing-tags .badge {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: rgba(255, 255, 255, 0.8) !important;
+            border: none !important; /* Removed border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important; /* Increased shadow for dark mode */
+        }
+        
+        [data-bs-theme="dark"] .job-listing-tags .badge:hover {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3) !important; /* Increased hover shadow for dark mode */
+        }
+
+        /* Fix for dark mode navbar background */
+        [data-bs-theme="dark"] .navbar-nav {
+            background-color: transparent !important;
+        }
+        
+        [data-bs-theme="dark"] .navbar-collapse {
+            background-color: transparent !important;
+        }
+
+        /* Override Bootstrap navbar styles */
+        .navbar-collapse {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+        
+        .navbar-nav, 
+        .navbar-nav.me-auto, 
+        ul.navbar-nav {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        @media (max-width: 992px) {
+            .navbar-nav {
+                width: 100% !important;
+                padding: 2.5rem 0 0 !important;
+                margin-left: 0 !important;
+                margin-bottom: 0 !important;
+                flex-grow: 1; /* Make nav list take available space */
+                overflow-y: auto; /* Allow scrolling within nav if needed */
+            }
+            
+            /* Align auth buttons in bottom menu */
+            .navbar-collapse .d-flex.align-items-center.gap-3 {
+                width: 100% !important;
+                margin: 0 !important; /* Remove specific margins */
+                padding: 0 0.5rem 1rem !important;
+                justify-content: space-around !important;
+                margin-top: auto !important; /* Push to bottom */
+                flex-shrink: 0; /* Prevent shrinking */
+            }
+        }
+
+        /* Improved touch targets and mobile/tablet styles */
+        @media (max-width: 992px) { 
+            /* Styles previously only in 768px block, now needed up to 991px */
+            .navbar-nav {
+                width: 100% !important;
+                padding: 2.5rem 0 0 !important;
+                margin-left: 0 !important;
+                margin-bottom: 0 !important;
+                flex-grow: 1; /* Make nav list take available space */
+                overflow-y: auto; /* Allow scrolling within nav if needed */
+            }
+            
+            .navbar-collapse .d-flex.align-items-center.gap-3 {
+                width: 100% !important;
+                margin: 0 !important; /* Remove specific margins */
+                padding: 0 0.5rem 1rem !important;
+                justify-content: space-around !important;
+                margin-top: auto !important; /* Push to bottom */
+                flex-shrink: 0; /* Prevent shrinking */
+            }
+
+            /* Original 991px styles */
+            .btn, .nav-link, .dropdown-item, button, 
+            [role="button"], .form-control, input, select {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 10px 15px;
+                touch-action: manipulation;
+            }
+
+            /* Ensure toggler button styling - comprehensive removal of border/outline/shadow */
+            .navbar-toggler,
+            .navbar-toggler:focus,
+            .navbar-toggler:active,
+            .navbar-toggler:focus-visible {
+                border: none !important; 
+                background-color: transparent !important; 
+                box-shadow: none !important; 
+                outline: none !important; 
+                padding: 0.25rem 0.75rem; /* Maintain padding */
+                font-size: 1.25rem; /* Maintain font size */
+                border-radius: 0.375rem; /* Maintain radius */
+                transition: none !important;
+            }
+            /* Remove the separate :focus, :active rules as they are combined above */
+
+            .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important; 
+            }
+            
+            .navbar {
+                padding: 0.3rem 0.5rem;
+            }
+            
+            .navbar-brand {
+                font-size: 1.3rem;
+                margin-left: 0;
+            }
+            
+            .nav-link {
+                margin: 0 0.25rem;
+                padding: 0.5rem 0.75rem;
+            }
+            
+            main {
+                padding: 0.5rem;
+                margin-top: 56px;
+            }
+            
+            /* Mobile theme toggle and language switcher positioning */
+            .navbar-collapse .position-absolute.top-0.end-0 {
+                z-index: 11 !important;
+                transform: scale(0.9) !important;
+                transition: all 0.2s ease !important;
+            }
+            
+            .navbar-collapse .position-absolute.top-0.end-0:hover {
+                transform: scale(1) !important;
+            }
+            
+            /* Mobile theme toggle styling */
+            .navbar-collapse .theme-toggle-btn {
+                opacity: 0.85 !important;
+                color: white !important;
+                transition: all 0.2s ease !important;
+            }
+            
+            .navbar-collapse .theme-toggle-btn:hover {
+                opacity: 1 !important;
+                transform: scale(1.1) !important;
+            }
+            
+            .navbar-collapse .theme-toggle-btn:active {
+                transform: scale(0.9) !important;
+                opacity: 0.7 !important;
+            }
+            
+            /* Mobile theme toggle icon display in dark mode */
+            .navbar-collapse .theme-toggle-btn i.bi-moon-stars {
+                display: inline-block !important;
+            }
+            
+            .navbar-collapse .theme-toggle-btn i.bi-sun {
+                display: none !important;
+            }
+            
+            /* Use JavaScript to properly toggle these based on theme */
+            [data-bs-theme="dark"] .navbar-collapse .theme-toggle-btn i.bi-moon-stars,
+            [data-bs-theme="light"] .navbar-collapse .theme-toggle-btn i.bi-sun {
+                display: none !important;
+            }
+            
+            [data-bs-theme="dark"] .navbar-collapse .theme-toggle-btn i.bi-sun,
+            [data-bs-theme="light"] .navbar-collapse .theme-toggle-btn i.bi-moon-stars {
+                display: inline-block !important;
+            }
+            
+            /* Ensure the sun icon is always yellow in dark mode */
+            [data-bs-theme="dark"] .navbar-collapse .theme-toggle-btn i.bi-sun {
+                color: #ffd43b !important;
+            }
+            
+            /* Mobile language switcher positioning */
+            .navbar-collapse .language-switcher-mobile.position-absolute {
+                z-index: 11 !important;
+                transform: scale(0.9) !important;
+                transition: all 0.2s ease !important;
+            }
+            
+            .navbar-collapse .language-switcher-mobile.position-absolute:hover {
+                transform: scale(1) !important;
+            }
+            
+            /* MOBILE NAVBAR: Full-screen bottom drawer */
+            .navbar .container {
+                position: static !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            
+            .navbar-collapse {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                top: auto !important;
+                width: 100vw !important;
+                height: auto !important;
+                max-height: 85vh !important;
+                min-height: 0 !important;
+                margin: 0 !important;
+                padding: 1.25rem 0.5rem 0.75rem !important;
+                transform: translateY(100%) !important;
+                visibility: hidden;
+                transition: transform 0.3s ease, opacity 0.3s ease !important;
+                background: linear-gradient(135deg, rgba(5, 15, 30, 0.98) 0%, rgba(10, 25, 45, 0.98) 100%) !important;
+                z-index: 2000 !important;
+                overflow-y: auto !important;
+                border-top-left-radius: 16px !important;
+                border-top-right-radius: 16px !important;
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25) !important;
+                display: flex !important;
+                flex-direction: column !important; /* Ensure flex column layout */
+                box-sizing: border-box !important;
+                min-width: 100% !important;
+                max-width: 100vw !important;
+                left: 0 !important;
+                border-left: 0 !important;
+                border-right: 0 !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                position: relative !important;
+                color: #E9ECEF !important;
+                border-color: rgba(255, 255, 255, 0.1) !important;
+                opacity: 0;
+            }
+            
+            /* Updated mobile menu text colors to match dark mode */
+            .navbar-collapse .nav-link {
+                color: rgba(255, 255, 255, 0.85) !important;
+            }
+            
+            .navbar-collapse .nav-link:hover, 
+            .navbar-collapse .nav-link.active {
+                color: white !important;
+            }
+            
+            /* Mobile auth menu always in dark mode */
+            .mobile-auth-header {
+                color: #9BA1A6 !important;
+            }
+            
+            .mobile-auth-list li {
+                border-color: rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            .mobile-auth-list li a {
+                background: rgba(255, 255, 255, 0.05) !important;
+                color: #E9ECEF !important;
+            }
+            
+            .mobile-auth-list li a:hover,
+            .mobile-auth-list li a:active {
+                background: rgba(var(--bs-primary-rgb), 0.2) !important;
+                color: var(--bs-primary) !important;
+            }
+            
+            /* Ensure dropdowns in mobile menu are also using dark mode */
+            .navbar-collapse .dropdown-menu {
+                background-color: #2A2A2A !important;
+                border-color: rgba(255, 255, 255, 0.1) !important;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+            }
+            
+            .navbar-collapse .dropdown-item {
+                color: #E9ECEF !important;
+            }
+            
+            .navbar-collapse .dropdown-item:hover {
+                background-color: #333333 !important;
+                color: var(--primary-color) !important;
+            }
+            
+            .navbar-collapse .dropdown-divider {
+                border-color: rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            .navbar-collapse .dropdown-header {
+                background-color: #2A2A2A !important;
+                border-color: #2D2D2D !important;
+                color: #9BA1A6 !important;
+            }
+            
+            /* Close button instead of drag handle */
+            .mobile-menu-close {
+                position: absolute !important;
+                top: 0.5rem !important; /* Moved up from 0.75rem */
+                left: 0.75rem !important;
+                width: 36px !important;
+                height: 36px !important;
+                border-radius: 50% !important;
+                background-color: transparent !important; /* Removed background */
+                border: none !important;
+                color: white !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 1.5rem !important; /* Increased font size slightly */
+                cursor: pointer !important;
+                transition: all 0.2s ease !important;
+                z-index: 10 !important;
+                padding: 0 !important;
+                opacity: 0.85 !important; /* Added slight transparency */
+            }
+            
+            .mobile-menu-close:hover {
+                background-color: transparent !important; /* Removed hover background */
+                opacity: 1 !important; /* Full opacity on hover */
+                transform: scale(1.1) !important; /* Slight scale effect on hover */
+            }
+            
+            .mobile-menu-close:active {
+                transform: scale(0.9) !important; /* Increased click effect */
+                opacity: 0.7 !important; /* More transparency when clicked */
+            }
+            
+            /* Remove the original drag handle styles */
+            .navbar-collapse:before {
+                display: none !important;
+            }
+            
+            /* Add padding to the navbar-nav to prevent content from being covered by the X button */
+            .navbar-nav {
+                width: 100% !important;
+                padding: 2.5rem 0 0 !important; /* Only top padding for the X button */
+                margin-left: 0 !important;
+                margin-bottom: 0 !important; /* Ensure no bottom margin */
+            }
+            
+            .navbar-nav .nav-item {
+                width: 100% !important;
+                margin: 0 !important; /* No margins */
+            }
+            
+            .navbar-nav .nav-link {
+                width: 100% !important;
+                padding: 0.5rem 1rem !important; /* Smaller padding */
+                margin: 0 !important;
+                border-radius: 8px !important;
+                border-bottom: none !important;
+            }
+            
+            /* Reduce the gap between nav links and auth menu */
+            .nav-item.d-lg-none {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+            }
+            
+            /* Adjust mobile auth menu for better spacing */
+            .mobile-auth-menu {
+                margin-top: 0 !important;
+                padding-top: 0.25rem !important;
+                border-top: none !important; /* Remove the border to reduce visual separation */
+            }
+            
+            .mobile-auth-header {
+                margin-top: 0.5rem !important;
+                margin-bottom: 0.2rem !important;
+            }
+            
+            .navbar-nav .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.1) !important;
+                border-left: 3px solid white !important;
+                padding-left: calc(1rem - 3px) !important;
+            }
+            
+            .navbar-nav .nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+            }
+            
+            .navbar-nav .nav-link:after {
+                display: none !important;
+            }
+            
+            .navbar-collapse.show {
+                height: auto !important; /* Auto height instead of fixed */
+                transform: translateY(0) !important;
+                visibility: visible; /* Make it visible when shown */
+                opacity: 1;
+            }
+            
+            /* Align auth buttons in bottom menu */
+            .navbar-collapse .d-flex.align-items-center.gap-3 {
+                width: 100% !important;
+                margin: 0 !important; /* Remove specific margins */
+                padding: 0 0.5rem 1rem !important;
+                justify-content: space-around !important;
+                margin-top: auto !important; /* Push to bottom */
+                flex-shrink: 0; /* Prevent shrinking */
+            }
+            
+            /* Improve dropdown items for touch */
+            .dropdown-item {
+                padding: 12px 16px !important;
+            }
+            
+            /* Optimize form controls for mobile */
+            .form-control {
+                font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+            
+            /* Fix for theme toggle button */
+            .theme-toggle-btn {
+                padding: 10px;
+            }
+            
+            /* Adjust language switcher */
+            .language-switcher .btn-sign-in {
+                width: 38px;
+                height: 38px;
+            }
+            
+            /* Card optimizations */
+            .card {
+                margin-bottom: 1rem;
+            }
+            
+            /* Remove hover animations on mobile */
+            .card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            
+            /* Optimize alerts for mobile */
+            .messages {
+                max-width: 90%;
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            /* Improve footer spacing */
+            footer {
+                padding: 0.75rem;
+            }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 992px) {
+            body {
+                font-size: 14px;
+            }
+            
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            /* Further compact navbar elements */
+            .navbar-brand {
+                font-size: 1.2rem;
+                margin-right: 0.5rem;
+            }
+            
+            /* Make buttons larger on very small screens */
+            .navbar-toggler {
+                padding: 0.5rem;
+                margin-right: -0.5rem;
+            }
+            
+            /* Optimize auth buttons text */
+            .btn-sign-in span {
+                display: none;
+            }
+            
+            /* Exception for the POST A JOB button - always show its text */
+            .navbar-collapse .btn-sign-in span {
+                display: inline-block !important;
+            }
+            
+            .btn-sign-in i {
+                margin-right: 0 !important;
+            }
+            
+            .dropdown-toggle.btn-sign-in {
+                padding: 0.35rem 0.75rem !important;
+            }
+            
+            /* Adjust tags display for smaller screens */
+            .job-listing-tags .badge {
+                margin: 0.15rem !important;
+                padding: 4px 10px !important;
+                font-size: 12px !important;
+            }
+            
+            /* Further optimize slide-up menu */
+            .navbar-collapse {
+                padding: 1.25rem 0.5rem 0.75rem !important;
+            }
+            
+            .navbar-collapse.show {
+                height: 80vh;
+            }
+        }
+        
+        /* Reduce motion for users who prefer it */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            
+            .card:hover,
+            .btn:hover,
+            .dropdown-item:hover,
+            .btn-sign-in:hover,
+            .nav-link:hover:after,
+            .featured-badge {
+                animation: none !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            
+            .navbar-collapse {
+                transition: none !important;
+            }
+        }
+
+        /* Updated Footer styles */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        .footer {
+            margin-top: auto;
+            width: 100%;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(10, 25, 50, 1) 0%, rgba(20, 40, 80, 1) 100%);
+        }
+
+        .footer-main {
+            position: relative;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(10, 25, 50, 0.95) 0%, rgba(20, 40, 80, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom {
+            position: relative;
+            width: 100vw;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            background: transparent;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Updated Footer styles with matte blue hover - no animations */
+        .footer a.hover-white {
+            transition: color 0.2s ease;
+            display: inline-block;
+            opacity: 1;
+            color: white;
+        }
+
+        .footer a.hover-white:hover {
+            color: #7EB2FF !important; /* Matte light blue */
+            text-shadow: none;
+        }
+
+        .footer .social-links a {
+            transition: color 0.2s ease;
+            opacity: 1;
+            color: white;
+        }
+
+        .footer .social-links a:hover {
+            color: #7EB2FF !important; /* Matte light blue */
+        }
+
+        /* Remove dimmed styles for copyright section */
+        .footer-bottom .text-white-50 {
+            color: white !important;
+        }
+
+        .footer-bottom a.hover-white {
+            opacity: 1;
+            transition: color 0.2s ease;
+            color: white;
+        }
+
+        .footer-bottom a.hover-white:hover {
+            opacity: 1;
+            color: #7EB2FF !important; /* Matte light blue */
+            text-shadow: none;
+        }
+
+        /* Dark mode adjustments */
+        [data-bs-theme="dark"] .footer a.hover-white:hover,
+        [data-bs-theme="dark"] .footer .social-links a:hover,
+        [data-bs-theme="dark"] .footer-bottom a.hover-white:hover {
+            color: #92C1FF !important; /* Slightly lighter matte blue for dark mode */
+        }
+
+        /* Mobile viewport fixes */
+        @media (max-width: 992px) {
+            html, body {
+                overflow-x: hidden !important;
+                width: 100% !important;
+                position: relative !important;
+            }
+            
+            body {
+                width: 100vw !important;
+                max-width: 100vw !important;
+            }
+            
+            main {
+                width: 100% !important;
+                max-width: 100% !important;
+                overflow-x: hidden !important;
+            }
+            
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+            
+            .navbar {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            
+            .footer {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+
+        /* Reset navbar-collapse styles for desktop */
+        @media (min-width: 992px) {
+            .navbar-collapse {
+                position: static !important;
+                width: auto !important;
+                height: auto !important;
+                background: transparent !important;
+                transform: none !important;
+                visibility: visible !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                display: flex !important;
+                flex-direction: row !important;
+                border-radius: 0 !important;
+                transition: none !important;
+            }
+            
+            .navbar-collapse .d-flex.align-items-center.gap-3 {
+                margin-right: -35px !important;
+                width: auto !important;
+                margin-top: 0 !important;
+                flex-direction: row !important;
+                justify-content: flex-end !important;
+            }
+            
+            .navbar-nav {
+                width: auto !important;
+                padding: 0 !important;
+                margin-left: -20px !important;
+                overflow: visible !important;
+            }
+            
+            .navbar-nav .nav-item {
+                width: auto !important;
+                margin: 0 0.5rem !important;
+            }
+            
+            .navbar-nav .nav-link {
+                width: auto !important;
+                padding: 0.75rem 0 !important;
+                margin: 0 !important;
+                color: rgba(255, 255, 255, 0.85) !important;
+                border-radius: 0 !important;
+            }
+            
+            .navbar-nav .nav-link.active {
+                background-color: transparent !important;
+                border-left: none !important;
+                border-bottom: 2px solid white !important;
+                padding-left: 0 !important;
+            }
+            
+            .navbar-nav .nav-link:hover {
+                background-color: transparent !important;
+            }
+        }
+
+        /* Dark theme variables */
+        :root {
+            --dark-bg: #121212;
+            --dark-input: #1E1E1E;
+            --dark-card: #1A1A1A;
+            --dark-border: #2D2D2D;
+        }
+
+        [data-bs-theme="dark"] {
+            --bs-body-bg: var(--dark-bg);
+            --bs-body-color: #E9ECEF;
+            --bs-border-color: var(--dark-border);
+            --bs-navbar-bg: var(--dark-bg);
+            --bs-card-bg: var(--dark-card);
+            --bs-input-bg: var(--dark-input);
+            --bs-input-color: #E9ECEF;
+            --bs-input-border-color: var(--dark-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'authentication:home' %}"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <button class="mobile-menu-close d-lg-none" aria-label="Close menu">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <!-- Add language switcher and theme toggle for mobile view at the top right -->
+                <div class="d-lg-none position-absolute top-0 end-0 mt-2 me-2 d-flex align-items-center">
+                    <button class="theme-toggle-btn" id="mobileThemeToggle" aria-label="Toggle theme">
+                        <i class="bi bi-moon-stars"></i>
+                        <i class="bi bi-sun"></i>
+                    </button>
+                    <div class="language-switcher-mobile ms-2">
+                        {% include "mobile_language_toggle.html" %}
+                    </div>
+                </div>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'authentication:home' %}">
+                            {% trans "Job offers" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'companies' in request.path %}active{% endif %}" href="#">
+                            {% trans "Companies" %}
+                        </a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center ms-3 d-none d-lg-flex">
+                        <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
+                            <i class="bi bi-moon-stars"></i>
+                        </button>
+                    </li>
+                    
+                    <!-- Mobile-only auth menu inside navbar -->
+                    <li class="nav-item d-lg-none">
+                        {% if not user.is_authenticated %}
+                            <div class="mobile-auth-menu">
+                                <div class="mobile-auth-header">{% trans "SIGN IN" %}</div>
+                                <ul class="mobile-auth-list">
+                                    <li>
+                                        <a href="{% url 'authentication:login' %}?next={{ request.path }}&type=candidate">
+                                            <i class="bi bi-person" style="color: inherit;"></i>{% trans "Candidate" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'authentication:login' %}?next={{ request.path }}&type=recruiter">
+                                            <i class="bi bi-building" style="color: inherit;"></i>{% trans "Company" %}
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                                <div class="mobile-auth-header">{% trans "SIGN UP" %}</div>
+                                <ul class="mobile-auth-list">
+                                    <li>
+                                        <a href="{% url 'authentication:signup' %}?next={{ request.path }}&type=candidate">
+                                            <i class="bi bi-person-plus" style="color: inherit;"></i>{% trans "Candidate" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'authentication:signup' %}?next={{ request.path }}&type=recruiter">
+                                            <i class="bi bi-building-add" style="color: inherit;"></i>{% trans "Company" %}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <div class="mobile-auth-menu">
+                                <div class="mobile-auth-header">{% trans "MY ACCOUNT" %}</div>
+                                <ul class="mobile-auth-list">
+                                    <li>
+                                        <a href="{% url 'authentication:profile' %}">
+                                            <i class="bi bi-person" style="color: inherit;"></i>{% trans "Profile" %}
+                                        </a>
+                                    </li>
+                                    {% if user.user_type == 'recruiter' %}
+                                    <li>
+                                        <a href="{% url 'authentication:my_jobs' %}">
+                                            <i class="bi bi-briefcase" style="color: inherit;"></i>{% trans "My Job Postings" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'authentication:post_job' %}">
+                                            <i class="bi bi-plus-circle" style="color: inherit;"></i>{% trans "Post a Job" %}
+                                        </a>
+                                    </li>
+                                    {% else %}
+                                    <li>
+                                        <a href="{% url 'authentication:my_applications' %}">
+                                            <i class="bi bi-briefcase"></i>{% trans "My Applications" %}
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    <li>
+                                        <a href="{% url 'authentication:logout' %}">
+                                            <i class="bi bi-box-arrow-right" style="color: inherit;"></i>{% trans "Logout" %}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    {% if request.path != '/login/' and request.path != '/signup/' %}
+                    <a href="{% if user.is_authenticated %}{% url 'authentication:post_job' %}{% else %}{% url 'authentication:login' %}?next={% url 'authentication:post_job' %}&type=recruiter{% endif %}" class="btn-sign-in text-decoration-none">
+                        <span>{% trans "POST A JOB" %}</span>
+                    </a>
+                    {% endif %}
+                    {% if not user.is_authenticated %}
+                        <div class="dropdown dropdown-align-right d-none d-lg-block">
+                            <button class="btn-sign-in dropdown-toggle" id="authDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i>
+                                <span>{% trans "LOG IN" %}</span>
+                                <i class="bi bi-chevron-down ms-1"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="authDropdown">
+                                <div class="dropdown-header">{% trans "SIGN IN" %}</div>
+                                <a class="dropdown-item" href="{% url 'authentication:login' %}?next={{ request.path }}&type=candidate">
+                                    <i class="bi bi-person"></i>{% trans "Candidate" %}
+                                </a>
+                                <a class="dropdown-item" href="{% url 'authentication:login' %}?next={{ request.path }}&type=recruiter">
+                                    <i class="bi bi-building"></i>{% trans "Company" %}
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-header">{% trans "SIGN UP" %}</div>
+
+                                <a class="dropdown-item" href="{% url 'authentication:signup' %}?next={{ request.path }}&type=candidate">
+                                    <i class="bi bi-person-plus"></i>{% trans "Candidate" %}
+                                </a>
+                                <a class="dropdown-item" href="{% url 'authentication:signup' %}?next={{ request.path }}&type=recruiter">
+                                    <i class="bi bi-building-add"></i>{% trans "Company" %}
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="dropdown dropdown-align-right d-none d-lg-block">
+                            <button class="btn-sign-in dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i>
+                                <span>{{ user.username }}</span>
+                                <i class="bi bi-chevron-down ms-1"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <div class="dropdown-header">{% trans "MY ACCOUNT" %}</div>
+                                <a class="dropdown-item" href="{% url 'authentication:profile' %}">
+                                    <i class="bi bi-person"></i>{% trans "Profile" %}
+                                </a>
+                                {% if user.user_type == 'recruiter' %}
+                                <a class="dropdown-item" href="{% url 'authentication:my_jobs' %}">
+                                    <i class="bi bi-briefcase"></i>{% trans "My Job Postings" %}
+                                </a>
+                                <a class="dropdown-item" href="{% url 'authentication:post_job' %}">
+                                    <i class="bi bi-plus-circle"></i>{% trans "Post a Job" %}
+                                </a>
+                                {% else %}
+                                <a class="dropdown-item" href="{% url 'authentication:my_applications' %}">
+                                    <i class="bi bi-briefcase"></i>{% trans "My Applications" %}
+                                </a>
+                                {% endif %}
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item" href="{% url 'authentication:logout' %}">
+                                    <i class="bi bi-box-arrow-right"></i>{% trans "Logout" %}
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Language Switcher (hidden on mobile) -->
+                    <div class="language-switcher ms-auto d-none d-lg-flex align-items-center">
+                        {% include "language_selector.html" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container py-4">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="container-fluid px-3 py-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="row g-4">
+                            <!-- Column 1: Logo and Contact Info -->
+                            <div class="col-md-3 col-6 mb-3 footer-column">
+                                <a href="{% url 'authentication:home' %}" class="text-decoration-none mb-2 d-block">
+                                    <span class="h5 text-white fw-bold"></span>
+                                </a>
+                                <div class="mt-3">
+                                    <div class="mb-3">
+                                        <div class="text-white small fw-medium">{% trans "E-mail us" %}</div>
+                                        <a href="mailto:info@.com" class="text-decoration-none text-white hover-white small">info@.com</a>
+                                    </div>
+                                    <div>
+                                        <div class="text-white small fw-medium">{% trans "Call us" %}</div>
+                                        <a href="tel:+48504062747" class="text-decoration-none text-white hover-white small">+48 504 062 747</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Column 2: First Menu Column -->
+                            <div class="col-md-3 col-6 mb-3 footer-column">
+                                <h6 class="mb-2 text-white">{% trans "Job Categories" %}</h6>
+                                <ul class="list-unstyled small">
+                                    <li class="mb-1">
+                                        <a href="#" class="text-decoration-none text-white hover-white">{% trans "Python Developers" %}</a>
+                                    </li>
+                                    <li class="mb-1">
+                                        <a href="#" class="text-decoration-none text-white hover-white">{% trans "JavaScript Developers" %}</a>
+                                    </li>
+                                    <li class="mb-1">
+                                        <a href="#" class="text-decoration-none text-white hover-white">{% trans "Java Developers" %}</a>
+                                    </li>
+                                    <li class="mb-1">
+                                        <a href="#" class="text-decoration-none text-white hover-white">{% trans "DevOps Engineers" %}</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Column 3: Second Menu Column -->
+                            <div class="col-md-3 col-6 mb-3 footer-column">
+                                <h6 class="mb-2 text-white">{% trans "Locations" %}</h6>
+                                <ul class="list-unstyled small">
+                                    <li class="mb-1">
+                                        <a href="#" class="text-decoration-none text-white hover-white">{% trans "Jobs in Warsaw" %}</a>
+                                    </li>
+                                    <li class="mb-1">
+                                        <a href="#" class="text-decoration-none text-white hover-white">{% trans "Jobs in Krakow" %}</a>
+                                    </li>
+                                    <li class="mb-1">
+                                        <a href="#" class="text-decoration-none text-white hover-white">{% trans "Jobs in Wroclaw" %}</a>
+                                    </li>
+                                    <li class="mb-1">
+                                        <a href="#" class="text-decoration-none text-white hover-white">{% trans "Jobs in Gdansk" %}</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Column 4: Social Media -->
+                            <div class="col-md-3 col-6 mb-3 footer-column">
+                                <h6 class="mb-2 text-white">{% trans "Social Media" %}</h6>
+                                <div class="d-flex gap-2 social-links">
+                                    <a href="#" class="text-white fs-6 hover-white" title="LinkedIn">
+                                        <i class="bi bi-linkedin"></i>
+                                    </a>
+                                    <a href="#" class="text-white fs-6 hover-white" title="Twitter">
+                                        <i class="bi bi-twitter-x"></i>
+                                    </a>
+                                    <a href="#" class="text-white fs-6 hover-white" title="Facebook">
+                                        <i class="bi bi-facebook"></i>
+                                    </a>
+                                    <a href="#" class="text-white fs-6 hover-white" title="Instagram">
+                                        <i class="bi bi-instagram"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div class="footer-bottom">
+            <div class="container-fluid px-3 py-3">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-center text-md-start">
+                                <span class="text-white small">{% trans "Copyright © 2025  – All Rights Reserved" %}</span>
+                            </div>
+                            <div class="col-md-6 text-center text-md-end">
+                                <a href="{% url 'authentication:privacy_policy' %}" class="text-decoration-none text-white small hover-white">{% trans "Privacy Policy" %}</a>
+                                <span class="text-white mx-2">•</span>
+                                <a href="{% url 'authentication:cookie_policy' %}" class="text-decoration-none text-white small hover-white">{% trans "Cookie Policy" %}</a>
+                                <span class="text-white mx-2">•</span>
+                                <a href="#" class="text-decoration-none text-white small hover-white">{% trans "Terms & Conditions" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent Popup -->
+    <div class="cookie-consent-banner" id="cookieConsentBanner" style="display: none;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 col-md-7">
+                    <p class="mb-md-0 mb-3">
+                        {% trans "We use cookies to improve your experience on our site. By continuing to use our site, you consent to our use of cookies in accordance with our " %}
+                        <a href="{% url 'authentication:cookie_policy' %}" class="text-decoration-underline">{% trans "Cookie Policy" %}</a> {% trans "and" %}
+                        <a href="{% url 'authentication:privacy_policy' %}" class="text-decoration-underline">{% trans "Privacy Policy" %}</a>.
+                    </p>
+                </div>
+                <div class="col-lg-4 col-md-5 d-flex justify-content-md-end gap-2">
+                    <button id="rejectCookiesBtn" class="btn btn-outline-secondary">{% trans "Reject" %}</button>
+                    <button id="acceptCookiesBtn" class="btn btn-primary">{% trans "Accept Cookies" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    {% bootstrap_javascript %}
+    
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/salary-slider.js' %}"></script>
+    <script src="{% static 'js/search-tags.js' %}"></script>
+    <script src="{% static 'js/load-more.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/city-search.js' %}"></script>
+    <script src="{% static 'js/language-switcher.js' %}"></script>
+    
+    <!-- Cookie Consent JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user has already accepted cookies
+            const cookiesAccepted = localStorage.getItem('cookiesAccepted');
+            
+            if (!cookiesAccepted) {
+                // Show the cookie banner
+                document.getElementById('cookieConsentBanner').style.display = 'block';
+                
+                // Handle accept button click
+                document.getElementById('acceptCookiesBtn').addEventListener('click', function() {
+                    localStorage.setItem('cookiesAccepted', 'true');
+                    document.getElementById('cookieConsentBanner').style.display = 'none';
+                });
+                
+                // Handle reject button click
+                document.getElementById('rejectCookiesBtn').addEventListener('click', function() {
+                    // Store rejection but still hide the banner
+                    localStorage.setItem('cookiesAccepted', 'false');
+                    document.getElementById('cookieConsentBanner').style.display = 'none';
+                    
+                    // You could implement more functionality here to disable non-essential cookies
+                });
+            }
+        });
+    </script>
+    
+    <!-- Lazy loading for images -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to ensure mobile menu has correct spacing
+            function fixMobileMenuSpacing() {
+                // Only run on mobile screens
+                if (window.innerWidth > 993) return;
+                
+                // Find the mobile auth menu container and adjust its spacing
+                const mobileAuthMenu = document.querySelector('.nav-item.d-lg-none .mobile-auth-menu');
+                if (mobileAuthMenu) {
+                    mobileAuthMenu.style.marginTop = '0';
+                    mobileAuthMenu.style.paddingTop = '0.25rem';
+                    mobileAuthMenu.style.borderTop = 'none';
+                }
+                
+                // Ensure no gap between navigation and auth items
+                const mobileNavItem = document.querySelector('.nav-item.d-lg-none');
+                if (mobileNavItem) {
+                    mobileNavItem.style.marginTop = '0';
+                    mobileNavItem.style.paddingTop = '0';
+                }
+                
+                // Style mobile auth menu elements for better spacing
+                document.querySelectorAll('.mobile-auth-header').forEach(el => {
+                    el.style.marginTop = '0.5rem';
+                    el.style.marginBottom = '0.2rem';
+                });
+                
+                // Style nav links to reduce vertical spacing
+                document.querySelectorAll('.navbar-collapse .nav-link').forEach(el => {
+                    el.style.padding = '0.5rem 1rem';
+                });
+                
+                // Enhance the POST A JOB button in mobile menu
+                enhanceMobilePostJobButton();
+            }
+            
+            // Function to make the POST A JOB button bigger and more prominent
+            function enhanceMobilePostJobButton() {
+                const postJobBtn = document.querySelector('.navbar-collapse .btn-sign-in');
+                if (postJobBtn && window.innerWidth <= 993) {
+                    // Only apply styles if navbar is visible/showing
+                    const navbarCollapse = document.querySelector('.navbar-collapse');
+                    if (!navbarCollapse || !navbarCollapse.classList.contains('show')) {
+                        return; // Don't apply styles if navbar is hidden
+                    }
+                    
+                    // Apply enhanced styling
+                    postJobBtn.style.marginTop = '1rem';
+                    postJobBtn.style.marginBottom = '0.75rem';
+                    postJobBtn.style.padding = '0.8rem 1rem';
+                    postJobBtn.style.width = '100%';
+                    postJobBtn.style.fontSize = '0.95rem';
+                    postJobBtn.style.textAlign = 'center';
+                    postJobBtn.style.fontWeight = '600';
+                    postJobBtn.style.borderRadius = '8px';
+                    postJobBtn.style.display = 'flex';
+                    postJobBtn.style.justifyContent = 'center';
+                    postJobBtn.style.alignItems = 'center';
+                    postJobBtn.style.backgroundColor = 'var(--bs-primary)';
+                    postJobBtn.style.color = 'white';
+                    postJobBtn.style.boxShadow = '0 4px 12px rgba(var(--bs-primary-rgb), 0.3)';
+                    postJobBtn.style.transition = 'all 0.2s ease';
+                    
+                    // Ensure the text is visible
+                    const postJobBtnText = postJobBtn.querySelector('span');
+                    if (postJobBtnText) {
+                        postJobBtnText.style.display = 'inline-block';
+                        postJobBtnText.style.visibility = 'visible';
+                        postJobBtnText.style.fontSize = '0.95rem';
+                        postJobBtnText.style.fontWeight = '600';
+                        postJobBtnText.style.letterSpacing = '0.3px';
+                    }
+                    
+                    // Add hover and active effects
+                    postJobBtn.addEventListener('mouseenter', function() {
+                        this.style.transform = 'translateY(-2px)';
+                        this.style.boxShadow = '0 6px 16px rgba(var(--bs-primary-rgb), 0.35)';
+                    });
+                    
+                    postJobBtn.addEventListener('mouseleave', function() {
+                        this.style.transform = 'translateY(0)';
+                        this.style.boxShadow = '0 4px 12px rgba(var(--bs-primary-rgb), 0.3)';
+                    });
+                    
+                    // Let CSS handle the container positioning
+                    const btnContainer = document.querySelector('.navbar-collapse .d-flex.align-items-center.gap-3');
+                    if (btnContainer) {
+                        // We are now using CSS margin-top: auto, so JS styling for container is less critical
+                        // But we can keep width and padding adjustments
+                        btnContainer.style.flexDirection = 'column';
+                        btnContainer.style.width = '100%';
+                        btnContainer.style.padding = '0 0.5rem 1rem'; // Keep padding
+                        // Remove the margin-top: auto JS style
+                        // btnContainer.style.marginTop = 'auto';
+                        // Remove marginBottom as well, let padding handle space
+                        btnContainer.style.marginBottom = '0'; 
+                    }
+                }
+            }
+            
+            // Ensure mobile menu icons have the same color as text
+            function styleMenuIcons() {
+                document.querySelectorAll('.mobile-auth-list a i').forEach(icon => {
+                    icon.style.color = 'inherit';
+                });
+                
+                // Override hover styles for mobile auth links
+                document.querySelectorAll('.mobile-auth-list a').forEach(link => {
+                    link.addEventListener('mouseenter', function() {
+                        this.style.background = 'rgba(255, 255, 255, 0.15)';
+                        this.style.color = 'white';
+                        const icon = this.querySelector('i');
+                        if (icon) icon.style.color = 'inherit';
+                    });
+                    
+                    link.addEventListener('mouseleave', function() {
+                        this.style.background = 'rgba(255, 255, 255, 0.05)';
+                        this.style.color = '#E9ECEF';
+                        const icon = this.querySelector('i');
+                        if (icon) icon.style.color = 'inherit';
+                    });
+                });
+            }
+            
+            // Apply improvements immediately
+            fixMobileMenuSpacing();
+            styleMenuIcons();
+            
+            // Apply when mobile menu is opened or theme changes
+            const navbarToggler = document.querySelector('.navbar-toggler');
+            if (navbarToggler) {
+                navbarToggler.addEventListener('click', function() {
+                    setTimeout(function() {
+                        fixMobileMenuSpacing();
+                        styleMenuIcons();
+                        enhanceMobilePostJobButton(); // Ensure bigger button when menu opens
+                    }, 50);
+                });
+            }
+            
+            // Add specific listener for the mobile menu appearance
+            document.addEventListener('shown.bs.collapse', function(event) {
+                if (event.target.classList.contains('navbar-collapse')) {
+                    // Menu has been shown, enhance the button
+                    enhanceMobilePostJobButton();
+                }
+            });
+            
+            // Apply when theme changes
+            document.getElementById('themeToggle').addEventListener('click', function() {
+                setTimeout(function() {
+                    fixMobileMenuSpacing();
+                    styleMenuIcons();
+                    enhanceMobilePostJobButton(); // Ensure bigger button when theme changes
+                }, 50);
+            });
+            
+            const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+            if (mobileThemeToggle) {
+                mobileThemeToggle.addEventListener('click', function() {
+                    setTimeout(function() {
+                        fixMobileMenuSpacing();
+                        styleMenuIcons();
+                        enhanceMobilePostJobButton(); // Ensure bigger button when theme changes
+                    }, 50);
+                });
+            }
+            
+            // Fix layout when resizing between mobile and desktop
+            function resetNavbar() {
+                const isDesktop = window.innerWidth >= 993;
+                const navbarCollapse = document.querySelector('.navbar-collapse');
+                const navbarNav = document.querySelector('.navbar-nav');
+                
+                if (isDesktop) {
+                    // Reset all inline styles that might have been applied in mobile view
+                    if (navbarCollapse) {
+                        navbarCollapse.removeAttribute('style');
+                        navbarCollapse.classList.remove('show');
+                    }
+                    
+                    if (navbarNav) {
+                        navbarNav.removeAttribute('style');
+                    }
+                    
+                    document.querySelectorAll('.nav-item, .nav-link, .dropdown-menu, .d-flex.align-items-center.gap-3')
+                        .forEach(el => el.removeAttribute('style'));
+                    
+                    // Reset any other mobile-specific styles
+                    document.querySelectorAll('.mobile-menu-close').forEach(el => {
+                        el.style.display = 'none';
+                    });
+                } else {
+                    // Apply mobile styles if needed
+                    fixMobileMenuSpacing();
+                    styleMenuIcons();
+                    enhanceMobilePostJobButton();
+                    
+                    document.querySelectorAll('.mobile-menu-close').forEach(el => {
+                        el.style.display = 'flex';
+                    });
+                }
+            }
+            
+            // Reset navbar on resize
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(resetNavbar, 100);
+            });
+            
+            // Initial setup
+            resetNavbar();
+            
+            if ('loading' in HTMLImageElement.prototype) {
+                // Browser supports the loading attribute
+                const images = document.querySelectorAll('img[data-src]');
+                images.forEach(img => {
+                    img.src = img.dataset.src;
+                    img.loading = 'lazy';
+                });
+            } else {
+                // Fallback for browsers that don't support lazy loading
+                const script = document.createElement('script');
+                script.src = "{% static 'js/lazysizes.min.js' %}";
+                document.body.appendChild(script);
+            }
+            
+            // Optimize performance for mobile
+            const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
+            
+            if (isSmallScreen) {
+                // Make sure both theme toggles work with the same functionality
+                const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+                if (mobileThemeToggle) {
+                    mobileThemeToggle.addEventListener('click', function() {
+                        // Trigger main theme toggle programmatically
+                        document.getElementById('themeToggle').click();
+                    });
+                }
+                
+                // Disable any heavy animations on mobile
+                document.querySelectorAll('.featured-badge').forEach(el => {
+                    el.style.animation = 'none';
+                });
+                
+                // Defer non-critical scripts
+                const deferScripts = [
+                    "{% static 'js/salary-slider.js' %}",
+                    "{% static 'js/load-more.js' %}"
+                ];
+                
+                deferScripts.forEach(src => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.setAttribute('defer', '');
+                    document.body.appendChild(script);
+                    
+                    // Remove the original script
+                    document.querySelectorAll(`script[src="${src}"]`).forEach(s => s.remove());
+                });
+                
+                // Enhanced mobile menu behavior
+                const navbarToggler = document.querySelector('.navbar-toggler');
+                const navbarCollapse = document.querySelector('.navbar-collapse');
+                const closeButton = document.querySelector('.mobile-menu-close');
+                
+                // Ensure the menu is always in a clean state when toggled
+                if (navbarToggler && navbarCollapse) {
+                    // Add a mutation observer to monitor show/hide classes
+                    const observer = new MutationObserver(function(mutations) {
+                        mutations.forEach(function(mutation) {
+                            if (mutation.attributeName === 'class') {
+                                // Reset opacity and transition properties
+                                if (!navbarCollapse.classList.contains('show')) {
+                                    setTimeout(() => {
+                                        navbarCollapse.style.opacity = '';
+                                        navbarCollapse.style.transition = '';
+                                    }, 300);
+                                }
+                            }
+                        });
+                    });
+                    
+                    observer.observe(navbarCollapse, { attributes: true });
+                }
+                
+                // Make close button functional
+                if (closeButton) {
+                    closeButton.addEventListener('click', function() {
+                        // First reset the post job button
+                        const postJobBtn = document.querySelector('.navbar-collapse .btn-sign-in');
+                        if (postJobBtn) {
+                            postJobBtn.removeAttribute('style');
+                            
+                            const postJobBtnText = postJobBtn.querySelector('span');
+                            if (postJobBtnText) {
+                                postJobBtnText.removeAttribute('style');
+                            }
+                        }
+                        
+                        // Then hide the navbar
+                        navbarCollapse.classList.remove('show');
+                        
+                        // Apply transition before hiding
+                        navbarCollapse.style.transition = 'all 0.2s ease';
+                        navbarCollapse.style.opacity = '0';
+                        
+                        // Reset the opacity after animation completes to ensure menu can be reopened
+                        setTimeout(() => {
+                            navbarCollapse.style.opacity = '';
+                            navbarCollapse.style.transition = '';
+                        }, 300);
+                        
+                        // Also collapse via Bootstrap API
+                        if (typeof bootstrap !== 'undefined') {
+                            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                            if (bsCollapse) {
+                                bsCollapse.hide();
+                            }
+                        }
+                        
+                        // Reset navbar toggler state
+                        if (navbarToggler) {
+                            navbarToggler.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                }
+                
+                // Force fullwidth modal style on small screens
+                function enforceFullWidth() {
+                    // Force the menu to be full width at all times
+                    navbarCollapse.style.setProperty('position', 'fixed', 'important');
+                    navbarCollapse.style.setProperty('left', '0', 'important');
+                    navbarCollapse.style.setProperty('right', '0', 'important');
+                    navbarCollapse.style.setProperty('width', '100vw', 'important');
+                    navbarCollapse.style.setProperty('max-width', '100vw', 'important');
+                    navbarCollapse.style.setProperty('box-sizing', 'border-box', 'important');
+                    navbarCollapse.style.setProperty('margin', '0', 'important');
+                    
+                    // Fix any Bootstrap containers or other elements that might be constraining width
+                    const allContainers = document.querySelectorAll('.container, .container-fluid');
+                    allContainers.forEach(container => {
+                        if (container.closest('.navbar-collapse')) {
+                            container.style.setProperty('width', '100%', 'important');
+                            container.style.setProperty('max-width', '100%', 'important');
+                            container.style.setProperty('padding', '0', 'important');
+                            container.style.setProperty('margin', '0', 'important');
+                        }
+                    });
+                }
+                
+                // Call immediately and on resize
+                enforceFullWidth();
+                window.addEventListener('resize', enforceFullWidth);
+                
+                // Add swipe down to close
+                let touchStartY = 0;
+                let touchEndY = 0;
+                
+                navbarCollapse.addEventListener('touchstart', function(e) {
+                    touchStartY = e.changedTouches[0].screenY;
+                });
+                
+                navbarCollapse.addEventListener('touchend', function(e) {
+                    touchEndY = e.changedTouches[0].screenY;
+                    if (touchEndY - touchStartY > 100) {
+                        // Swiped down
+                        navbarCollapse.classList.remove('show');
+                        
+                        // Also collapse via Bootstrap API
+                        if (typeof bootstrap !== 'undefined') {
+                            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                            if (bsCollapse) {
+                                bsCollapse.hide();
+                            }
+                        }
+                    }
+                });
+                
+                // Close menu when clicking menu items
+                document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+                    link.addEventListener('click', function() {
+                        navbarCollapse.classList.remove('show');
+                        
+                        // Also collapse via Bootstrap API
+                        if (typeof bootstrap !== 'undefined') {
+                            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                            if (bsCollapse) {
+                                bsCollapse.hide();
+                            }
+                        }
+                    });
+                });
+                
+                // Remove the top drag handle click handler since we now have a close button
+                // Instead, prevent clicks within the menu from closing it (unless it's a nav link)
+                navbarCollapse.addEventListener('click', function(e) {
+                    // Only prevent default if the click is directly on the collapse element
+                    // and not on a child element like a link or the close button
+                    if (e.target === navbarCollapse) {
+                        e.stopPropagation();
+                    }
+                });
+                
+                // Prevent scrolling on body when menu is open
+                navbarToggler.addEventListener('click', function() {
+                    // Reset any display:none style that might be applied from the hidden event
+                    navbarCollapse.style.display = '';
+                    navbarCollapse.style.transition = '';
+                    
+                    // Force redraw to ensure proper dimensions
+                    setTimeout(() => {
+                        if (navbarCollapse.classList.contains('show')) {
+                            document.body.style.overflow = 'hidden';
+                            
+                            // Make 100% sure menu is visible and at the right position
+                            navbarCollapse.style.setProperty('transform', 'translateY(0)', 'important');
+                            navbarCollapse.style.setProperty('height', 'auto', 'important');
+                            navbarCollapse.style.setProperty('bottom', '0', 'important');
+                            
+                            // Force full width
+                            navbarCollapse.style.setProperty('width', '100vw', 'important');
+                            navbarCollapse.style.setProperty('left', '0', 'important');
+                            navbarCollapse.style.setProperty('right', '0', 'important');
+                            navbarCollapse.style.setProperty('margin', '0', 'important');
+                            
+                            // Try an alternative approach to make sure it's truly full width
+                            requestAnimationFrame(() => {
+                                const viewportWidth = window.innerWidth;
+                                navbarCollapse.style.setProperty('width', viewportWidth + 'px', 'important');
+                                navbarCollapse.style.setProperty('max-width', viewportWidth + 'px', 'important');
+                            });
+                        } else {
+                            document.body.style.overflow = '';
+                        }
+                    }, 50);
+                });
+                
+                // Reset body scroll when hiding collapse
+                navbarCollapse.addEventListener('hidden.bs.collapse', function() {
+                    document.body.style.overflow = '';
+                    
+                    // Clean up the Post a Job button to prevent text from staying visible
+                    const postJobBtn = document.querySelector('.navbar-collapse .btn-sign-in');
+                    if (postJobBtn) {
+                        // Reset the button's styling 
+                        postJobBtn.removeAttribute('style');
+                        
+                        // Reset the span text visibility
+                        const postJobBtnText = postJobBtn.querySelector('span');
+                        if (postJobBtnText) {
+                            postJobBtnText.removeAttribute('style');
+                        }
+                    }
+                    
+                    // Force a small delay before removing all styles to prevent flashing
+                    setTimeout(() => {
+                        // Clean up inline styles that might cause flashing
+                        navbarCollapse.style.transition = 'none';
+                        navbarCollapse.style.display = 'none';
+                        
+                        // Re-enable transition after a small delay
+                        setTimeout(() => {
+                            navbarCollapse.style.transition = '';
+                            navbarCollapse.style.display = '';
+                        }, 50);
+                    }, 10);
+                });
+                
+                // Additional fix for iOS
+                if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
+                    // Set padding for bottom safe area
+                    navbarCollapse.style.setProperty('padding-bottom', 'calc(1rem + env(safe-area-inset-bottom))', 'important');
+                    
+                    // Apply color to status bar (top safe area)
+                    document.head.insertAdjacentHTML('beforeend', `
+                        <style>
+                            @supports (padding: max(0px)) {
+                                html {
+                                    --status-bar-height: env(safe-area-inset-top);
+                                }
+                                
+                                body {
+                                    --navbar-background-solid: rgba(10, 25, 50, 1);
+                                }
+                                
+                                body::before,
+                                body::after {
+                                    background: var(--navbar-background-solid) !important;
+                                }
+                            }
+                        </style>
+                    `);
+                    
+                    // Handle scroll behavior to maintain color
+                    window.addEventListener('scroll', function() {
+                        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                        if (scrollTop <= 0) {
+                            document.documentElement.style.setProperty('--status-bar-height', 'env(safe-area-inset-top)');
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

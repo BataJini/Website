@@ -6,6 +6,8 @@ from datetime import datetime
 import requests
 from io import BytesIO
 from django.core.files import File
+import re
+import string
 
 class Command(BaseCommand):
     help = 'Import jobs from NoFluffJobs JSON files'
@@ -14,6 +16,84 @@ class Command(BaseCommand):
         parser.add_argument('--nofluff', type=str, help='Path to nofluff_data.json')
         parser.add_argument('--desc', type=str, help='Path to desc_data.json')
         parser.add_argument('--response', type=str, help='Path to nofluff_response.json')
+        parser.add_argument('--justjoin', type=str, help='Path to justjoin_it.json')
+
+    def is_polish_text(self, text):
+        """
+        Detect if text is likely in Polish by checking for Polish-specific characters
+        and common Polish words, ignoring company names, locations, and URLs.
+        """
+        if not text:
+            return False
+
+        # Remove URLs
+        text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', text)
+        
+        # Remove common location patterns
+        text = re.sub(r'\b(?:ul\.|ulica|al\.|aleja)\s+[^,]+,?\s*\d*(?:-\d+)?', '', text)
+        
+        # Remove company legal suffixes
+        text = re.sub(r'\b(?:Sp\. z o\.o\.|S\.A\.|sp\. j\.|sp\. k\.)\b', '', text)
+        
+        # Polish specific characters
+        polish_chars = set('ąćęłńóśźż')
+        
+        # Common Polish words that indicate Polish language content
+        polish_words = [
+            'stanowisko', 'praca', 'oferta', 'umowa', 'zlecenie', 
+            'specjalista', 'kierownik', 'oraz', 'obowiązki', 'wymagania',
+            'pracownik', 'firma', 'spółka', 'ogłoszenie', 'zatrudni',
+            'kandydat', 'doświadczenie', 'wykształcenie'
+        ]
+        
+        # Convert to lowercase for comparison
+        text_lower = text.lower()
+        
+        # Count Polish characters (requiring multiple to reduce false positives)
+        polish_char_count = sum(1 for char in text_lower if char in polish_chars)
+        if polish_char_count > 2:  # Only flag if multiple Polish characters are found
+            return True
+            
+        # Check for common Polish words (exact matches only)
+        for word in polish_words:
+            if f" {word} " in f" {text_lower} ":
+                return True
+                
+        # Check for very specific Polish word endings that don't appear in English
+        if re.search(r'\b\w+(ość|ąc|ęć|ść)\b', text_lower):
+            return True
+            
+        return False
+
+    def is_tech_job(self, title, description):
+        """
+        Detect if job is in IT/tech/development field
+        """
+        if not title and not description:
+            return False
+            
+        # Convert to lowercase for comparison
+        title_lower = title.lower() if title else ''
+        desc_lower = description.lower() if description else ''
+        
+        # Common IT/tech/development keywords
+        tech_keywords = [
+            'developer', 'engineer', 'programmer', 'software', 'frontend', 'backend',
+            'fullstack', 'full-stack', 'devops', 'sre', 'data', 'analyst', 'architect',
+            'qa', 'tester', 'cyber', 'security', 'it', 'tech', 'technical', 'web',
+            'mobile', 'ios', 'android', 'cloud', 'aws', 'azure', 'gcp', 'python',
+            'java', 'javascript', 'react', 'angular', 'vue', 'node', 'ruby', 'php',
+            'c#', 'c++', 'go', 'rust', 'scala', 'kotlin', 'swift', 'sql', 'database',
+            'machine learning', 'ai', 'artificial intelligence', 'blockchain',
+            'devops', 'sre', 'infrastructure', 'network', 'system', 'admin'
+        ]
+        
+        # Check if any tech keyword is in title or description
+        for keyword in tech_keywords:
+            if keyword in title_lower or keyword in desc_lower:
+                return True
+                
+        return False
 
     def download_logo(self, logo_url):
         try:
@@ -140,6 +220,64 @@ class Command(BaseCommand):
             return json.dumps(skills)
         return None
 
+    def format_justjoin_salary(self, salary_data):
+        """Format JustJoin.it salary data"""
+        if not salary_data:
+            return "Salary not specified"
+            
+        try:
+            if isinstance(salary_data, list):
+                # JustJoin.it typically provides salary as a list of strings
+                salary_str = ' '.join(salary_data)
+                # Clean up the salary string
+                salary_str = salary_str.replace('PLN', 'PLN').strip()
+                return salary_str
+            return str(salary_data)
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f'Error formatting JustJoin.it salary: {str(e)}'))
+            return "Salary not specified"
+
+    def format_justjoin_description(self, description_data):
+        """Format JustJoin.it description data"""
+        if not description_data:
+            return ""
+            
+        try:
+            if isinstance(description_data, list):
+                # Join all description items with proper HTML formatting
+                description = "<div class='job-description'>"
+                for item in description_data:
+                    if item.strip():
+                        description += f"<p>{item}</p>"
+                description += "</div>"
+                return description
+            return str(description_data)
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f'Error formatting JustJoin.it description: {str(e)}'))
+            return ""
+
+    def format_tech_stack(self, tech_stack):
+        """Format tech stack as JSON array"""
+        if not tech_stack:
+            return None
+            
+        try:
+            if isinstance(tech_stack, list):
+                return json.dumps(tech_stack)
+            return None
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f'Error formatting tech stack: {str(e)}'))
+        return None
+
+    def clear_json_file(self, file_path):
+        """Clear the contents of a JSON file by writing an empty array"""
+        try:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump([], f)
+            self.stdout.write(self.style.SUCCESS(f'Cleared contents of {file_path}'))
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f'Error clearing {file_path}: {str(e)}'))
+
     def handle(self, *args, **options):
         try:
             # Read nofluff_data.json which contains an array of job listings
@@ -149,8 +287,30 @@ class Command(BaseCommand):
             # Counter for tracking
             jobs_created = 0
             jobs_updated = 0
+            jobs_skipped_polish = 0  # Counter for skipped Polish jobs
+            jobs_skipped_non_tech = 0  # Counter for skipped non-tech jobs
 
             for job_data in nofluff_data:
+                # Get title and description
+                title = job_data.get('title', '')
+                description = job_data.get('full_description', '')
+                
+                # Skip jobs with Polish content
+                if self.is_polish_text(title) or self.is_polish_text(description):
+                    self.stdout.write(self.style.WARNING(
+                        f'Skipping job with Polish content: {title}'
+                    ))
+                    jobs_skipped_polish += 1
+                    continue
+                
+                # Skip non-tech jobs
+                if not self.is_tech_job(title, description):
+                    self.stdout.write(self.style.WARNING(
+                        f'Skipping non-tech job: {title}'
+                    ))
+                    jobs_skipped_non_tech += 1
+                    continue
+                
                 # Get location
                 location = "Remote"
                 if isinstance(job_data.get('location'), dict) and 'places' in job_data.get('location', {}):
@@ -256,13 +416,107 @@ class Command(BaseCommand):
                         self.style.SUCCESS(f'Updated job: {job.title} at {job.company}')
                     )
 
-            self.stdout.write(
-                self.style.SUCCESS(
+            # Print summary with added counters
+            self.stdout.write(self.style.SUCCESS(
                     f'\nImport completed:\n'
                     f'Created: {jobs_created} jobs\n'
-                    f'Updated: {jobs_updated} jobs'
-                )
-            )
+                f'Updated: {jobs_updated} jobs\n'
+                f'Skipped Polish jobs: {jobs_skipped_polish}\n'
+                f'Skipped non-tech jobs: {jobs_skipped_non_tech}'
+            ))
+
+            # Process JustJoin.it data
+            if options['justjoin']:
+                try:
+                    with open(options['justjoin'], 'r', encoding='utf-8') as file:
+                        justjoin_data = json.load(file)
+                        
+                    for job_data in justjoin_data:
+                        title = job_data['title'][0] if isinstance(job_data['title'], list) and job_data['title'] else ''
+                        description = ' '.join(job_data.get('description', []))
+                        
+                        # Skip Polish content
+                        if self.is_polish_text(title) or self.is_polish_text(description):
+                            self.stdout.write(f'Skipping job with Polish content: {title}')
+                            jobs_skipped_polish += 1
+                            continue
+                            
+                        # Skip non-tech jobs
+                        if not self.is_tech_job(title, description):
+                            jobs_skipped_non_tech += 1
+                            continue
+                            
+                        # Format job data
+                        formatted_description = self.format_justjoin_description(job_data.get('description', []))
+                        formatted_salary = self.format_justjoin_salary(job_data.get('salary', []))
+                        tech_stack = self.format_tech_stack(job_data.get('tech_stack', []))
+                        
+                        # Download company logo
+                        logo = self.download_logo(job_data.get('logo', ''))
+                        
+                        # Prepare job data
+                        job_fields = {
+                            'title': title,
+                            'company': job_data.get('company', 'Unknown Company'),
+                            'location': job_data.get('location', 'Remote'),
+                            'job_type': job_data.get('type_of_work', 'Not specified'),
+                            'experience_level': job_data.get('experience', 'Not specified'),
+                            'employment_type': job_data.get('employment_type', 'Not specified'),
+                            'salary': formatted_salary,
+                            'description': formatted_description,
+                            'tech_stack': tech_stack,
+                            'source': 'justjoin.it',
+                            'job_url': job_data.get('job_post_url', ''),
+                            'posted_date': timezone.now(),
+                            'operating_mode': job_data.get('operating_type', 'Not specified')
+                        }
+                        
+                        # Try to get existing job
+                        existing_job = Job.objects.filter(
+                            title=title,
+                            company=job_fields['company'],
+                            source='justjoin.it'
+                        ).first()
+                        
+                        if existing_job:
+                            # Update existing job
+                            for key, value in job_fields.items():
+                                setattr(existing_job, key, value)
+                            if logo:
+                                existing_job.company_logo = logo
+                            existing_job.save()
+                            jobs_updated += 1
+                            self.stdout.write(f'Updated job: {title} at {job_fields["company"]}')
+                        else:
+                            # Create new job
+                            job = Job(**job_fields)
+                            if logo:
+                                job.company_logo = logo
+                            job.save()
+                            jobs_created += 1
+                            self.stdout.write(f'Created job: {title} at {job_fields["company"]}')
+                            
+                except Exception as e:
+                    self.stdout.write(
+                        self.style.ERROR(f'Error processing JustJoin.it data: {str(e)}')
+                    )
+
+            # Print final summary
+            self.stdout.write('\nImport completed:')
+            self.stdout.write(f'Created: {jobs_created} jobs')
+            self.stdout.write(f'Updated: {jobs_updated} jobs')
+            self.stdout.write(f'Skipped Polish jobs: {jobs_skipped_polish}')
+            self.stdout.write(f'Skipped non-tech jobs: {jobs_skipped_non_tech}')
+
+            # After successful import, clear the JSON files
+            if options['nofluff']:
+                self.clear_json_file(options['nofluff'])
+            if options['desc']:
+                self.clear_json_file(options['desc'])
+            if options['response']:
+                self.clear_json_file(options['response'])
+            if options['justjoin']:
+                self.clear_json_file(options['justjoin'])
 
         except FileNotFoundError as e:
             self.stdout.write(

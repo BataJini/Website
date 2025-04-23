@@ -496,18 +496,23 @@ def search_jobs_ajax(request):
     jobs = Job.objects.filter(is_archived=False).order_by('-is_featured', '-posted_date')
 
     if query:
-        # Split the query into individual terms
-        search_terms = query.replace('"', '').split()
+        # Split the query into individual terms, preserving quoted phrases
+        import re
+        search_terms = re.findall(r'"([^"]+)"|(\S+)', query)
+        search_terms = [term[0] or term[1] for term in search_terms]
         
+        # Start with a base Q object that matches everything
         query_filter = Q()
         
         for term in search_terms:
-            # Search in title, description, and requirements
-            query_filter |= (
+            # For each term, search in title, description, and requirements
+            term_filter = (
                 Q(title__icontains=term) |
                 Q(description__icontains=term) |
                 Q(requirements__icontains=term)
             )
+            # Use AND logic between terms
+            query_filter &= term_filter
         
         jobs = jobs.filter(query_filter)
 

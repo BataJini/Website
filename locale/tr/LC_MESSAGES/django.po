@@ -24,7 +24,7 @@ msgstr ""
 
 #: templates/authentication/login.html:6 templates/authentication/signup.html:6
 #: templates/base.html:25
-msgid "JobHub"
+msgid "jobhub"
 msgstr ""
 
 #: templates/authentication/login.html:133
@@ -129,7 +129,7 @@ msgid "Create your account"
 msgstr ""
 
 #: templates/base.html:19
-msgid "JobHub - Find your dream job today"
+msgid "jobhub - Find your dream job today"
 msgstr ""
 
 #: templates/base.html:20
@@ -243,7 +243,7 @@ msgid "Social Media"
 msgstr ""
 
 #: templates/base.html:2077
-msgid "Copyright © 2025 JobHub – All Rights Reserved"
+msgid "Copyright © 2025 jobhub – All Rights Reserved"
 msgstr ""
 
 #: templates/base.html:2082
@@ -251,7 +251,7 @@ msgid "Terms & Conditions"
 msgstr ""
 
 #: templates/index.html:7
-msgid "Jobs - JobHub"
+msgid "Jobs - jobhub"
 msgstr ""
 
 #: templates/index.html:14

@@ -1,5 +1,5 @@
 /**
- * JobHub - Job Detail Page Scripts
+ *  - Job Detail Page Scripts
  * Handles the fixed apply button functionality
  */
 

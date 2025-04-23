@@ -828,8 +828,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const tags = searchTagsContainer.querySelectorAll('.search-tag span');
         const searchText = Array.from(tags)
-            .map(tag => `"${tag.textContent.trim()}"`)
-            .join(' ');
+            .map(tag => {
+                const text = tag.textContent.trim();
+                // If the tag contains spaces, wrap it in quotes to treat it as a single term
+                return text.includes(' ') ? `"${text}"` : text;
+            })
+            .join(' AND ');
         
         hiddenSearchInput.value = searchText;
         

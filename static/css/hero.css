@@ -17,8 +17,11 @@
 .hero-section {
     max-height: 350px;
     height: 350px;
-    padding: 0;
-    background: linear-gradient(135deg, rgba(10, 25, 50, 0.95) 0%, rgba(20, 40, 80, 0.9) 100%);
+    padding: 120px 0 100px 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/static/images/Hero.png');
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
     border-bottom: 1px solid rgba(38, 132, 255, 0.2);
     margin: 0;
     width: 100%;
@@ -27,13 +30,12 @@
     left: 0;
     right: 0;
     z-index: 10;
-    padding-top: 64px; /* Padding equal to navbar height */
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    box-sizing: border-box;
 }
 
 /* Content wrapper to push content below the hero section */
 .content-wrapper {
-    margin-top: 250px; /* Reduced from 350px to bring content closer to hero */
+    margin-top: 250px;
     position: relative;
     z-index: 5;
 }
@@ -79,6 +81,9 @@
     border-radius: 2rem;
     cursor: pointer;
     box-shadow: none;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
 }
 
 .hero-tag:hover {
@@ -96,7 +101,10 @@
 
 /* Dark mode styles for hero section */
 [data-bs-theme="dark"] .hero-section {
-    background: linear-gradient(135deg, rgba(38, 132, 255, 0.05) 0%, rgba(38, 132, 255, 0.01) 100%);
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/images/Hero.png');
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
     border-bottom: 1px solid rgba(38, 132, 255, 0.08);
 }
 
@@ -113,7 +121,7 @@
     background-color: transparent;
     color: var(--bs-body-color);
     padding: 0;
-    margin-top: -20px; /* Added negative margin to reduce gap */
+    margin-top: -20px;
     position: relative;
 }
 
@@ -121,7 +129,7 @@
     color: var(--bs-body-color);
     font-size: 1.8rem;
     margin-bottom: 0.75rem;
-    padding-top: 0;  /* Removed top padding */
+    padding-top: 0;
 }
 
 .search-container {
@@ -170,14 +178,14 @@
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     padding: 0 0.25rem;
     align-items: center;
 }
 
 .search-tags::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
 }
 
 /* Individual Search Tag */
@@ -311,7 +319,7 @@
     }
     
     .search-tags {
-        padding-right: 50px; /* Add padding to ensure tags don't get covered by the button */
+        padding-right: 50px;
     }
 }
 
@@ -341,8 +349,24 @@
     }
     
     .hero-tag {
-        padding: 0.25rem 0.5rem;
+        padding: 0 0.75rem;
         font-size: 0.75rem;
+        height: 32px;
+        min-height: 32px;
+        max-height: 32px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 440px) {
+    .hero-subtitle {
+        display: none;
+    }
+    
+    .hero-title {
+        margin-bottom: 1.5rem;
     }
 }
 
@@ -444,13 +468,13 @@
         overflow-x: auto;
         gap: 0.5rem;
         padding: 0.25rem 0;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE and Edge */
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
     }
     
     .categories-scroll-container::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, Opera */
+        display: none;
     }
     
     /* Style for category buttons */

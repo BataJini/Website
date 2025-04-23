@@ -1,15 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# JobHub Team <info@jobhub.com>, 2025.
+# jobhub Team <info@jobhub.com>, 2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: JobHub 1.0\n"
+"Project-Id-Version: jobhub 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-26 20:25+0000\n"
 "PO-Revision-Date: 2025-03-26 20:00+0000\n"
-"Last-Translator: JobHub Team <info@jobhub.com>\n"
+"Last-Translator: jobhub Team <info@jobhub.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -28,16 +28,16 @@ msgid "Polish"
 msgstr "Polski"
 
 #: templates/base.html:19
-msgid "JobHub - Find your dream job today"
-msgstr "JobHub - Znajdź wymarzoną pracę już dziś"
+msgid "jobhub - Find your dream job today"
+msgstr "jobhub - Znajdź wymarzoną pracę już dziś"
 
 #: templates/base.html:20
 msgid "jobs, career, employment, hiring, job search"
 msgstr "praca, kariera, zatrudnienie, rekrutacja, szukanie pracy"
 
 #: templates/base.html:22
-msgid "JobHub"
-msgstr "JobHub"
+msgid "jobhub"
+msgstr "jobhub"
 
 #: templates/base.html:1206
 msgid "Job offers"
@@ -96,12 +96,12 @@ msgid "Privacy Policy – Terms & Conditions"
 msgstr "Polityka prywatności – Warunki korzystania"
 
 #: templates/base.html:1314
-msgid "Copyright © 2025 JobHub – All Rights Reserved"
-msgstr "Copyright © 2025 JobHub – Wszelkie prawa zastrzeżone"
+msgid "Copyright © 2025 jobhub – All Rights Reserved"
+msgstr "Copyright © 2025 jobhub – Wszelkie prawa zastrzeżone"
 
 #: templates/index.html:7
-msgid "Jobs - JobHub"
-msgstr "Oferty - JobHub"
+msgid "Jobs - jobhub"
+msgstr "Oferty - jobhub"
 
 #: templates/index.html:14
 msgid "Find Your Dream Tech Job"

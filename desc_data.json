@@ -1,0 +1,516 @@
+{
+    "id": "c-net-developer-escola-remote",
+    "apply": {
+        "option": "email",
+        "leadCollection": false,
+        "referenceNumber": "",
+        "leadCollectionInfoClause": ""
+    },
+    "specs": {
+        "details": {
+            "custom": [
+                {
+                    "key": "Prywatna opieka medyczna",
+                    "value": "",
+                    "active": true
+                },
+                {
+                    "key": "Dofinansowanie multisport",
+                    "value": "",
+                    "active": true
+                },
+                {
+                    "key": "Mo\u017cliwo\u015b\u0107 zmiany projektu",
+                    "value": "",
+                    "active": true
+                },
+                {
+                    "key": "Konferencje, szkolenia i mentoring",
+                    "value": "",
+                    "active": true
+                }
+            ],
+            "flexibleHours": true
+        },
+        "help4Ua": false,
+        "dailyTasks": [
+            "Jeste\u015b cz\u0119\u015bci\u0105 interdyscyplinarnego zespo\u0142u z dedykowanymi testerami, devopsami i designerami.",
+            "PM odpowiada za ustalenie co jest do zrobienia, zesp\u00f3\u0142 decyduje jak. Oczekiwania s\u0105 realistyczne, nie mamy mikrozarz\u0105dzania.",
+            "Komunikacja po polsku, wi\u0119kszo\u015b\u0107 spraw na komunikatorze lub na daily.",
+            "Robisz i otrzymujesz Code Review, dzi\u0119ki temu uczysz si\u0119, uczysz innych i podnosimy jako\u015b\u0107 kodu.",
+            "Rozwijasz si\u0119 te\u017c poza firm\u0105 np. na konferencjach i szkoleniach, kt\u00f3re Ty wybierasz, a firma op\u0142aca.",
+            "Raz w tygodniu spotkania developerskie na kt\u00f3rych programi\u015bci (w tym Ty) dziel\u0105 si\u0119 mi\u0119dzy sob\u0105 wiedz\u0105."
+        ],
+        "workProfile": {},
+        "referral": {
+            "allowed": true
+        }
+    },
+    "title": "C# (.NET) Developer",
+    "basics": {
+        "category": "backend",
+        "seniority": [
+            "Mid"
+        ],
+        "technology": ".NET"
+    },
+    "company": {
+        "url": "https://bit.ly/3wDZGvX",
+        "logo": {
+            "original": "companies/logos/original/escola_20180606_133106_20220812_152808.png",
+            "jobs_details": "companies/logos/jobs_details/escola_20180606_133106_20220812_152808.png",
+            "jobs_listing": "companies/logos/jobs_listing/escola_20180606_133106_20220812_152808.png",
+            "jobs_details_2x": "companies/logos/jobs_details_2x/escola_20180606_133106_20220812_152808.png",
+            "jobs_listing_2x": "companies/logos/jobs_listing_2x/escola_20180606_133106_20220812_152808.png",
+            "companies_details": "companies/logos/companies_details/escola_20180606_133106_20220812_152808.png",
+            "companies_listing": "companies/logos/companies_listing/escola_20180606_133106_20220812_152808.png",
+            "jobs_details_webp": "companies/logos/jobs_details/escola_20180606_133106_20220812_152808.webp",
+            "jobs_listing_webp": "companies/logos/jobs_listing/escola_20180606_133106_20220812_152808.webp",
+            "companies_details_2x": "companies/logos/companies_details_2x/escola_20180606_133106_20220812_152808.png",
+            "companies_listing_2x": "companies/logos/companies_listing_2x/escola_20180606_133106_20220812_152808.png",
+            "jobs_details_2x_webp": "companies/logos/jobs_details_2x/escola_20180606_133106_20220812_152808.webp",
+            "jobs_listing_2x_webp": "companies/logos/jobs_listing_2x/escola_20180606_133106_20220812_152808.webp",
+            "original_pixel_image": "companies/logos/original_pixel_image/escola_20180606_133106_20220812_152808.png",
+            "companies_details_webp": "companies/logos/companies_details/escola_20180606_133106_20220812_152808.webp",
+            "companies_listing_webp": "companies/logos/companies_listing/escola_20180606_133106_20220812_152808.webp",
+            "companies_details_2x_webp": "companies/logos/companies_details_2x/escola_20180606_133106_20220812_152808.webp",
+            "companies_listing_2x_webp": "companies/logos/companies_listing_2x/escola_20180606_133106_20220812_152808.webp"
+        },
+        "name": "ESCOLA",
+        "size": "50 - 249",
+        "video": "https://www.youtube.com/watch?v=ZmX7kHxuEtw"
+    },
+    "details": {
+        "quote": "\u017beby zbudowa\u0107 mocny i trwa\u0142y zesp\u00f3\u0142, rozw\u00f3j firmy musi is\u0107 w parze z rozwojem pracownik\u00f3w. Retencja pracownik\u00f3w w Escoli broni si\u0119 sama.",
+        "position": "CEO",
+        "coverPhoto": {
+            "original": "cropped/original/escola_231_20211112_141049.JPG",
+            "cropped_resized": "cropped/cropped_resized/escola_231_20211112_141051.JPG",
+            "cropped_original": "cropped/cropped_original/escola_231_20211112_141051.JPG",
+            "cropped_resized_2x": "cropped/cropped_resized_2x/escola_231_20211112_141051.JPG",
+            "cropped_resized_webp": "cropped/cropped_resized/escola_231_20211112_141051.webp",
+            "cropped_resized_2x_webp": "cropped/cropped_resized_2x/escola_231_20211112_141051.webp",
+            "cropped_original_pixel_image": "cropped/cropped_original_pixel_image/escola_231_20211112_141051.JPG"
+        },
+        "avatarPhoto": {
+            "cropped": "avatars/cropped/escola_070_20211112_190332.JPG",
+            "original": "avatars/cropped_original/escola_070_20211112_190331.JPG",
+            "cropped_resized": "avatars/cropped_resized/escola_070_20211112_190332.JPG",
+            "cropped_resized_2x": "avatars/cropped_resized_2x/escola_070_20211112_190332.JPG",
+            "cropped_pixel_image": "avatars/cropped_pixel_image/escola_070_20211112_190332.JPG",
+            "cropped_resized_webp": "avatars/cropped_resized/escola_070_20211112_190332.webp",
+            "cropped_resized_2x_webp": "avatars/cropped_resized_2x/escola_070_20211112_190332.webp"
+        },
+        "description": "Z nami mo\u017cesz pracowa\u0107 w r\u00f3\u017cnych projektach: kr\u00f3tko i d\u0142ugoterminowe, wewn\u0119trzne i na zam\u00f3wienie, greenfield i brownfield, dla klienta polskiego i zagranicznego, T&M i fixed price. Projekty mo\u017cna zmienia\u0107 i zawsze udaje si\u0119 co\u015b dopasowa\u0107. Piszemy w: PHP, Laravel, node.js, nestJS, TypeScript, ReactJS, React Native, Swift, Kotlin, Java, Spring. Pracujemy w polskiej strefie czasowej z elastycznymi godzinami pracy.\n\nKomunikujemy si\u0119 po polsku, wi\u0119kszo\u015b\u0107 spraw na komunikatorze lub na daily. Zespo\u0142y s\u0105 ma\u0142e i interdyscyplinarne z dedykowanymi testerami, devopsami i designerami.",
+        "quoteAuthor": "Krzysiek Wojewodzic"
+    },
+    "benefits": {
+        "benefits": [
+            "Possibility to change projects",
+            "Private healthcare",
+            "Training budget",
+            "Flat structure",
+            "Sport subscription",
+            "Small teams",
+            "English lessons",
+            "Conferences"
+        ],
+        "equipment": {
+            "computer": "Notebook",
+            "monitors": "If needed",
+            "operatingSystems": {
+                "lin": false,
+                "mac": true,
+                "win": true
+            }
+        },
+        "officePerks": []
+    },
+    "consents": {
+        "infoClause": "The Controller of your personal data is ESCOLA S.A, with registered office at Warsaw. Your data is processed for the purpose of the current recruitment process. Providing data is voluntary but necessary for this purpose. Processing your data is lawful because it is necessary in order to take steps at the request of the data subject prior to entering into a contract (article 6 point 1b of Regulation EU 2016/679 - GDPR). Your personal data will be deleted when the current recruitment process is finished, unless a separate consent is provided below. You have the right to access, correct, modify, update, rectify, request for the transfer or deletion of data, withdrawal of consent or objection.",
+        "futureConsent": true,
+        "futureConsentRequired": false,
+        "futureConsentMsg": "I hereby give consent for my personal data included in the application to be processed for the purposes of\nany other future recruitment process taking place within the next 3 years in accordance with Art. 6\nparagraph 1 letter a of the Regulation of the European Parliament and of the Council (EU) 2016/679 of 27 April\n2016 on the protection of natural persons with regard to the processing of personal data and on the free\nmovement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation)",
+        "personalDataRequestLink": "rekrutacja@escolasoft.com"
+    },
+    "location": {
+        "places": [
+            {
+                "city": "Remote",
+                "url": "c-net-developer-escola-remote"
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "city": "Gda\u0144sk",
+                "street": "Strzelecka 7b",
+                "postalCode": "80-803",
+                "geoLocation": {
+                    "latitude": 54.35248050000001,
+                    "longitude": 18.6382369
+                },
+                "url": "c-net-developer-escola-gdansk"
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "city": "Warszawa",
+                "street": "Ch\u0142odna 22a/14",
+                "postalCode": "00-891",
+                "geoLocation": {
+                    "latitude": 52.23794849999999,
+                    "longitude": 20.9895203
+                },
+                "url": "c-net-developer-escola-warszawa"
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "city": "Krak\u00f3w",
+                "street": "Z\u0142oty R\u00f3g 29A/5",
+                "postalCode": "30-095",
+                "geoLocation": {
+                    "latitude": 50.082411,
+                    "longitude": 19.8959734
+                },
+                "url": "c-net-developer-escola-krakow"
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "lower-silesian",
+                "url": "c-net-developer-escola-lower-silesian",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "kuyavian-pomeranian",
+                "url": "c-net-developer-escola-kuyavian-pomeranian",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "lodz",
+                "url": "c-net-developer-escola-lodz",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "lublin",
+                "url": "c-net-developer-escola-lublin",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "lubusz",
+                "url": "c-net-developer-escola-lubusz",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "opole",
+                "url": "c-net-developer-escola-opole",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "subcarpathian",
+                "url": "c-net-developer-escola-subcarpathian",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "podlaskie",
+                "url": "c-net-developer-escola-podlaskie",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "silesian",
+                "url": "c-net-developer-escola-silesian",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "holy-cross",
+                "url": "c-net-developer-escola-holy-cross",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "warmian-masurian",
+                "url": "c-net-developer-escola-warmian-masurian",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "greater-poland",
+                "url": "c-net-developer-escola-greater-poland",
+                "provinceOnly": true
+            },
+            {
+                "country": {
+                    "code": "POL",
+                    "name": "Poland"
+                },
+                "province": "west-pomeranian",
+                "url": "c-net-developer-escola-west-pomeranian",
+                "provinceOnly": true
+            }
+        ],
+        "remote": 5,
+        "multicityCount": 5,
+        "covidTimeRemotely": false,
+        "remoteFlexible": false,
+        "fieldwork": false,
+        "defaultIndex": 0,
+        "hybridDesc": ""
+    },
+    "essentials": {
+        "contract": {
+            "start": "ASAP",
+            "duration": {}
+        },
+        "originalSalary": {
+            "currency": "PLN",
+            "types": {
+                "b2b": {
+                    "period": "Month",
+                    "range": [
+                        12000.0,
+                        17000.0
+                    ],
+                    "paidHoliday": false
+                }
+            },
+            "disclosedAt": "VISIBLE"
+        }
+    },
+    "methodology": [
+        {
+            "name": "Unit tests",
+            "values": [
+                "Zale\u017cnie od projektu (r\u00f3wnie\u017c TDD)"
+            ]
+        },
+        {
+            "name": "Tester(s)",
+            "values": [
+                "1"
+            ]
+        },
+        {
+            "name": "Agile management",
+            "values": [
+                "Scrum",
+                "Kanban",
+                "Agile"
+            ]
+        },
+        {
+            "name": "Knowledge repository",
+            "values": [
+                "Confluence",
+                "GitHub",
+                "GitLab"
+            ]
+        },
+        {
+            "name": "Code reviews",
+            "values": [
+                "GitLab",
+                "GitHub"
+            ]
+        },
+        {
+            "name": "Version control system",
+            "values": [
+                "GIT"
+            ]
+        },
+        {
+            "name": "Build server",
+            "values": [
+                "GitLab"
+            ]
+        }
+    ],
+    "recruitment": {
+        "languages": [
+            {
+                "code": "pl"
+            }
+        ],
+        "onlineInterviewAvailable": true
+    },
+    "requirements": {
+        "musts": [
+            {
+                "value": ".NET",
+                "type": "main"
+            },
+            {
+                "value": "C#",
+                "type": "main"
+            },
+            {
+                "value": "SQL",
+                "type": "main"
+            },
+            {
+                "value": "Git",
+                "type": "main"
+            },
+            {
+                "value": "Docker",
+                "type": "main"
+            },
+            {
+                "value": "Microservices",
+                "type": "main"
+            },
+            {
+                "value": "Entity Framework",
+                "type": "main"
+            }
+        ],
+        "nices": [
+            {
+                "value": "Windows Services",
+                "type": "main"
+            },
+            {
+                "value": "Google Cloud Certificate",
+                "type": "main"
+            },
+            {
+                "value": "Angular",
+                "type": "main"
+            },
+            {
+                "value": "Vue.js",
+                "type": "main"
+            },
+            {
+                "value": "DDD",
+                "type": "main"
+            },
+            {
+                "value": "GitLab",
+                "type": "main"
+            },
+            {
+                "value": "GitLab CI",
+                "type": "main"
+            },
+            {
+                "value": "Google cloud platform",
+                "type": "main"
+            }
+        ],
+        "description": "<h3>Must-have:</h3>\n<ul>\n<li><strong>Minimum 3 lata do\u015bwiadczenia jako C#/.NET Developer</strong></li>\n<li>Bardzo dobra znajomo\u015b\u0107 <strong>C# (min. wersja 7, preferowana 10+)</strong></li>\n<li>Wymagane do\u015bwiadczenie w pracy z\u00a0<strong>mikroserwisami / aplikacjami bezstanowymi / monolitami modu\u0142owymi</strong></li>\n<li>Do\u015bwiadczenie z <strong>.NET Core 3.1+ i .NET 6/7/8 oraz .NET Framework 4.5+</strong></li>\n<li>Znajomo\u015b\u0107 <strong>ASP.NET Core Web API oraz ASP.NET MVC / Web Forms</strong></li>\n<li>Znajomo\u015b\u0107 <strong>system\u00f3w kolejkowych</strong> (np. RabbitMQ)</li>\n<li>Znajomo\u015b\u0107 baz danych <strong>SQL (MSSQL/PostgreSQL)</strong> oraz podstawy <strong>NoSQL (MongoDB, Redis)</strong></li>\n<li>Umiej\u0119tno\u015b\u0107 pracy z <strong>Entity Framework Core, Entity Framework 6,\u00a0</strong><strong>Dapper\u00a0</strong></li>\n<li>Znajomo\u015b\u0107 <strong>wzorc\u00f3w projektowych i architektonicznych</strong></li>\n<li>Umiej\u0119tno\u015b\u0107 testowania kodu</li>\n<li>Znajomo\u015b\u0107 <strong>JavaScript i jednego z framework\u00f3w (Angular, Vue.js, React)</strong></li>\n<li>Znajomo\u015b\u0107 <strong>Git</strong></li>\n<li>Zrozumienie cyklu \u017cycia oprogramowania (<strong>SDLC</strong>) i najlepszych praktyk DevOps</li>\n<li>Podstawowa znajomo\u015b\u0107 us\u0142ug chmurowych:\u00a0<strong>Storage, Functions, Key Vault, Service Bus</strong></li>\n<li>Podstawowa znajomo\u015b\u0107 konteneryzacji -\u00a0<strong>Docker\u00a0</strong></li>\n</ul>\n<h3><strong>Nice-to-</strong>have:</h3>\n<ul>\n<li>Do\u015bwiadczenie z <strong>DDD (Domain-Driven Design)</strong></li>\n<li>Znajomo\u015b\u0107\u00a0<strong>Windows Services oraz WCF (Windows Communication Foundation)</strong></li>\n<li>Znajomo\u015b\u0107 <strong>Blazor, WPF lub MAUI oraz Windows Forms</strong></li>\n<li>Podstawowa znajomo\u015b\u0107 <strong>Kubernetes </strong>(zarz\u0105dzanie podami, deployment, services)</li>\n<li>Podstawowa znajomo\u015b\u0107 <strong>Terraform</strong></li>\n<li>Automatyzacja <strong>CI/CD (Gitlab CI, Argo CD)</strong></li>\n<li>Znajomo\u015b\u0107 system\u00f3w skanowania podatno\u015bci (<strong>Snyk, Dependabot itp</strong>.)</li>\n<li>Wiedza o<strong> bezpiecze\u0144stwie aplikacji webowych (OWASP TOP 10, OWASP ASVS)</strong></li>\n<li><strong>Google Cloud Certificate </strong>- Certifications | Google Cloud</li>\n</ul>",
+        "languages": [
+            {
+                "type": "MUST",
+                "code": "pl",
+                "level": "NATIVE"
+            },
+            {
+                "type": "NICE",
+                "code": "en",
+                "level": "B2"
+            }
+        ]
+    },
+    "wizardCopyMetadata": {
+        "clonedFromJobOfferId": "XUV5ACGJ",
+        "sectionToCopiedFromJobOfferId": {}
+    },
+    "posted": 1743448883134,
+    "postedOrRenewedDaysAgo": 0,
+    "expiresAt": "2025-04-30T23:59:59",
+    "status": "PUBLISHED",
+    "postingUrl": "c-net-developer-escola-remote",
+    "metadata": {
+        "sectionLanguages": {
+            "daily-tasks": "pl",
+            "description": "pl",
+            "requirements.description": "pl"
+        }
+    },
+    "regions": [
+        "pl"
+    ],
+    "reference": "NCKLPXDJ",
+    "meta": {
+        "videosInCompanyProfileVisible": true
+    },
+    "companyUrl": "/company/escola-5khue1tc",
+    "seo": {
+        "title": "C# (.NET) Developer @ ESCOLA",
+        "description": "C# (.NET) Developer @ ESCOLA Fully remote job 12.0k-17.0k (B2B) PLN / month"
+    },
+    "analytics": {
+        "lastBump": 0,
+        "lastBumpType": "SYSTEM",
+        "previousBumpCount": 8,
+        "nextBump": -1,
+        "nextBumpCount": 0,
+        "emissionDay": 22,
+        "productType": "PREMIUM",
+        "emissionBumps": 8,
+        "emissionLength": 30,
+        "emission": "O2HSCA",
+        "addons": {
+            "bump": true,
+            "publication": false,
+            "offerOfTheDay": false,
+            "topInSearch": false,
+            "highlighted": false
+        },
+        "topInSearchConfig": {
+            "pairs": []
+        }
+    }
+}
